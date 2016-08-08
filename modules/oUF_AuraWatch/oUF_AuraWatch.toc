@@ -1,0 +1,9 @@
+## Interface: 60020
+## Title: oUF AuraWatch
+## Author: Astromech
+## Version: 1.6.8-8
+## Notes: Adds aura timers and indicators to oUF
+## OptionalDeps: oUF
+## X-oUF: oUF
+
+oUF_AuraWatch.lua

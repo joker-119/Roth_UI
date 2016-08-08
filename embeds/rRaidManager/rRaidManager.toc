@@ -1,0 +1,6 @@
+## Interface: 60200
+## Author: Galaxy119
+## Title: rRaidManager
+## Notes: Simple toolbar for raid management
+
+core.lua

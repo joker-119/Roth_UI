@@ -1,0 +1,22 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='config.lua' />
+	<Script file='charspecific.lua' />
+
+	<Script file='core\hide_blizzart.lua' />
+	<Script file='core\slashcmd.lua' />
+	<Script file='core\micromenu.lua' />
+	<Script file='core\bags.lua' />
+	<Script file='core\bar1.lua' />
+	<Script file='core\overridebar.lua' />
+	<Script file='core\bar2.lua' />
+	<Script file='core\bar3.lua' />
+	<Script file='core\bar4.lua' />
+	<Script file='core\bar5.lua' />
+	<Script file='core\petbar.lua' />
+	<Script file='core\stancebar.lua' />
+	<Script file='core\extrabar.lua' />
+	<Script file='core\leave_vehicle.lua' />
+	<Script file='core\spellflyout.lua' />
+	<Script file='core\cooldown.lua' />
+
+</Ui>

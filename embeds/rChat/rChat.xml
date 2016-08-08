@@ -1,0 +1,8 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='config.lua' />
+	<Script file='core\core.lua' />
+	<Script file='core\scroll.lua' />
+	<Script file='core\channelreplacements.lua' />
+	<Script file='core\altinvite.lua' />
+	<Script file='core\urlcopy.lua' />
+</Ui>
