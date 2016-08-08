@@ -19,6 +19,8 @@ embeds\rNamePlates\rNamePlates.xml
 embeds\rInfoStrings\rInfo.xml
 embeds\rRaidManager\rManager.xml
 embeds\rTooltip\rTooltip.xml
+embeds\tullaRange\tulla.xml
+
 
 
 modules\oUF_AuraWatch.lua
