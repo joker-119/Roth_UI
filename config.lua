@@ -29,7 +29,7 @@
     bright              = { r = 1, g = 0, b = 0, a = 1, },          -- the bright color
     dark                = { r = 1, g = 0, b = 0, a = 0.1, },   -- the dark color
     classcolored        = true,  -- true   -> override the bright color with the unit specific color (class, faction, happiness, threat), if false uses the predefined color
-    useBrightForeground = false,  -- true   -> use bright color in foreground and dark color in background
+    useBrightForeground = true,  -- true   -> use bright color in foreground and dark color in background
                                  -- false  -> use dark color in foreground and bright color in background
     threatColored       = true,  -- true/false -> enable threat coloring of the health plate for raidframes
   }
@@ -223,7 +223,6 @@
       },
 	  healper = {
 	frequentUpdates = true,
-		texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
 		tag = "[perphp]",
 		fontSize = 10,
 		point = "CENTER",

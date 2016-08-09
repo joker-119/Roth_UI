@@ -1120,9 +1120,9 @@
   panel.elementPowerOrbFillingColor = createPickerPowerOrbFillingColor(panel.scrollFrame.scrollChild)
   --create model headline
   panel.elementHealthModelHeadline = createBasicFontString(panel.scrollFrame.scrollChild,nil,nil,"GameFontNormalLarge","Model Animation")
-  createTooltipButton(panel.scrollFrame.scrollChild,panel.elementHealthModelHeadline,"The following options allow you to edit the animation model settings.")
+  createTooltipButton(panel.scrollFrame.scrollChild,panel.elementHealthModelHeadline,"This feature is currently a WIP. Enable at your own risk.")
   panel.elementPowerModelHeadline = createBasicFontString(panel.scrollFrame.scrollChild,nil,nil,"GameFontNormalLarge","Model Animation")
-  createTooltipButton(panel.scrollFrame.scrollChild,panel.elementPowerModelHeadline,"The following options allow you to edit the animation model settings.")
+  createTooltipButton(panel.scrollFrame.scrollChild,panel.elementPowerModelHeadline,"This feature is currently a WIP. Enable at your own risk.")
   --create model enable checkbutton
   panel.elementHealthOrbModelEnable = createCheckButtonHealthOrbModelEnable(panel.scrollFrame.scrollChild)
   panel.elementPowerOrbModelEnable = createCheckButtonPowerOrbModelEnable(panel.scrollFrame.scrollChild)

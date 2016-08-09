@@ -38,7 +38,7 @@
         },
         --model
         model = {
-          enable            = true,
+          enable            = false,
           displayInfo       = 32368,
           camDistanceScale  = 0.95,
           pos_x             = 0,
@@ -46,10 +46,6 @@
           rotation          = 0,
           portraitZoom      = 0,
           alpha             = 1,
-        },
-        --galaxies
-        galaxies = {
-          alpha = 0,
         },
         --spark
         spark = {
@@ -80,11 +76,11 @@
         filling = {
           texture     = "Interface\\AddOns\\Roth_UI\\media\\orb_filling16",
           color       = { r = 0, g = 0, b = 1, },
-          colorAuto   = false, --automatic coloring based on class/powertype
+          colorAuto   = true, --automatic coloring based on class/powertype
         },
         --model
         model = {
-          enable            = true,
+          enable            = false,
           displayInfo       = 32368,
           camDistanceScale  = 0.95,
           pos_x             = 0,
@@ -92,10 +88,6 @@
           rotation          = 0,
           portraitZoom      = 0,
           alpha             = 1,
-        },
-        --galaxies
-        galaxies  = {
-          alpha = 0,
         },
         --spark
         spark = {
@@ -146,10 +138,6 @@
           rotation          = 0,
           portraitZoom      = 0,
           alpha             = 1,
-        },
-        --galaxies
-        galaxies = {
-          alpha = 0,
         },
         --spark
         spark = {
