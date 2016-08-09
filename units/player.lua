@@ -453,6 +453,9 @@
     --reputation bar
     bars.createRepBar(self)
 
+	--artifact bar
+	bars.createArtifactPowerBar(self)
+	
     --bottomline
     createBottomLine(self)
 

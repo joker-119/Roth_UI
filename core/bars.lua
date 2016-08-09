@@ -105,6 +105,46 @@
     self.Reputation = f
 
   end
+  
+  bars.createArtifactPowerBar = function(self)
+  
+	local cfg = self.cfg.ArtifactPower
+	if not cfg.show then return end
+	
+	local w, h = 360, 5
+	
+	-- Create the Bar Frame
+	local f = CreateFrame("StatusBar","Roth_UIArtifactPower",self)
+	f:SetFrameStrata("LOW")
+	f:SetFrameLevel(1)
+	f:SetSize(w,h)
+	f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
+	f:SetScale(cfg.scale)
+	f:SetStatusBarTexture(cfg.texture)
+	f:SetStatusBarColor(.05,.5,.5)
+	
+	--Add Drag Functionality
+	func.applyDragFunctionality(f)
+	
+	--Add Text
+	local t = f:CreateFontString(nil,"TOOLTIP")
+	t:SetPoint("CENTER")
+	t:SetFontObject(GameFontHighlight)
+	
+	--Create Bar Background
+	local bg = f:CreateTexture(nil,"BACKGROUND",nil,-8)
+	bg:SetAllPoints(f)
+	bg:SetTexture(cfg.texture)
+	bg:SetVertexColor(.05,.5,.5)
+	bg:SetAlpha(0.3)
+	f.bg = bg
+	
+	--Add Mouseover
+	f:EnableMouse(true)
+	
+	--Register with oUF
+	self.ArtifactPower = f
+end
 
 
   --create harmony power bar

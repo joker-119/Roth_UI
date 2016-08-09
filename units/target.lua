@@ -32,13 +32,23 @@
     self:SetHitRectInsets(10,10,10,10)
   end
 
-  --actionbar background
-  local createArtwork = function(self)
+  --Target Frame
+	local createArtwork = function(self)
     local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetAllPoints(self)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target")
-  end
-
+    t:SetPoint("TOP",0,25)
+    t:SetPoint("LEFT",-62,0)
+    t:SetPoint("RIGHT",60,0)
+    t:SetPoint("BOTTOM",0,-15)
+      
+    if UnitClassification(unit) == "worldboss" then
+         t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_boss")
+    elseif UnitClassification(unit) == "rare" or UnitClassification(unit) == "rareelite" or UnitClassification(unit) == "elite" then
+         t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_elite")
+    else 
+         t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target")
+    end
+end
+	
   --make a sound when target gets selected
   local playTargetSound = function(self,event)
     if event == "PLAYER_TARGET_CHANGED" then
@@ -75,7 +85,10 @@
 
     h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
     h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_hpglow")
-    h.glow:SetAllPoints(self)
+    h:SetPoint("TOP",0,-21.9)
+    h:SetPoint("LEFT",24,0)
+    h:SetPoint("RIGHT",-24.5,0)
+    h:SetPoint("BOTTOM",0,28.7)
     h.glow:SetVertexColor(0,0,0,1)
 
     h.highlight = h:CreateTexture(nil,"OVERLAY",nil,-4)
@@ -93,11 +106,11 @@
     local cfg = self.cfg.power
 
     --power
-    local h = CreateFrame("StatusBar", nil, self)
-    h:SetPoint("TOP",0,-38.5)
-    h:SetPoint("LEFT",24.5,0)
-    h:SetPoint("RIGHT",-24.5,0)
-    h:SetPoint("BOTTOM",0,21.9)
+    local h = CreateFrame("StatusBar", nil, self.Health)
+    h:SetPoint("TOP",0,-20)
+    h:SetPoint("LEFT",11,0)
+    h:SetPoint("RIGHT",-12,0)
+    h:SetPoint("BOTTOM",0,-13)
 
     h:SetStatusBarTexture(cfg.texture)
 
@@ -144,7 +157,7 @@
     local perphp = func.createFontString(self.Health, cfg.font, self.cfg.healper.fontSize, "THINOUTLINE") 
     perphp:SetPoint(self.cfg.healper.point, self.cfg.healper.x,self.cfg.healper.y)    
 
-    local perpp = func.createFontString(self.Health, cfg.font, self.cfg.powper.fontSize, "THINOUTLINE")
+    local perpp = func.createFontString(self.Power, cfg.font, self.cfg.powper.fontSize, "THINOUTLINE")
     perpp:SetPoint(self.cfg.powper.point, self.cfg.powper.x,self.cfg.powper.y)
 	
 	local ppval = func.createFontString(self.Health, cfg.font, self.cfg.power.fontSize, "THINOUTLINE")
@@ -287,7 +300,7 @@
     self.cfg = cfg.units.target
     self.cfg.style = "target"
 
-    self.cfg.width = 256
+    self.cfg.width = 300
     self.cfg.height = 64
 
     --init

@@ -154,13 +154,13 @@
 		}
 	end
       local dir = {
-        [1] = {size = 15, pos = "CENTER",       x = 0, y = 3 },
-        [2] = {size = 15, pos = "CENTER",       x = 15, y = 3 },
-        [3] = {size = 15, pos = "CENTER",       x = -15, y = 3 },
-        [4] = {size = 15, pos = "CENTER",       x = 30, y = 3 },
-        [5] = {size = 15, pos = "CENTER",       x = -30, y = 3 },
-        [6] = {size = 15, pos = "CENTER",       x = 15, y = 3 },
-        [7] = {size = 15, pos = "CENTER",       x = 15, y = 3 },
+        [1] = {size = 15, pos = "CENTER",       x = 0, y = 12.5 },
+        [2] = {size = 15, pos = "CENTER",       x = 15, y = 12.5 },
+        [3] = {size = 15, pos = "CENTER",       x = -15, y = 12.5 },
+        [4] = {size = 15, pos = "CENTER",       x = 30, y = 12.5 },
+        [5] = {size = 15, pos = "CENTER",       x = -30, y = 12.5 },
+        [6] = {size = 15, pos = "CENTER",       x = 15, y = 12.5 },
+        [7] = {size = 15, pos = "CENTER",       x = 15, y = 12.5 },
       }
       auras.onlyShowPresent = true
       auras.presentAlpha = .75
@@ -294,7 +294,7 @@
 
     --health
     local h = CreateFrame("StatusBar", nil, self)
-    h:SetPoint("TOP",0,-21.9)
+    h:SetPoint("TOP",0,-27.9)
     h:SetPoint("LEFT",24.5,0)
     h:SetPoint("RIGHT",-24.5,0)
     h:SetPoint("BOTTOM",0,28.7)
@@ -306,7 +306,10 @@
 
     h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
     h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_hpglow")
-    h.glow:SetAllPoints(self)
+    h.glow:SetPoint("TOP",0,17)
+    h.glow:SetPoint("LEFT",-24,0)
+    h.glow:SetPoint("RIGHT",24,0)
+    h.glow:SetPoint("BOTTOM",0,-20)
     h.glow:SetVertexColor(0,0,0,1)
 
     h.highlight = h:CreateTexture(nil,"OVERLAY",nil,-4)
@@ -314,7 +317,34 @@
     h.highlight:SetAllPoints(self)
 
     self.Health = h
-    self.Health.Smooth = false
+    self.Health.Smooth = true
+  end
+
+  --create power frames
+  local createPowerFrame = function(self)
+    local cfg = self.cfg.power
+
+    --power
+    local h = CreateFrame("StatusBar", nil, self.Health)
+     h:SetPoint("TOP",0,-13)
+     h:SetPoint("LEFT",5,0)
+     h:SetPoint("RIGHT",-5,0)
+     h:SetPoint("BOTTOM",0,-10)
+
+    h:SetStatusBarTexture(cfg.texture)
+
+    h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
+    h.bg:SetTexture(cfg.texture)
+    h.bg:SetAllPoints(h)
+
+    h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
+    h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_ppglow")
+    h.glow:SetAllPoints(self)
+    h.glow:SetVertexColor(0,0,0,1)
+
+    self.Power = h
+    self.Power.Smooth = true
+
   end
 
   --create health power strings
@@ -335,33 +365,6 @@
 
   end
 
-  --create power frames
-  local createPowerFrame = function(self)
-
-    local cfg = self.cfg.power
-
-    --power
-    local h = CreateFrame("StatusBar", nil, self)
-    h:SetPoint("TOP",0,-38.5)
-    h:SetPoint("LEFT",24.5,0)
-    h:SetPoint("RIGHT",-24.5,0)
-    h:SetPoint("BOTTOM",0,21.9)
-
-    h:SetStatusBarTexture(cfg.texture)
-
-    h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
-    h.bg:SetTexture(cfg.texture)
-    h.bg:SetAllPoints(h)
-
-    h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
-    h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_ppglow")
-    h.glow:SetAllPoints(self)
-    h.glow:SetVertexColor(0,0,0,1)
-
-    self.Power = h
-    self.Power.Smooth = true
-
-  end
 
   ---------------------------------------------
   -- RAID STYLE FUNC

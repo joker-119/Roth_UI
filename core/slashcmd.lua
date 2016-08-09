@@ -23,6 +23,7 @@
     "Roth_UIEclipsePower",
     "Roth_UIRuneBar",
     "Roth_UIComboPoints",
+	"Roth_UIArtifactPower",
   }
   Roth_UI_Orbs = {
   "Roth_UIPowerOrb",

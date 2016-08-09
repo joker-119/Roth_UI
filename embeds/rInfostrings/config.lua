@@ -22,4 +22,4 @@
   }
 
   cfg.showXpRep     = true --show xp or reputation as string
-  cfg.showMail      = true --show mail as text
+  cfg.showMail      = false --show mail as text

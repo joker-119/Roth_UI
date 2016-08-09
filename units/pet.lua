@@ -45,7 +45,7 @@
 
     --health
     local h = CreateFrame("StatusBar", nil, self)
-    h:SetPoint("TOP",0,-21.9)
+    h:SetPoint("TOP",0,-27.9)
     h:SetPoint("LEFT",24.5,0)
     h:SetPoint("RIGHT",-24.5,0)
     h:SetPoint("BOTTOM",0,28.7)
@@ -57,7 +57,10 @@
 
     h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
     h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_hpglow")
-    h.glow:SetAllPoints(self)
+    h.glow:SetPoint("TOP",0,17)
+    h.glow:SetPoint("LEFT",-24,0)
+    h.glow:SetPoint("RIGHT",24,0)
+    h.glow:SetPoint("BOTTOM",0,-20)
     h.glow:SetVertexColor(0,0,0,1)
 
     h.highlight = h:CreateTexture(nil,"OVERLAY",nil,-4)
@@ -73,11 +76,11 @@
     local cfg = self.cfg.power
 
     --power
-    local h = CreateFrame("StatusBar", nil, self)
-    h:SetPoint("TOP",0,-38.5)
-    h:SetPoint("LEFT",24.5,0)
-    h:SetPoint("RIGHT",-24.5,0)
-    h:SetPoint("BOTTOM",0,21.9)
+    local h = CreateFrame("StatusBar", nil, self.Health)
+     h:SetPoint("TOP",0,-13)
+     h:SetPoint("LEFT",5,0)
+     h:SetPoint("RIGHT",-5,0)
+     h:SetPoint("BOTTOM",0,-10)
 
     h:SetStatusBarTexture(cfg.texture)
 

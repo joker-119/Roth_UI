@@ -86,10 +86,10 @@
 		TextSize = 11,
         hideDefault = true, --if you hide the Roth_UI castbar, should the Blizzard castbar be shown?
         latency = true,
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar256_2",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         scale = 1/1, --divide 1 by current unit scale if you want to prevent scaling of the castbar based on unit scale
         color = {
-          bar = { r = 1, g = 0.7, b = 0, a = 1, },
+          bar = { r = 0, g = 0.5, b = 1, a = 0.8, },
           bg = { r = 0.1, g = 0.1, b = 0.1, a = 0.7, },
         },
         pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 180.5 },
@@ -157,8 +157,8 @@
       },
       expbar = { --experience
         show = true,
-          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 10 },
-          texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 9 },
+          texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar2",
           scale = 1,
           color = {r = 0.8, g = 0, b = 0.8, },
           rested = {
@@ -167,10 +167,16 @@
       },
       repbar = { --reputation
         show = true,
-          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 10 },
-          texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 20 },
+          texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar2",
           scale = 1,
       },
+	  ArtifactPower = {
+		show = true,
+			pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 15 },
+			texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar2",
+			scale = 1,
+	  },
       art = {
         actionbarbackground = {
           show = true,
@@ -208,7 +214,7 @@
       pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = -100 },
       health = {
 	frequentUpdates = true,
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar256_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:hpval]",
 		fontSize = 7,
 		point = "RIGHT",
@@ -217,7 +223,7 @@
       },
 	  healper = {
 	frequentUpdates = true,
-		texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar256_3",
+		texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
 		tag = "[perphp]",
 		fontSize = 10,
 		point = "CENTER",
@@ -226,16 +232,16 @@
 	  },
 	  powper = {
 	frequentUpdates = true,
-		texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+		texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
 		tag = "[perpp]%",
 		fontSize = 7,
 		point = "CENTER",
 		x = 0,
-		y = -11,
+		y = 0,
 	  },
       power = {
 	frequentUpdates = true,
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:ppval]",
 		fontSize = 7,
 		point = "LEFT",
@@ -270,15 +276,15 @@
       castbar = {
         show = true,
 		TextSize = 11,
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar256_2",
-        scale = 1/1.5, --divide 1 by current unit scale if you want to prevent scaling of the castbar based on unit scale
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
+        scale = 1/1.9, --divide 1 by current unit scale if you want to prevent scaling of the castbar based on unit scale
         color = {
-          bar = { r = 1, g = 0.7, b = 0, a = 1, },
-          bg = { r = 0.1, g = 0.1, b = 0.1, a = 0.7, },
+          bar = { r = 0, g = 0.5, b = 1, a = .7, },
+          bg = { r = 0.1, g = 0.1, b = 0.1, a = 1, },
           shieldbar = { r = 0.5, g = 0.5, b = 0.5, a = 1, }, --the castbar color while target casting a shielded spell
           shieldbg = { r = 0.1, g = 0.1, b = 0.1, a = 0.7, },  --the castbar background color while target casting a shielded spell
         },
-        pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = -230 },
+        pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = -300 },
       },
       portrait = {
         pos = { a1 = "CENTER", a2 = "CENTER", af = "UIParent", x = 100, y = 0 },
@@ -288,7 +294,7 @@
       },
       healprediction = {
         show = true,
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         color = {
           myself  = {r = 0, g = 1, b = 0, a = 1 },
           other   = {r = 0, g = 1, b = 0, a = 0.7 },
@@ -308,7 +314,7 @@
     targettarget = {
       show = true,
       scale = 1.3,
-      pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = -200, y = -120 },
+      pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = -238, y = -115 },
       auras = {
         show = true,
         size = 22,
@@ -316,15 +322,15 @@
         showDebuffType = false,
       },
       health = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:misshp]",
       },
       power = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
       },
       healprediction = {
         show = true,
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         color = {
           myself  = {r = 0, g = 1, b = 0, a = 1 },
           other   = {r = 0, g = 1, b = 0, a = 0.7 },
@@ -345,17 +351,17 @@
         showDebuffType = false,
       },
       health = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:misshp]",
       },
       power = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
       },
       altpower = {
         show = false,
         scale = 0.5,
         color = {r = 1, g = 0, b = 1, },
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         pos = { a1 = "CENTER", a2 = "CENTER", af = "UIParent", x = 0, y = 0 },
       },
       portrait = {
@@ -365,7 +371,7 @@
       castbar = {
         show = false,
         hideDefault = true, --if you hide the Roth_UI castbar, should the Blizzard castbar be shown?
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar256_2",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         scale = 1/0.85, --divide 1 by current unit scale if you want to prevent scaling of the castbar based on unit scale
         color = {
           bar = { r = 1, g = 0.7, b = 0, a = 1, },
@@ -401,21 +407,21 @@
         showBuffType = false,
       },
       health = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:misshp]",
       },
       power = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
       },
       portrait = {
         show = true,
         use3D = true,
       },
       castbar = {
-        show = true,
+        show = false,
 		TextSize = 11,
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar256_2",
-        scale = 1/0.85, --divide 1 by current unit scale if you want to prevent scaling of the castbar based on unit scale
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
+        scale = 1/1.9, --divide 1 by current unit scale if you want to prevent scaling of the castbar based on unit scale
         color = {
           bar = { r = 1, g = 0.7, b = 0, a = 1, },
           bg = { r = 0.1, g = 0.1, b = 0.1, a = 0.7, },
@@ -452,11 +458,11 @@
         showDebuffType = false,
       },
       health = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:misshp]",
       },
       power = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
       },
       portrait = {
         show = true,
@@ -512,7 +518,7 @@
 		number = 12,
       },
       health = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:misshp]",
 		fontSize = 11,
 		point = "RIGHT",
@@ -520,7 +526,7 @@
 		y = 0,
       },
       power = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
       },
 	  misc = {
 		NameFontSize = 14
@@ -539,7 +545,7 @@
       },
       healprediction = {
         show = true,
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         color = {
           myself  = {r = 0, g = 1, b = 0, a = 1 },
           other   = {r = 0, g = 1, b = 0, a = 0.7 },
@@ -567,11 +573,11 @@
       scale = .98,
       pos = { a1 = "TOPLEFT", a2 = "TOPLEFT", af = "UIParent", x = 5, y = -5 },
       health = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:misshp]",   --tag for the second line
       },
       power = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
       },
       aurawatch = {
         show            = true,
@@ -619,7 +625,7 @@
       },
       healprediction = {
         show = false,
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         color = {
           myself  = {r = 0, g = 1, b = 0, a = 1 },
           other   = {r = 0, g = 1, b = 0, a = 0.7 },
@@ -641,11 +647,11 @@
       scale = 1,
       pos = { a1 = "TOP", a2 = "BOTTOM", af = "Minimap", x = 0, y = -80 },
       health = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:bosshp]%",
       },
       power = {
-        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar5",
+        texture = "Interface\\AddOns\\Roth_UI\\media\\statusbar3",
         tag = "[diablo:bosspp]",
       },
     },

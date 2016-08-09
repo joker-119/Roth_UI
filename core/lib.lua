@@ -635,19 +635,19 @@ end
     local c = CreateFrame("StatusBar", "$parentCastbar", f)
     --wow is this outdated...man I really need to rewrite how the drag stuff is handled
     tinsert(Roth_UI_Bars,c:GetName())
-    c:SetSize(186.8,20.2)
+    c:SetSize(265,15)
     c:SetStatusBarTexture(f.cfg.castbar.texture)
     c:SetScale(f.cfg.castbar.scale)
-    c:SetPoint(f.cfg.castbar.pos.a1, f.cfg.castbar.pos.af, f.cfg.castbar.pos.a2, f.cfg.castbar.pos.x+10.1, f.cfg.castbar.pos.y)
+    c:SetPoint(f.cfg.castbar.pos.a1, f.cfg.castbar.pos.af, f.cfg.castbar.pos.a2, f.cfg.castbar.pos.x+8, f.cfg.castbar.pos.y)
     c:SetStatusBarColor(f.cfg.castbar.color.bar.r,f.cfg.castbar.color.bar.g,f.cfg.castbar.color.bar.b,f.cfg.castbar.color.bar.a)
     --c:SetStatusBarColor(0,0,0,1)
 
     c.background = c:CreateTexture(nil,"BACKGROUND",nil,-8)
     c.background:SetTexture("Interface\\AddOns\\Roth_UI\\media\\castbar")
-    c.background:SetPoint("TOP",0,21.9)
-    c.background:SetPoint("LEFT",-44.7,0)
-    c.background:SetPoint("RIGHT",24.5,0)
-    c.background:SetPoint("BOTTOM",0,-22.2)
+    c.background:SetPoint("TOP",0,24.9)
+    c.background:SetPoint("LEFT",-170,0)
+    c.background:SetPoint("RIGHT",170,0)
+    c.background:SetPoint("BOTTOM",0,-24.2)
 
     c.bg = c:CreateTexture(nil,"BACKGROUND",nil,-6)
     c.bg:SetTexture(f.cfg.castbar.texture)
@@ -664,11 +664,6 @@ end
     c.Text:SetPoint("RIGHT", -50, 0)
     --c.Text:SetPoint("RIGHT", c.Time, "LEFT", -10, 0) --right point of text will anchor left point of time
 
-    --icon
-    c.Icon = c:CreateTexture(nil, "OVERLAY",nil,-5)
-    c.Icon:SetSize(20.2,20.2)
-    c.Icon:SetPoint("LEFT", -20.2, 0)
-    c.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
     c.Spark = c:CreateTexture(nil,"LOW",nil,-7)
     c.Spark:SetBlendMode("ADD")
@@ -676,12 +671,19 @@ end
 
     c.glow = c:CreateTexture(nil, "OVERLAY",nil,-4)
     c.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\castbar_glow")
-    c.glow:SetAllPoints(c.background)
+    c.glow:SetPoint("TOP",0,26.5)
+    c.glow:SetPoint("LEFT",-35,0)
+    c.glow:SetPoint("RIGHT",35,0)
+    c.glow:SetPoint("BOTTOM",0,-24.2)
     c.glow:SetVertexColor(0,0,0,1)
 
     c.highlight = c:CreateTexture(nil,"OVERLAY",nil,-3)
     c.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\castbar_highlight")
-    c.highlight:SetAllPoints(c.background)
+    c.highlight:SetPoint("TOP",0,26.5)
+    c.highlight:SetPoint("LEFT",-35,0)
+    c.highlight:SetPoint("RIGHT",35,0)
+    c.highlight:SetPoint("BOTTOM",0,-24.2)
+	
 
     if f.cfg.style == "target" then
       c.Shield = c:CreateTexture(nil,"BACKGROUND",nil,-8)
