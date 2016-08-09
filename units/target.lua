@@ -33,20 +33,16 @@
   end
 
   --Target Frame
+	local artwork
 	local createArtwork = function(self)
     local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetPoint("TOP",0,25)
     t:SetPoint("LEFT",-62,0)
     t:SetPoint("RIGHT",60,0)
     t:SetPoint("BOTTOM",0,-15)
-      
-    if UnitClassification(unit) == "worldboss" then
-         t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_boss")
-    elseif UnitClassification(unit) == "rare" or UnitClassification(unit) == "rareelite" or UnitClassification(unit) == "elite" then
-         t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_elite")
-    else 
-         t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target")
-    end
+	t:SetTexture("")
+	
+	artwork = t
 end
 	
   --make a sound when target gets selected
@@ -127,19 +123,6 @@ end
     self.Power.Smooth = true
     self.Power.frequentUpdates = self.cfg.power.frequentUpdates or false
 
-  end
-
-  --create the elite head texture
-  local bubblehead
-  local createBubbleHead = function(self)
-    local headsize = 80
-    local head = self.Health:CreateTexture(nil,"OVERLAY",nil,-4)
-    head:SetTexture("")
-    head:SetWidth(headsize)
-    head:SetHeight(headsize/2)
-    head:SetPoint("BOTTOM",0,-32)
-    bubblehead = head
-    bubblehead:Hide()
   end
 
   --create health power strings
@@ -241,7 +224,6 @@ end
   ---------------------------------------------
 
   oUF.Tags.Methods["diablo:classtext"] = function(unit)
-    bubblehead:Hide()
     local string, tmpstring, sp = "", "", " "
     if UnitLevel(unit) == 0 then
       string = "Haxx, unit undefined"
@@ -262,19 +244,19 @@ end
     local unit_classification = UnitClassification(unit)
     if unit_classification == "worldboss" or UnitLevel(unit) == -1 then
       tmpstring = "Boss"
-      bubblehead:Show()
-      bubblehead:SetTexture("Interface\\AddOns\\Roth_UI\\media\\d3_head_skull")
+	  artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_boss")
     elseif unit_classification == "rare" or unit_classification == "rareelite" then
       tmpstring = "Rare"
-      bubblehead:Show()
-      bubblehead:SetTexture("Interface\\AddOns\\Roth_UI\\media\\d3_head_diablo")
+	  artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_elite")
       if unit_classification == "rareelite" then
         tmpstring = tmpstring.." Elite"
+		artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_elite")
       end
     elseif unit_classification == "elite" then
       tmpstring = "Elite"
-      bubblehead:Show()
-      bubblehead:SetTexture("Interface\\AddOns\\Roth_UI\\media\\d3_head_new")
+	  artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_elite")
+	else
+	  artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target")
     end
     if tmpstring ~= "" then
       tmpstring = tmpstring..sp
@@ -318,9 +300,6 @@ end
     self.Health:SetScript("OnShow",function(s)
       playTargetSound(self,"PLAYER_TARGET_CHANGED")
     end)
-
-    --create bubblehead
-    createBubbleHead(self)
 
     --health power strings
     createHealthPowerStrings(self)
