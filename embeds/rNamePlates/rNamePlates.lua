@@ -92,16 +92,17 @@ h:SetScript("OnEvent", function(h, event, ...)
   
             --Highlight Frame
             local hlf = CreateFrame("Frame",nil,frame.healthBar)
-            hlf:SetAllPoints()
+            hlf:SetAllPoints(frame.healthBar)
             frame.healthBar.hlf = hlf
   
             --Highlight
             local hl = hlf:CreateTexture(nil,"BACKGROUND",nil,-8)
             hl:SetTexture(mediapath.."statusbar_highlight")
-            hl:SetPoint("TOP",50,0)
-			hl:SetPoint("LEFT",-50,0)
-			hl:SetPoint("RIGHT",50,0)
-			hl:SetPoint("BOTTOM",40,0)
+			hl:SetAllPoints(hlf)
+--            hl:SetPoint("TOP",50,0)
+--			hl:SetPoint("LEFT",-30,0)
+--			hl:SetPoint("RIGHT",30,0)
+--			hl:SetPoint("BOTTOM",40,0)
   
             --Cast Bar
             frame.castBar:SetStatusBarTexture(mediapath.."statusbar_fill")
