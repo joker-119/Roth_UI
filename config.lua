@@ -45,9 +45,9 @@
     -- PLAYER
     player = {
       show = true,
-      size = 150,
+      size = 160,
       scale = 1,
-      pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -300, y = -9 },
+      pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -264, y = 2 },
       health = {
         frequentUpdates = true,
         smooth = true,
@@ -180,17 +180,17 @@
       art = {
         actionbarbackground = {
           show = true,
-          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 1, y = 0 },
-          scale = 1.2,
+          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 0 },
+          scale = 1,
         },
         angel = {
           show = true,
-          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 315, y = 0 },
+          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 265, y = 0 },
           scale = 1,
         },
         demon = {
           show = true,
-          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -315, y = 0 },
+          pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -270, y = 0 },
           scale = 1,
         },
         bottomline = {

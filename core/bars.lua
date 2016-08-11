@@ -9,6 +9,7 @@
   --get the functions
   local func = ns.func
   local cfg = ns.cfg
+  local barposition = ns.player
 
   ---------------------------------------------
   -- FUNCTIONS
@@ -19,13 +20,13 @@
     local cfg = self.cfg.expbar
     if not cfg.show then return end
 
-    local w, h = 360, 5
+    local w, h = 365, 5
 
     local f = CreateFrame("StatusBar","Roth_UIExpBar",self)
-    f:SetFrameStrata("LOW")
+    f:SetFrameStrata("BACKGROUND")
     f:SetFrameLevel(2)
     f:SetSize(w,h)
-    f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
+--    f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
     f:SetScale(cfg.scale)
     f:SetStatusBarTexture(cfg.texture)
     f:SetStatusBarColor(cfg.color.r,cfg.color.g,cfg.color.b)
@@ -69,13 +70,12 @@
     local cfg = self.cfg.repbar
     if not cfg.show then return end
 
-    local w, h = 360, 5
+    local w, h = 365, 5
 
     local f = CreateFrame("StatusBar","Roth_UIRepBar",self)
-    f:SetFrameStrata("LOW")
-    f:SetFrameLevel(1)
+    f:SetFrameStrata("BACKGROUND")
+    f:SetFrameLevel(0)
     f:SetSize(w,h)
-    f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
     f:SetScale(cfg.scale)
     f:SetStatusBarTexture(cfg.texture)
     f:SetStatusBarColor(0,0.7,0)
@@ -106,16 +106,17 @@
 
   end
   
+  --create the Artifact Bar
   bars.createArtifactPowerBar = function(self)
   
 	local cfg = self.cfg.ArtifactPower
 	if not cfg.show then return end
 	
-	local w, h = 360, 5
+	local w, h = 365, 5
 	
 	-- Create the Bar Frame
 	local f = CreateFrame("StatusBar","Roth_UIArtifactPower",self)
-	f:SetFrameStrata("LOW")
+	f:SetFrameStrata("BACKGROUND")
 	f:SetFrameLevel(1)
 	f:SetSize(w,h)
 	f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
@@ -337,110 +338,6 @@ end
 
   end
 
-  --create burningember power bar
-  bars.createBurningEmberPowerBar = function(self)
-
-    self.BurningEmbers = {}
-
-    local t
-    local bar = CreateFrame("Frame","Roth_UIBurningEmberPower",self)
-    bar.maxOrbs = 4
-    local w = 64*(bar.maxOrbs+2) --create the bar for
-    local h = 64
-    --bar:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-    bar:SetPoint(self.cfg.burningembers.pos.a1,self.cfg.burningembers.pos.af,self.cfg.burningembers.pos.a2,self.cfg.burningembers.pos.x,self.cfg.burningembers.pos.y)
-    bar:SetWidth(w)
-    bar:SetHeight(h)
-    bar:Hide() --hide bar (it will become available if the spec matches)
-
-    --color
-    bar.color = self.cfg.burningembers.color
-
-    --left edge
-    t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetSize(64,64)
-    t:SetPoint("LEFT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_left")
-    bar.leftEdge = t
-
-    --right edge
-    t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetSize(64,64)
-    t:SetPoint("RIGHT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_right")
-    bar.rightEdge = t
-
-    local MAX_POWER_PER_EMBER = 10
-
-    for i = 1, bar.maxOrbs do
-
-      local orb = CreateFrame("StatusBar",nil,bar)
-      self.BurningEmbers[i] = orb
-      orb:SetSize(64,64)
-      orb:SetPoint("LEFT",i*64,0)
-      orb:SetMinMaxValues(0, MAX_POWER_PER_EMBER)
-      orb:SetValue(0)
-
-      local orbSizeMultiplier = 0.74
-
-      --bar background
-      orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
-      orb.barBg:SetSize(64,64)
-      orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_bar_bg")
-
-      --orb background
-      orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
-      orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
-      orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_pot_bg")
-      orb.bg:SetAlpha(0.7)
-
-      --orb filling
-      local fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
-      fill:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_pot_fill1")
-      --fill:SetVertexColor(self.cfg.burningembers.color.r,self.cfg.burningembers.color.g,self.cfg.burningembers.color.b)
-      orb:SetStatusBarTexture(fill)
-      orb:SetOrientation("VERTICAL")
-
-      --stack another frame to correct the texture stacking
-      local helper = CreateFrame("Frame",nil,orb)
-      helper:SetAllPoints(orb)
-
-      --orb border
-      orb.border = helper:CreateTexture(nil,"BACKGROUND",nil,-5)
-      orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
-      orb.border:SetPoint("CENTER")
-      orb.border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_pot_border")
-      orb.border:SetVertexColor(0.75,0.7,0.7)
-
-      --orb glow
-      orb.glow = helper:CreateTexture(nil,"BACKGROUND",nil,-4)
-      orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
-      orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_pot_glow")
-      orb.glow:SetVertexColor(self.cfg.burningembers.color.r,self.cfg.burningembers.color.g,self.cfg.burningembers.color.b)
-      orb.glow:SetBlendMode("BLEND")
-
-      --orb highlight
-      orb.highlight = helper:CreateTexture(nil,"BACKGROUND",nil,-3)
-      orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
-      orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_pot_highlight")
-      orb.highlight:SetAlpha(0.8)
-
-    end
-
-    bar:SetScale(self.cfg.burningembers.scale)
-    func.applyDragFunctionality(bar)
-    --combat fading
-    if self.cfg.burningembers.combat.enable then
-      rCombatFrameFader(bar, self.cfg.burningembers.combat.fadeIn, self.cfg.burningembers.combat.fadeOut) --frame, buttonList, fadeIn, fadeOut
-    end
-    self.BurningEmberPowerBar = bar
-
-  end
-
   --create soulshard power bar
   bars.createSoulShardPowerBar = function(self)
 
@@ -537,58 +434,6 @@ end
 
   end
 
-  --create warlock bars
-  bars.createDemonicFuryPowerBar = function(self)
-    self.DemonicFury = {}
-    local bar = CreateFrame("Frame","oUF_DemonicFuryPower",self)
-    bar:SetPoint(self.cfg.demonicfury.pos.a1,self.cfg.demonicfury.pos.af,self.cfg.demonicfury.pos.a2,self.cfg.demonicfury.pos.x,self.cfg.demonicfury.pos.y)
-    bar:SetSize(256,32)
-    bar:SetScale(self.cfg.demonicfury.scale)
-    bar:Hide() --hide bar (it will become available if the spec matches)
-
-    local sb = CreateFrame("StatusBar",nil,bar)
-    self.DemonicFury[1] = sb
-
-    sb:SetPoint("TOPLEFT",17,-5)
-    sb:SetPoint("BOTTOMRIGHT",-17,5)
-    sb:SetStatusBarTexture("Interface\\AddOns\\Roth_UI\\media\\demonic_fury_statusbar")
-    sb:SetStatusBarColor(self.cfg.demonicfury.color.bar.r,self.cfg.demonicfury.color.bar.g,self.cfg.demonicfury.color.bar.b)
-
-    local t = sb:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetAllPoints(sb)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\demonic_fury_statusbar")
-    t:SetVertexColor(self.cfg.demonicfury.color.bg.r,self.cfg.demonicfury.color.bg.g,self.cfg.demonicfury.color.bg.b)
-    sb.bg = t
-
-    local border = CreateFrame("Frame",nil,sb)
-    border:SetAllPoints(bar)
-    local t = border:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetAllPoints(bar)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\demonic_fury_border")
-    sb.border = t
-
-    local t = border:CreateTexture(nil,"BACKGROUND",nil,-7)
-    t:SetSize(512,64)
-    t:SetPoint("CENTER")
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\demonic_fury_glow")
-    t:SetVertexColor(self.cfg.demonicfury.color.bar.r,self.cfg.demonicfury.color.bar.g,self.cfg.demonicfury.color.bar.b)
-    t:SetBlendMode("BLEND")
-    sb.glow = t
-    
-    local text = func.createFontString(border, cfg.font, 14, "THINOUTLINE")
-    text:SetPoint("CENTER")
-    text:SetTextColor(0.8,0.8,0.8)
-    sb.value = text
-
-    func.applyDragFunctionality(bar)
-
-    --combat fading
-    if self.cfg.demonicfury.combat.enable then
-      rCombatFrameFader(bar, self.cfg.demonicfury.combat.fadeIn, self.cfg.demonicfury.combat.fadeOut) --frame, buttonList, fadeIn, fadeOut
-    end
-
-    self.DemonicFuryPowerBar = bar
-  end
 
   --create rune orbs bar
   bars.createRuneBar = function(self)
@@ -682,120 +527,6 @@ end
       rCombatFrameFader(bar, self.cfg.runes.combat.fadeIn, self.cfg.runes.combat.fadeOut) --frame, buttonList, fadeIn, fadeOut
     end
     self.RuneBar = bar
-
-  end
-
-  --create eclipse power bar
-  bars.createEclipseBar = function(self)
-
-    local bar = CreateFrame("Frame","Roth_UIEclipsePower",self)
-    bar:SetPoint(self.cfg.eclipse.pos.a1,self.cfg.eclipse.pos.af,self.cfg.eclipse.pos.a2,self.cfg.eclipse.pos.x,self.cfg.eclipse.pos.y)
-    bar:SetSize(256,32)
-    bar:SetScale(self.cfg.eclipse.scale)
-
-    local statusbarHelper = CreateFrame("Frame",nil,bar)
-    statusbarHelper:SetPoint("TOPLEFT",17,-5)
-    statusbarHelper:SetPoint("BOTTOMRIGHT",-17,5)
-
-    local bg = statusbarHelper:CreateTexture(nil,"BACKGROUND",nil,-8)
-    bg:SetAllPoints(statusbarHelper)
-    bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\demonic_fury_statusbar")
-    bg:SetVertexColor(self.cfg.eclipse.color.bg.r,self.cfg.eclipse.color.bg.g,self.cfg.eclipse.color.bg.b)
-
-    --lunar bar
-    local lunar = CreateFrame("StatusBar",nil,statusbarHelper)
-    lunar:SetAllPoints(statusbarHelper)
-    local fill = lunar:CreateTexture(nil,"BACKGROUND",nil,-6)
-    fill:SetTexture("Interface\\AddOns\\Roth_UI\\media\\demonic_fury_statusbar")
-    lunar:SetStatusBarTexture(fill)
-    lunar:SetStatusBarColor(self.cfg.eclipse.color.lunar.r,self.cfg.eclipse.color.lunar.g,self.cfg.eclipse.color.lunar.b)
-
-    --solar bar
-    local solar = CreateFrame("StatusBar",nil,statusbarHelper)
-    solar:SetAllPoints(statusbarHelper)
-    local fill = solar:CreateTexture(nil,"BACKGROUND",nil,-6)
-    fill:SetTexture("Interface\\AddOns\\Roth_UI\\media\\demonic_fury_statusbar")
-    solar:SetStatusBarTexture(fill)
-    solar:SetStatusBarColor(self.cfg.eclipse.color.solar.r,self.cfg.eclipse.color.solar.g,self.cfg.eclipse.color.solar.b)
-
-    --border
-    local border = CreateFrame("Frame",nil,statusbarHelper)
-    border:SetFrameLevel(max(solar:GetFrameLevel()+1,lunar:GetFrameLevel()+1))
-    border:SetAllPoints(bar)
-    local t = border:CreateTexture(nil,"BACKGROUND",nil,-4)
-    t:SetAllPoints(bar)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\demonic_fury_border")
-    bar.border = t
-
-    --tick
-    local t = border:CreateTexture(nil,"BACKGROUND",nil,-5)
-    t:SetPoint("TOP",0,6)
-    t:SetSize(48,48)
-    t:SetAlpha(0.6)
-    t:SetTexture("Interface\\MainMenuBar\\UI-ExhaustionTickNormal")
-    bar.tickTexture = t
-
-    --glow
-    local t = border:CreateTexture(nil,"BACKGROUND",nil,-2)
-    t:SetSize(512,64)
-    t:SetPoint("CENTER")
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\demonic_fury_glow")
-    t:SetVertexColor(0,0.5,1)
-    t:SetBlendMode("BLEND")
-    bar.glow = t
-    bar.glow:Hide()
-
-    bar.PostUnitAura = function()
-      if bar.hasSolarEclipse then
-        bar.glow:SetVertexColor(self.cfg.eclipse.color.solar.r,self.cfg.eclipse.color.solar.g,self.cfg.eclipse.color.solar.b)
-        bar.glow:Show()
-        return
-      end
-      if bar.hasLunarEclipse then
-        bar.glow:SetVertexColor(self.cfg.eclipse.color.lunar.r,self.cfg.eclipse.color.lunar.g,self.cfg.eclipse.color.lunar.b)
-        bar.glow:Show()
-        return
-      end
-      bar.glow:Hide()
-    end
-
-    bar.PostDirectionChange = function()
-      if GetEclipseDirection() == "sun" then
-        bar.LunarBar:SetStatusBarColor(self.cfg.eclipse.color.lunar.r,self.cfg.eclipse.color.lunar.g,self.cfg.eclipse.color.lunar.b)
-        bar.LunarBar:Show()
-        bar.SolarBar:Hide()
-      elseif GetEclipseDirection() == "moon" then
-        bar.LunarBar:Hide()
-        bar.SolarBar:SetStatusBarColor(self.cfg.eclipse.color.solar.r,self.cfg.eclipse.color.solar.g,self.cfg.eclipse.color.solar.b)
-        bar.SolarBar:Show()
-      else
-        bar.LunarBar:SetStatusBarColor(0.8,0.8,0.8)
-        bar.SolarBar:SetStatusBarColor(0.8,0.8,0.8)
-        bar.LunarBar:Show()
-        bar.SolarBar:Show()
-      end
-    end
-
-    bar.PostUpdatePower = function()
-      local lmin, lmax = bar.LunarBar:GetMinMaxValues()
-      local lval = bar.LunarBar:GetValue()
-      local smin, smax = bar.SolarBar:GetMinMaxValues()
-      local sval = bar.SolarBar:GetValue()
-      bar.SolarBar:SetValue(bar.SolarBar:GetValue()*(-1))
-      bar.LunarBar:SetValue(bar.LunarBar:GetValue()*(-1))
-    end
-
-    bar.PostUpdateVisibility = bar.PostDirectionChange
-
-    func.applyDragFunctionality(bar)
-    --combat fading
-    if self.cfg.eclipse.combat.enable then
-      rCombatFrameFader(bar, self.cfg.eclipse.combat.fadeIn, self.cfg.eclipse.combat.fadeOut) --frame, buttonList, fadeIn, fadeOut
-    end
-
-    bar.SolarBar = solar
-    bar.LunarBar = lunar
-    self.EclipseBar = bar
 
   end
   

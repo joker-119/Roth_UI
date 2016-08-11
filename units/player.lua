@@ -28,7 +28,7 @@
 
   --init parameters
   local initUnitParameters = function(self)
-    self:SetFrameStrata("BACKGROUND")
+    self:SetFrameStrata("LOW")
     self:SetFrameLevel(1)
     self:SetSize(self.cfg.size, self.cfg.size)
     self:SetScale(self.cfg.scale)
@@ -40,51 +40,210 @@
   end
 
   --actionbar background
-  local createActionBarBackground = function(self)
-    local cfg = self.cfg.art.actionbarbackground
-    if not cfg.show then return end
-    local f = CreateFrame("Frame","Roth_UIActionBarBackground",self)
-    f:SetFrameStrata("BACKGROUND")
-    f:SetFrameLevel(0)
-    f:SetSize(512,256)
-    f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
-    f:SetScale(cfg.scale)
-    func.applyDragFunctionality(f)
-    local t = f:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetAllPoints(f)
-    local setupBarTexture = function()
-      if ((HasVehicleActionBar() and UnitVehicleSkin("player") and UnitVehicleSkin("player") ~= "")
-      or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= ""))
-      or UnitHasVehicleUI("player") then
-        t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\vehiclebar")
-      elseif MultiBarBottomRight:IsShown() then
-        t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\bar3")
-      elseif MultiBarBottomLeft:IsShown() then
-        t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\bar2")
-      else
-        t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\bar1")
-      end
-    end
-    setupBarTexture()
-    MultiBarBottomRight:HookScript("OnShow", setupBarTexture)
-    MultiBarBottomRight:HookScript("OnHide", setupBarTexture)
-    MultiBarBottomLeft:HookScript("OnShow", setupBarTexture)
-    MultiBarBottomLeft:HookScript("OnHide", setupBarTexture)
-    f:RegisterEvent("UNIT_ENTERED_VEHICLE")
-    f:RegisterEvent("UNIT_EXITED_VEHICLE")
-    f:SetScript("OnEvent", function(...)
-      local self, event, unit = ...
-      if unit and unit ~= "player" then return end
-      setupBarTexture()
-    end)
-  end
+local createActionBarBackground = function(self)
+	local cfg = self.cfg.art.actionbarbackground
+	if not cfg.show then return end
+	local f = CreateFrame("Frame","Roth_UIActionBarBackground",self)
+		f:SetFrameStrata("LOW")
+		f:SetFrameLevel(0)
+		f:SetSize(788,220)
+		f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
+		f:SetScale(cfg.scale)
+		
+		func.applyDragFunctionality(f)
+		
+		local t = f:CreateTexture(nil,"BACKGROUND",nil,-8)
+			t:SetAllPoints(f)
+	
+			--Setup Actionbars
+			local setupBarTexture = function()
+			--Establish Variables
+			local cfg = self.cfg.repbar
+			local actionbar
+			local levelbar
+			local repbar
+			local artifactbar
+			
+				--Determine ActionBar Status and report vehicle, 3, 2 or 1 depending on actionbars displayed
+				if ((HasVehicleActionBar() and UnitVehicleSkin("player") and UnitVehicleSkin("player") ~= "") or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= "")) or UnitHasVehicleUI("player") then
+					bar = "vehicle"
+				elseif MultiBarBottomRight:IsShown() then
+					bar = "3"
+				elseif MultiBarBottomLeft:IsShown() then
+					bar = "2"
+				else
+					bar = "1"
+				end
+
+				--Determine is player is max level
+				if UnitLevel("player") == 100 then
+					levelbar = false
+				else
+					levelbar = true
+				end
+		
+				--Determine if player is 'watching' a faction (show rep as exp bar)
+				if GetWatchedFactionInfo() then
+					repbar = true
+				else
+					repbar = false
+				end
+		
+				--Determine if player has an artifact weapon equipped
+				if C_ArtifactUI.GetArtifactInfo() then
+					artifactbar = true
+				else
+					artifactbar = false
+				end
+		
+				--Select actionbar background and align related elements to fit within artwork (actionbars 1-3 are pre-set, we only need to change micromenubar, stancebar, bagbar, expbar, artifactpowerbar and repbar)
+				--If player is in vehicle, display vehicleUI artwork
+				if bar == "vehicle" then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\vehiclebar")
+				--If we are displaying all 3 actionbars and all 3 'exp' bars
+				elseif bar == "3" and repbar and levelbar and artifactbar then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_all")
+					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 123)
+					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 133)
+					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 143)
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 129)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 129)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 129)
+				--If we are displaying 3 action bars and only 2 'exp' bars, determing types and set positions accordingly. Exp/rep bars are static, Artifact will take free space
+				elseif (bar == "3" and repbar and levelbar) or (bar == "3" and repbar and artifactbar) or (bar == "3" and levelbar and artifactbar) then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_2")
+					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 123)
+					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 133)
+					if artifactbar and not levelbar then
+						Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 123)
+					else
+						Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 133)
+					end
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 129)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 129)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 129)
+				--If we are displaying all 3 actionbars but only 1 'exp' bar, since only one bar is displayed, set position for all to avoid unecessary if/then/else functions
+				elseif (bar == "3" and levelbar) or (bar == "3" and repbar) or (bar == "3" and artifactbar) then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_1")
+					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 123)
+					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 123)
+					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 123)
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 129)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 129)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 129)
+				--If we are displaying 2 actionbars and all 3 'exp' bars, set positions for all bars.
+				elseif bar == "2" and repbar and levelbar and artifactbar then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_3")
+					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 103)
+					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 113)
+					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 123)
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 95)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 95)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 95)
+				--If we are displaying 2 action bars and 2 'exp' bars, set position for bars, and determine where artifact bar goes
+				elseif (bar == "2" and repbar and levelbar) or (bar == "2" and repbar and artifactbar) or (bar == "2" and levelbar and artifactbar) then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_2")
+					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 103)
+					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 113)
+					if artifactbar and not levelbar then
+						Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 103)
+					else
+						Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 113)
+					end
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 95)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 95)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 95)
+				--If we are displaying 2 actionbars and 1 'exp' bar, set position for all bars to avoid unecessary if/then/else functions
+				elseif (bar == "2" and repbar) or (bar == "2" and levelbar) or (bar == "2" and artifactbar) then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_1")
+					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 103)
+					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 103)
+					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 103)
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 95)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 95)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 95)
+				--If we are displaying 1 actionbar and 3 'exp' bars, set positions for all bars.
+				elseif bar == "1" and repbar and levelbar and artifactbar then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_1_3")
+					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 57)
+					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 67)
+					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 77)
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 50)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 50)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 50)
+				--If 1 actionbar and 2 'exp' set static positions then determine location for artifact power
+				elseif (bar == "1" and repbar and levelbar) or (bar == "1" and repbar and artifactbar) or (bar == "1" and levelbar and artifactbar) then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_1_2")
+--					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 57)
+--					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 67)
+--					if artifactpower and not levelbar then
+--						Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 57)
+--					else
+--						Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 67)
+--					end
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 50)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 50)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 50)
+				--If 1 actionbar and 1 'exp' set all locations as static
+				elseif (bar == "1" and repbar) or (bar == "1" and levelbar) or (bar == "1" and artifactbar) then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_1_1")
+--					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 57)
+--					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 57)
+--					Roth_UIArtifactPower("BOTTOM", "UIParent", "BOTTOM", 0, 57)
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 95)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 95)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 95)
+				--If displaying 3 actionbars and no exp bars; checking status of exp bars not necessary, as they would have fired in previous elseif conditions if they existed
+				--Do not bother setting exp bar locations since none are displayed
+				elseif bar == "3"  then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_0")
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 129)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 129)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 129)
+				--If displaying 2 actionbar and no exp bars; checking status of exp bars not necessary, as they would have fired in previous elseif conditions if they existed
+				--Do not bother setting exp bar locations since none are displayed
+				elseif bar == "2" then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_0")
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 95)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 95)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 95)
+				--If displaying 1 actionbar and no exp bars; checking status of exp bars not necessary, as they would have fired in previous elseif conditions if they existed
+				--Do not bother setting exp bar locations since none are displayed
+				elseif bar == "1" then
+					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_1_0")
+					rABS_BagFrame:SetPoint("BOTTOM", "UIParent", "BOTTOM", 190, 50)
+					rABS_StanceBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 165, 50)
+					rABS_MicroMenu:SetPoint("BOTTOM", "UIParent", "BOTTOM", -120, 50)
+				end
+			end
+	
+	--Rerun function upon ActionBars 2&3 being hidden/shown to update artwork and exp/menu/bag/stance bar locations
+	setupBarTexture()
+	MultiBarBottomRight:HookScript("OnShow", setupBarTexture)
+	MultiBarBottomRight:HookScript("OnHide", setupBarTexture)
+	MultiBarBottomLeft:HookScript("OnShow", setupBarTexture)
+	MultiBarBottomLeft:HookScript("OnHide", setupBarTexture)
+		
+	--Register events to force re-run
+	--Used for updating when exp/rep/artifact bars are hidden/shown and when vehicles are entered/exited
+	f:RegisterEvent("UPDATE_FACTION")
+	f:RegisterEvent("ARTIFACT_UPDATE")
+	f:RegisterEvent("PLAYER_LEVEL_UP")
+	f:RegisterEvent("UNIT_ENTERED_VEHICLE")
+	f:RegisterEvent("UNIT_EXITED_VEHICLE")
+	f:SetScript("OnEvent", function(...)
+	local self, event, unit = ...
+	if unit and unit ~= "player" then return end
+		setupBarTexture()
+	end)
+end
 
   --create the angel
   local createAngelFrame = function(self)
     if not self.cfg.art.angel.show then return end
     local f = CreateFrame("Frame","Roth_UIAngelFrame",self)
     f:SetSize(320,160)
-    f:SetFrameStrata("LOW")
+    f:SetFrameStrata("MEDIUM")
     f:SetFrameLevel(0)
     f:SetPoint(self.cfg.art.angel.pos.a1, self.cfg.art.angel.pos.af, self.cfg.art.angel.pos.a2, self.cfg.art.angel.pos.x, self.cfg.art.angel.pos.y)
     f:SetScale(self.cfg.art.angel.scale)
@@ -99,7 +258,7 @@
     if not self.cfg.art.demon.show then return end
     local f = CreateFrame("Frame","Roth_UIDemonFrame",self)
     f:SetSize(320,160)
-    f:SetFrameStrata("LOW")
+    f:SetFrameStrata("MEDIUM")
     f:SetFrameLevel(0)
     f:SetPoint(self.cfg.art.demon.pos.a1, self.cfg.art.demon.pos.af, self.cfg.art.demon.pos.a2, self.cfg.art.demon.pos.x, self.cfg.art.demon.pos.y)
     f:SetScale(self.cfg.art.demon.scale)
@@ -116,7 +275,7 @@
     local f = CreateFrame("Frame","Roth_UIBottomLine",self)
     f:SetFrameStrata("MEDIUM")
     f:SetFrameLevel(0)
-    f:SetSize(500,112)
+    f:SetSize(600,112)
     f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
     f:SetScale(cfg.scale)
     func.applyDragFunctionality(f,"bottomline")

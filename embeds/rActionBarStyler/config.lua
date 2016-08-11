@@ -22,13 +22,13 @@
     bar1 = {
       enable          = true, --enable module
       uselayout2x6    = false,
-      scale           = 1.2,
+      scale           = 1,
       padding         = 2, --frame padding
       buttons         = {
         size            = 26,
         margin          = 5,
       },
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 20 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 16 },
       userplaced      = {
         enable          = true,
       },
@@ -46,13 +46,13 @@
     --OVERRIDE BAR (vehicle ui)
     overridebar = { --the new vehicle and override bar
       enable          = true, --enable module
-      scale           = 1.2,
+      scale           = 1,
       padding         = 2, --frame padding
       buttons         = {
         size            = 57,
         margin          = 5,
       },
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 20 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 16 },
       userplaced      = {
         enable          = true,
       },
@@ -71,13 +71,13 @@
     bar2 = {
       enable          = true, --enable module
       uselayout2x6    = false,
-      scale           = 1.2,
+      scale           = 1,
       padding         = 2, --frame padding
       buttons         = {
         size            = 26,
         margin          = 5,
       },
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 51 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 42 },
       userplaced      = {
         enable          = true,
       },
@@ -95,13 +95,13 @@
     --BAR 3
     bar3 = {
       enable          = true, --enable module
-      scale           = 1.2,
+      scale           = 1,
       padding         = 2, --frame padding
       buttons         = {
         size            = 26,
         margin          = 5,
       },
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 90 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 72 },
       userplaced      = {
         enable          = true,
       },
@@ -194,13 +194,13 @@
     stancebar = {
       enable          = true, --enable module
       show            = true, --true/false
-      scale           = 1.0,
+      scale           = 0.78,
       padding         = 2, --frame padding
       buttons         = {
         size            = 26,
         margin          = 5,
       },
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -70, y = 145 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 165, y = 129 },
       userplaced      = {
         enable          = true,
       },
@@ -257,14 +257,14 @@
     micromenu = {
       enable          = true, --enable module
       show            = true, --true/false
-      scale           = 0.82,
+      scale           = 0.7,
       padding         = 10, --frame padding
-      pos             = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = 25 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -120, y = 130 },
       userplaced      = {
         enable          = true,
       },
       mouseover       = {
-        enable          = true,
+        enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0},
       },
@@ -273,14 +273,14 @@
     bags = {
       enable          = true, --enable module
       show            = true, --true/false
-      scale           = 0.82,
+      scale           = 0.7,
       padding         = 15, --frame padding
-      pos             = { a1 = "BOTTOMRIGHT", a2 = "BOTTOMRIGHT", af = "UIParent", x = -0, y = 0 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 190, y = 131 },
       userplaced      = {
         enable          = true,
       },
       mouseover       = {
-        enable          = true,
+        enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0},
       },

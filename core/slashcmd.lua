@@ -13,8 +13,8 @@
   ---------------------------------------------
 
   Roth_UI_Bars = {
-    "Roth_UIExpBar",
-    "Roth_UIRepBar",
+--    "Roth_UIExpBar",
+--    "Roth_UIRepBar",
     "Roth_UISoulShardPower",
     "Roth_UIBurningEmberPower",
     "Roth_UIHolyPower",
@@ -23,7 +23,7 @@
     "Roth_UIEclipsePower",
     "Roth_UIRuneBar",
     "Roth_UIComboPoints",
-	"Roth_UIArtifactPower",
+--	"Roth_UIArtifactPower",
   }
   Roth_UI_Orbs = {
   "Roth_UIPowerOrb",
