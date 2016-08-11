@@ -30,21 +30,21 @@
     self:SetScript("OnLeave", UnitFrame_OnLeave)
     func.applyDragFunctionality(self)
     self:SetHitRectInsets(10,10,10,10)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED")
   end
 
   --Target Frame
-	local artwork
 	local createArtwork = function(self)
     local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetPoint("TOP",0,25)
     t:SetPoint("LEFT",-62,0)
     t:SetPoint("RIGHT",60,0)
     t:SetPoint("BOTTOM",0,-15)
-	t:SetTexture("")
-	
-	artwork = t
+		
+	self.RareIcon = t
 end
-	
+
+
   --make a sound when target gets selected
   local playTargetSound = function(self,event)
     if event == "PLAYER_TARGET_CHANGED" then
@@ -244,19 +244,13 @@ end
     local unit_classification = UnitClassification(unit)
     if unit_classification == "worldboss" or UnitLevel(unit) == -1 then
       tmpstring = "Boss"
-	  artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_boss")
     elseif unit_classification == "rare" or unit_classification == "rareelite" then
       tmpstring = "Rare"
-	  artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_elite")
       if unit_classification == "rareelite" then
         tmpstring = tmpstring.." Elite"
-		artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_elite")
       end
     elseif unit_classification == "elite" then
       tmpstring = "Elite"
-	  artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_elite")
-	else
-	  artwork:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target")
     end
     if tmpstring ~= "" then
       tmpstring = tmpstring..sp
@@ -294,6 +288,12 @@ end
     --createhealthPower
     createHealthFrame(self)
     createPowerFrame(self)
+	
+	--Classification
+	--[[self:RegisterEvent("PLAYER_TARGET_CHANGED", classification)
+	self.Health:SetScript("OnShow",function(s)
+		classification(self,"PLAYER_TARGET_CHANGED")
+	end)]]
 
     --sound
     self:RegisterEvent("PLAYER_TARGET_CHANGED", playTargetSound)
@@ -341,12 +341,13 @@ end
 
     --add heal prediction
     func.healPrediction(self)
-    
+	
     --add total absorb
     func.totalAbsorb(self)
 
     --add self to unit container (maybe access to that unit is needed in another style)
     unit.target = self
+
 
   end
 
