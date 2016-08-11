@@ -66,43 +66,54 @@ h:SetScript("OnEvent", function(h, event, ...)
             frame.healthBar:SetScale(0.35)
   
             --Left Edge artwork
-            local le = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
-            le:SetTexture(mediapath.."edge_left")
-            le:SetSize(64,64)
-            le:SetPoint("RIGHT",frame.healthBar,"LEFT",0,0)
-  
+			if (not frame.healthBar.le) then
+				frame.healthBar.le = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
+				frame.healthBar.le:SetTexture(mediapath.."edge_left")
+				frame.healthBar.le:SetSize(64,64)
+				frame.healthBar.le:SetPoint("RIGHT",frame.healthBar,"LEFT",0,0)
+			end
+	
             --Right Edge artwork
-            local re = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
-            re:SetTexture(mediapath.."edge_right")
-            re:SetSize(64,64)
-            re:SetPoint("LEFT",frame.healthBar,"RIGHT",0,0)
-            
+			if (not frame.healthBar.re) then
+				frame.healthBar.re = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
+				frame.healthBar.re:SetTexture(mediapath.."edge_right")
+				frame.healthBar.re:SetSize(64,64)
+				frame.healthBar.re:SetPoint("LEFT",frame.healthBar,"RIGHT",0,0)
+            end
+			
             --Healthbar Background
-            local bg = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
-            bg:SetTexture(mediapath.."statusbar_bg")
-            bg:SetAllPoints()
-  
+			if (not frame.healthBar.bg) then
+				frame.healthBar.bg = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
+				frame.healthBar.bg:SetTexture(mediapath.."statusbar_bg")
+				frame.healthBar.bg:SetAllPoints()
+			end
+			
             --Name shadow
-            local shadow = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
-            shadow:SetTexture("Interface\\Common\\NameShadow")
-            shadow:SetPoint("BOTTOM",frame.healthBar,"TOP",0,-20)
-            shadow:SetSize(256,32)
-            shadow:SetTexCoord(1,1,1,0,0,1,0,0)
-            shadow:SetAlpha(0.5)
+			if (not frame.healthBar.shadow) then
+				frame.healthBar.shadow = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
+				frame.healthBar.shadow:SetTexture("Interface\\Common\\NameShadow")
+				frame.healthBar.shadow:SetPoint("BOTTOM",frame.healthBar,"TOP",0,-20)
+				frame.healthBar.shadow:SetSize(256,32)
+				frame.healthBar.shadow:SetTexCoord(1,1,1,0,0,1,0,0)
+				frame.healthBar.shadow:SetAlpha(0.5)
+			end
   
             --Highlight Frame
-            local hlf = CreateFrame("Frame",nil,frame.healthBar)
-            hlf:SetAllPoints(frame.healthBar)
-            frame.healthBar.hlf = hlf
+			if (not frame.healthBar.hlf) then
+				frame.healthBar.hlf = CreateFrame("Frame",nil,frame.healthBar)
+				frame.healthBar.hlf:SetAllPoints(frame.healthBar)
+				frame.healthBar.hlf = frame.healthBar.hlf
+			end
   
             --Highlight
-            local hl = hlf:CreateTexture(nil,"BACKGROUND",nil,-8)
-            hl:SetTexture(mediapath.."statusbar_highlight")
-			hl:SetAllPoints(hlf)
---            hl:SetPoint("TOP",50,0)
---			hl:SetPoint("LEFT",-30,0)
---			hl:SetPoint("RIGHT",30,0)
---			hl:SetPoint("BOTTOM",40,0)
+			if (not frame.healthBar.hl) then
+				frame.healthBar.hl = frame.healthBar.hlf:CreateTexture(nil,"BACKGROUND",nil,-8)
+				frame.healthBar.hl:SetTexture(mediapath.."statusbar_highlight")
+				frame.healthBar.hl:SetPoint("TOP",50,0)
+				frame.healthBar.hl:SetPoint("LEFT",-30,0)
+				frame.healthBar.hl:SetPoint("RIGHT",30,0)
+				frame.healthBar.hl:SetPoint("BOTTOM",40,0)
+			end
   
             --Cast Bar
             frame.castBar:SetStatusBarTexture(mediapath.."statusbar_fill")
