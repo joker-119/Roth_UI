@@ -130,7 +130,7 @@ end)
 
 
 --Name
-local f = CreateFrame("Frame")
+--[[local f = CreateFrame("Frame")
 f:RegisterEvent("NAME_PLATE_UNIT_ADDED")
 f:SetScript("OnEvent", function(f, event, ...)
 	if event == "NAME_PLATE_UNIT_ADDED" then
@@ -141,22 +141,17 @@ f:SetScript("OnEvent", function(f, event, ...)
 		hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 		--Set the tag based on UnitClassification, can return "worldboss", "rare", "rareelite", "elite", "normal", "minus"
 		local tag 
-		local level = UnitLevel(frame.unit)
+		local level = "("..UnitLevel(frame.unit)..")"
 			if UnitClassification(frame.unit) == "worldboss" or UnitLevel(frame.unit) == -1 then
-				tag = BossTag
-				level = "??"
-			elseif UnitClassification(frame.unit) == "rare" or UnitClassification(frame.unit) =="rareelite" then
-				tag = RareTag
-			elseif UnitClassification(frame.unit) == "elite" then
-				tag = EliteTag
-			else 
-				tag = ""
+				level = "(??)"
+			elseif UnitClassification(frame.unit) == "elite" or UnitClassification(frame.unit) == "rareelite" then
+				level = "+"..level
 			end
 			--Set the nameplate name to include tag(if any), name and level
-			frame.name:SetText(UnitName(frame.unit).." ("..level..")"..tag)
+			frame.name:SetText(level.." "..UnitName(frame.unit))
 		end)
 	end
-end)
+end)]]
 
 
 

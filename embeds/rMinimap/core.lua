@@ -139,6 +139,7 @@ local function Show()
   MiniMapChallengeMode:SetAlpha(0.9)
   MiniMapInstanceDifficulty:SetAlpha(0.9)
   GuildInstanceDifficulty:SetAlpha(0.9)
+  GarrisonLandingPageMinimapButton:SetAlpha(0.9)
 end
 Minimap:SetScript("OnEnter", Show)
 
@@ -153,6 +154,7 @@ local function Hide()
   MiniMapChallengeMode:SetAlpha(0)
   MiniMapInstanceDifficulty:SetAlpha(0)
   GuildInstanceDifficulty:SetAlpha(0)
+  GarrisonLandingPageMinimapButton:SetAlpha(0)
 end
 local function SetTimer()
   lasttime = time()

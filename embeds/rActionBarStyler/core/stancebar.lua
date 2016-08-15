@@ -24,7 +24,7 @@
   local frame = CreateFrame("Frame", "rABS_StanceBar", UIParent, "SecureHandlerStateTemplate")
   frame:SetWidth(num*cfg.buttons.size + (num-1)*cfg.buttons.margin + 2*cfg.padding)
   frame:SetHeight(cfg.buttons.size + 2*cfg.padding)
-  frame:SetPoint(cfg.pos.a1,cfg.pos.af,cfg.pos.a2,cfg.pos.x,cfg.pos.y)
+--  frame:SetPoint(cfg.pos.a1,cfg.pos.af,cfg.pos.a2,cfg.pos.x,cfg.pos.y)
   frame:SetScale(cfg.scale)
 
   --STANCE BAR
@@ -74,9 +74,9 @@
   RegisterStateDriver(frame, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 
   --create drag frame and drag functionality
-  if cfg.userplaced.enable then
-    rLib:CreateDragFrame(frame, dragFrameList, -2 , true) --frame, dragFrameList, inset, clamp
-  end
+--  if cfg.userplaced.enable then
+--    rLib:CreateDragFrame(frame, dragFrameList, -2 , true) --frame, dragFrameList, inset, clamp
+--  end
 
   --create the mouseover functionality
   if cfg.mouseover.enable then

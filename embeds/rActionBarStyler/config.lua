@@ -30,7 +30,7 @@
       },
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 16 },
       userplaced      = {
-        enable          = true,
+        enable          = false,
       },
       mouseover       = {
         enable          = false,
@@ -54,7 +54,7 @@
       },
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 16 },
       userplaced      = {
-        enable          = true,
+        enable          = false,
       },
       mouseover       = {
         enable          = false,
@@ -79,7 +79,7 @@
       },
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 42 },
       userplaced      = {
-        enable          = true,
+        enable          = false,
       },
       mouseover       = {
         enable          = false,
@@ -103,7 +103,7 @@
       },
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 72 },
       userplaced      = {
-        enable          = true,
+        enable          = false,
       },
       mouseover       = {
         enable          = false,
@@ -119,6 +119,7 @@
     --BAR 4
     bar4 = {
       enable          = true, --enable module
+	  vert = false, --choosing this will make the bar stack vertically instead of horizontally
       combineBar4AndBar5  = true, --by choosing true both bar 4 and 5 will react to the same hover effect, thus true/false at the same time, settings for bar5 will be ignored
       scale           = 1.2,
       padding         = 10, --frame padding
@@ -144,6 +145,7 @@
     --BAR 5
     bar5 = {
       enable          = true, --enable module
+	  vert = true, --choosing this will make the bar stack vertically instead of horizontally
       scale           = 1.2,
       padding         = 10, --frame padding
       buttons         = {
@@ -199,10 +201,6 @@
       buttons         = {
         size            = 26,
         margin          = 5,
-      },
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 165, y = 129 },
-      userplaced      = {
-        enable          = true,
       },
       mouseover       = {
         enable          = false,
@@ -261,7 +259,7 @@
       padding         = 10, --frame padding
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -120, y = 130 },
       userplaced      = {
-        enable          = true,
+        enable          = false,
       },
       mouseover       = {
         enable          = false,
@@ -273,11 +271,11 @@
     bags = {
       enable          = true, --enable module
       show            = true, --true/false
-      scale           = 0.7,
+      scale           = .7,
       padding         = 15, --frame padding
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 190, y = 131 },
       userplaced      = {
-        enable          = true,
+        enable          = false,
       },
       mouseover       = {
         enable          = false,
