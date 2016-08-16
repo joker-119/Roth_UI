@@ -38,7 +38,7 @@
         },
         --model
         model = {
-          enable            = false,
+          enable            = true,
           displayInfo       = 32368,
           camDistanceScale  = 0.95,
           pos_x             = 0,
@@ -80,7 +80,7 @@
         },
         --model
         model = {
-          enable            = false,
+          enable            = true,
           displayInfo       = 32368,
           camDistanceScale  = 0.95,
           pos_x             = 0,

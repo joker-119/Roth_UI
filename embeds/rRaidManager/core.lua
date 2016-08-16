@@ -175,7 +175,7 @@
   --state frame texture
   local bg = stateFrame:CreateTexture(nil, "BACKGROUND", nil, -8)
   bg:SetAllPoints()
-  bg:SetTexture(1,1,1)
+  bg:SetColorTexture(1,1,1)
   bg:SetVertexColor(1,1,1)
   bg:SetAlpha(0.05)
   stateFrame.bg = bg

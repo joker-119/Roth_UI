@@ -75,21 +75,21 @@ local createActionBarBackground = function(self)
 				end
 
 				--Determine is player is max level
-				if UnitLevel("player") == 100 then
+				if UnitLevel("player") == 100 or (not self.cfg.expbar.show) then
 					levelbar = false
 				else
 					levelbar = true
 				end
 		
 				--Determine if player is 'watching' a faction (show rep as exp bar)
-				if GetWatchedFactionInfo() then
+				if GetWatchedFactionInfo() and self.cfg.repbar.show then
 					repbar = true
 				else
 					repbar = false
 				end
 		
 				--Determine if player has an artifact weapon equipped
-				if C_ArtifactUI.GetArtifactInfo() then
+				if C_ArtifactUI.GetArtifactInfo() and self.cfg.ArtifactPower.show then
 					artifactbar = true
 				else
 					artifactbar = false

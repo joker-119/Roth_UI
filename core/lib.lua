@@ -102,7 +102,7 @@
     end
     f:SetHeight((f.size+5)*(f.num/9))
     f:SetWidth((f.size+5)*4)
-    f:SetPoint("TOP", self, "RIGHT", -60, -97)
+    f:SetPoint("TOP", self, "RIGHT", -60, -37)
     f.initialAnchor = "TOPLEFT"
     f["growth-x"] = "RIGHT"
     f["growth-y"] = "DOWN"

@@ -46,10 +46,10 @@
 	 h:SetPoint("RIGHT",-46,0)
 	 h:SetPoint("BOTTOM",0,26)
 	else
-     h:SetPoint("TOP",0,-21.9)
-     h:SetPoint("LEFT",24.5,0)
-     h:SetPoint("RIGHT",-24.5,0)
-     h:SetPoint("BOTTOM",0,28.7)
+     h:SetPoint("TOP",0,-29)
+     h:SetPoint("LEFT",21,0)
+     h:SetPoint("RIGHT",-21,0)
+     h:SetPoint("BOTTOM",0,26)
 	end
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
@@ -85,10 +85,10 @@
      h:SetPoint("RIGHT",-7,0)
      h:SetPoint("BOTTOM",0,-8)
 	else
-     h:SetPoint("TOP",0,-38.5)
-     h:SetPoint("LEFT",24.5,0)
-     h:SetPoint("RIGHT",-24.5,0)
-     h:SetPoint("BOTTOM",0,21.9)
+     h:SetPoint("TOP",0,-12.5)
+     h:SetPoint("LEFT",7,0)
+     h:SetPoint("RIGHT",-7,0)
+     h:SetPoint("BOTTOM",0,-8)
 	end
     h:SetStatusBarTexture(cfg.texture)
 

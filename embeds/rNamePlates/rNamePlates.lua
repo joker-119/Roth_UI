@@ -54,6 +54,10 @@ end
 -- Functions
 -----------------------------
 
+local function GetHexColorFromRGB(r, g, b)
+	return string.format("%02x%02x%02x", r*255, g*255, b*255)
+end
+
 --SetupNamePlate
 local h = CreateFrame("Frame")
 h:RegisterEvent("NAME_PLATE_CREATED")
@@ -128,30 +132,40 @@ h:SetScript("OnEvent", function(h, event, ...)
     end
 end)
 
-
 --Name
---[[local f = CreateFrame("Frame")
-f:RegisterEvent("NAME_PLATE_UNIT_ADDED")
-f:SetScript("OnEvent", function(f, event, ...)
-	if event == "NAME_PLATE_UNIT_ADDED" then
-		local unit = ...
-		local nameplate = C_NamePlate.GetNamePlateForUnit(unit)
-		if not nameplate then return end
-		
-		hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
-		--Set the tag based on UnitClassification, can return "worldboss", "rare", "rareelite", "elite", "normal", "minus"
-		local tag 
-		local level = "("..UnitLevel(frame.unit)..")"
-			if UnitClassification(frame.unit) == "worldboss" or UnitLevel(frame.unit) == -1 then
-				level = "(??)"
-			elseif UnitClassification(frame.unit) == "elite" or UnitClassification(frame.unit) == "rareelite" then
-				level = "+"..level
-			end
-			--Set the nameplate name to include tag(if any), name and level
-			frame.name:SetText(level.." "..UnitName(frame.unit))
-		end)
+hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
+   --Set the tag based on UnitClassification, can return "worldboss", "rare", "rareelite", "elite", "normal", "minus"
+	local tag 
+	local level = UnitLevel(frame.unit)
+	local name = UnitName(frame.unit)
+	local hexColor
+   
+	if level >= UnitLevel("player")+5 then
+		hexColor = GetHexColorFromRGB(1,0,0)
+	elseif level >= UnitLevel("player")+3 then
+		hexColor = "ff6600"
+	elseif level <= UnitLevel("player")-3 then
+		hexColor = GetHexColorFromRGB(0,1,0)
+	elseif level <= UnitLevel("player")-5 then
+		hexColor = GetHexColorFromRGB(.5,.5,.5)
+	else
+		hexColor = GetHexColorFromRGB(1,1,0)
 	end
-end)]]
+
+	if UnitClassification(frame.unit) == "worldboss" or UnitLevel(frame.unit) == -1 then
+		level = "??"
+		hexColor = "ff6600"
+	elseif UnitClassification(frame.unit) == "rare" then
+		name = "*"..name.."*"
+	elseif UnitClassification(frame.unit) == "rareelite" then
+		name = "*"..name.."*"
+		level = "+"..level
+	elseif UnitClassification(frame.unit) == "elite" then
+		level = "+"..level
+	end
+	--Set the nameplate name to include tag(if any), name and level
+	frame.name:SetText("|cff"..hexColor.."("..level..")|r "..name)
+end)
 
 
 
