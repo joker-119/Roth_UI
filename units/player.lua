@@ -441,7 +441,7 @@ end
     orb.scrollFrame = scrollFrame
 
     --orb model
-    local model = CreateFrame("PlayerModel","$parentModel",scrollChild)
+    local model = CreateFrame("PlayerModel","$parentModel",orb)
     model:SetSize(orb:GetSize())
     model:SetPoint("TOP")
     --model:SetBackdrop(cfg.backdrop)
