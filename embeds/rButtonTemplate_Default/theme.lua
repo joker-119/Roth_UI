@@ -83,10 +83,12 @@ actionButtonConfig.normalTexture = {
 
 --cooldown
 actionButtonConfig.cooldown = {
+  font = { STANDARD_TEXT_FONT, 15, "OUTLINE"},
   points = {
     {"TOPLEFT", 0, 0 },
     {"BOTTOMRIGHT", 0, 0 },
   },
+  alpha = 1,
 }
 
 --name (macro name fontstring)
@@ -96,6 +98,7 @@ actionButtonConfig.name = {
     {"BOTTOMLEFT", 0, 0 },
     {"BOTTOMRIGHT", 0, 0 },
   },
+  alpha = 1,
 }
 
 --hotkey
@@ -114,10 +117,12 @@ actionButtonConfig.count = {
   points = {
     {"BOTTOMRIGHT", 0, 0 },
   },
+  alpha = 1,
 }
 
 --rButtonTemplate:StyleAllActionButtons
 rButtonTemplate:StyleAllActionButtons(actionButtonConfig)
+
 
 -----------------------------
 -- itemButtonConfig
@@ -160,7 +165,7 @@ auraButtonConfig.border = actionButtonConfig.border
 auraButtonConfig.border.texCoord = {0,1,0,1} --fix the settexcoord on debuff borders
 auraButtonConfig.normalTexture = actionButtonConfig.normalTexture
 auraButtonConfig.count = actionButtonConfig.count
-auraButtonConfig.duration = actionButtonConfig.hotkey
+auraButtonConfig.duration = actionButtonConfig.cooldown
 auraButtonConfig.duration.points = {
                                      {"TOPRIGHT", 0, -3 },
                                      {"TOPLEFT", 0, -3 },

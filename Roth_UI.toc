@@ -9,11 +9,11 @@
 embeds\oUF\oUF.xml
 embeds\rLib\rLib.xml
 embeds\rChat\rChat.xml
+embeds\rActionBarStyler\rActionBar.xml
 embeds\rBuffFrame\rBuff.xml
 embeds\rBuffFrame_Default\rBuff_Default.xml
 embeds\rButtonTemplate\rButton.xml
 embeds\rButtonTemplate_Default\rButton_Default.xml
-embeds\rActionBarStyler\rActionBar.xml
 embeds\rMinimap\rMinimap.xml
 embeds\rNamePlates\rNamePlates.xml
 embeds\rInfoStrings\rInfo.xml
