@@ -348,15 +348,17 @@ end
     orb.spark:SetVertexColor(r,g,b)
   end
 
-  --update orb func
+      --update orb func
   local updateOrb = function(bar,value)
     local orb = bar:GetParent()
     local min, max = bar:GetMinMaxValues()
-    local per = 0
+    local per = 1
+	local h = orb.size*per
     if max > 0 then per = value/max*100 end
     local offset = orb.size-per*orb.size/100
-    orb.scrollFrame:SetPoint("TOP",0,-offset)
+    orb.scrollFrame:SetHeight(h)
     orb.scrollFrame:SetVerticalScroll(offset)
+	orb.scrollFrame:SetPoint("TOP",0,-offset)
    --adjust the orb spark in width/height matching the current scrollframe state
     if not orb.spark then return end
     local multiplier = floor(sin(per/100*pi)*1000)/1000
@@ -369,8 +371,6 @@ end
       orb.spark:Show()
     end
   end
-
-
   
   --create orb func
   local createOrb = function(self,type)
@@ -429,23 +429,25 @@ end
     fill:SetOrientation("VERTICAL")
     fill:SetScript("OnValueChanged", updateOrb)
     orb.fill = fill
-
-    --scrollframe
-    local scrollFrame = CreateFrame("ScrollFrame","$parentScrollFrame",orb)
-    scrollFrame:SetSize(orb:GetSize())
-    scrollFrame:SetPoint("TOP")
-    --scrollchild
-    local scrollChild = CreateFrame("Frame","$parentScrollChild",scrollFrame)
-    scrollChild:SetSize(orb:GetSize())
-    scrollFrame:SetScrollChild(scrollChild)
-    orb.scrollFrame = scrollFrame
+	
+	
+    --scroll frame
+	local scrollFrame = CreateFrame("ScrollFrame", "$parentScrollFrame", orb)
+	scrollFrame:SetPoint("BOTTOM")
+	scrollFrame:SetSize(orb:GetSize())
+	
+	--scroll child
+	local scrollChild = CreateFrame("Frame",nil,scrollFrame)
+	scrollChild:SetSize(orb:GetSize())
+	scrollFrame:SetScrollChild(scrollChild)
+	
 
     --orb model
-    local model = CreateFrame("PlayerModel","$parentModel",orb)
+    local model = CreateFrame("PlayerModel",nil,scrollChild)
     model:SetSize(orb:GetSize())
     model:SetPoint("TOP")
-    --model:SetBackdrop(cfg.backdrop)
     model:SetAlpha(orbcfg.model.alpha or 1)
+	orb.scrollFrame = scrollFrame
 
     --update model func
     function model:Update()
@@ -599,6 +601,7 @@ end
     end
     --print(addon..": orb created "..orb.type)
   end
+
 
   ---------------------------------------------
   -- PLAYER STYLE FUNC
