@@ -355,6 +355,7 @@ end
     local per = 1
 	local h = orb.size*per
     if max > 0 then per = value/max*100 end
+	if value < 1 then per = 1 end
     local offset = orb.size-per*orb.size/100
     orb.scrollFrame:SetHeight(h)
     orb.scrollFrame:SetVerticalScroll(offset)
