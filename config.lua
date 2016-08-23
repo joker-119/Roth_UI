@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
-  --  Version 1.8.4
+  --  Version 1.9.1
   ---------------------------------------------
 
   --get the addon namespace
@@ -141,6 +141,17 @@
         show = true,
         scale = 0.40,
         color = {r = 0.9, g = 0.59, b = 0, },
+        pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 650 },
+        combat          = { --fade the bar in/out in combat/out of combat
+          enable          = false,
+          fadeIn          = {time = 0.4, alpha = 1},
+          fadeOut         = {time = 0.3, alpha = 0.2},
+        },
+      },
+	  arcbar = {
+        show = true,
+        scale = 0.40,
+        color = {r = 0.14, g = 0.56, b = .9, },
         pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 650 },
         combat          = { --fade the bar in/out in combat/out of combat
           enable          = false,

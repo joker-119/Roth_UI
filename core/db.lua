@@ -33,27 +33,35 @@
         --filling
         filling = {
           texture     = "Interface\\AddOns\\Roth_UI\\media\\orb_filling16",
-          color       = { r = 1, g = 0, b = 0, },
+          color       = { r = .3, g = 0, b = 0, },
           colorAuto   = false, --automatic coloring based on class/powertype
         },
         --model
         model = {
           enable            = true,
-          displayInfo       = 32368,
-          camDistanceScale  = 0.95,
+          displayInfo       = 33853,
+          camDistanceScale  = 1.606,
           pos_x             = 0,
           pos_y             = 0.1,
           rotation          = 0,
           portraitZoom      = 0,
-          alpha             = 1,
+          alpha             = 0.277,
+        },
+		--galaxies
+        galaxies = {
+          alpha = 0,
+        },
+		--bubbles
+        bubbles = {
+          alpha = 1,
         },
         --spark
         spark = {
-          alpha = 0.9,
+          alpha = 1,
         },
         --highlight
         highlight = {
-          alpha = 0.3,
+          alpha = 1,
         },
         --value
         value = {
@@ -75,12 +83,12 @@
         --filling
         filling = {
           texture     = "Interface\\AddOns\\Roth_UI\\media\\orb_filling16",
-          color       = { r = 0, g = 0, b = 1, },
+          color       = { r = 0, g = .5, b = 1, },
           colorAuto   = true, --automatic coloring based on class/powertype
         },
         --model
         model = {
-          enable            = true,
+          enable            = false,
           displayInfo       = 32368,
           camDistanceScale  = 0.95,
           pos_x             = 0,
@@ -89,13 +97,21 @@
           portraitZoom      = 0,
           alpha             = 1,
         },
+		--galaxies
+        galaxies  = {
+          alpha = 1,
+        },
+		--bubbles
+        bubbles = {
+          alpha = 0.3,
+        },
         --spark
         spark = {
-          alpha = 0.9,
+          alpha = 1,
         },
         --highlight
         highlight = {
-          alpha = 0.3,
+          alpha = 0.5,
         },
         --value
         value = {
@@ -138,6 +154,14 @@
           rotation          = 0,
           portraitZoom      = 0,
           alpha             = 1,
+        },
+		--galaxies
+        galaxies = {
+          alpha = 0,
+        },
+		--bubbles
+        bubbles = {
+          alpha = 0,
         },
         --spark
         spark = {
@@ -600,6 +624,7 @@
     { value = "Interface\\AddOns\\Roth_UI\\media\\orb_filling19", key = "dominion", },
     { value = "Interface\\AddOns\\Roth_UI\\media\\orb_filling20", key = "runes", },
     { value = "Interface\\AddOns\\Roth_UI\\media\\orb_filling21", key = "sigil orb", },
+	{ value = "Interface\\AddOns\\Roth_UI\\media\\orb_transparent", key = "transparent", },
   }
   db.getListFillingTexture = function() return db.list.filling_texture end
 

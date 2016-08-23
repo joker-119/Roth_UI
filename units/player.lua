@@ -346,6 +346,16 @@ end
   local updateStatusBarColor = function(bar, r, g, b)
     local orb = bar:GetParent()
     orb.spark:SetVertexColor(r,g,b)
+	if orb.galaxies then
+      for i, galaxy in pairs(orb.galaxies) do
+        galaxy:SetVertexColor(r,g,b)
+      end
+    end
+	if orb.bubbles then
+		for i, bubble in pairs(orb.bubbles) do
+			bubble:SetVertexColor(r,b,g)
+		end
+	end
   end
 
       --update orb func
@@ -371,6 +381,22 @@ end
       orb.spark:SetPoint("TOP", orb.scrollFrame, 0, 16*orb.size/256*multiplier)
       orb.spark:Show()
     end
+  end
+  
+    --create galaxy func
+  local createGalaxy = function(frame,type,x,y,size,duration,texture,sublevel,degree)
+    local t = frame:CreateTexture(nil, "MEDIUM", nil, sublevel)
+    t:SetSize(size,size)
+    t:SetPoint("CENTER",x,y)
+    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\"..texture)
+    t:SetBlendMode("ADD")
+    t.ag = t:CreateAnimationGroup()
+    t.ag.anim = t.ag:CreateAnimation("Rotation")
+    t.ag.anim:SetDegrees(degree)
+    t.ag.anim:SetDuration(duration)
+    t.ag:Play()
+    t.ag:SetLooping("REPEAT")
+    return t
   end
   
   --create orb func
@@ -467,6 +493,26 @@ end
     model:SetScript("OnShow", function(self) self:Update() end)
     model:Update()
     orb.model = model
+	
+    --galaxies
+    orb.galaxies = {}
+    tinsert(orb.galaxies, createGalaxy(scrollChild,orb.type,0,0,orb.size-0,120,"galaxy2",-8,360))
+    tinsert(orb.galaxies, createGalaxy(scrollChild,orb.type,0,-2,orb.size-20,90,"galaxy",-7,360))
+    tinsert(orb.galaxies, createGalaxy(scrollChild,orb.type,0,-4,orb.size-5,60,"galaxy4",-6,360))
+    for i, galaxy in pairs(orb.galaxies) do
+      galaxy:SetVertexColor(orbcfg.filling.color.r,orbcfg.filling.color.g,orbcfg.filling.color.b)
+    end
+	
+	--bubbles
+	orb.bubbles = {}
+	tinsert(orb.bubbles, createGalaxy(scrollChild,orb.type,0,0,orb.size-12,10,"orb_rotation_bubbles1",-8,-360))
+	tinsert(orb.bubbles, createGalaxy(scrollChild,orb.type,0,0,orb.size-0,20,"orb_rotation_bubbles2",-7,360))
+	tinsert(orb.bubbles, createGalaxy(scrollChild,orb.type,0,0,orb.size-12,15,"orb_rotation_bubbles1",-6,360))
+	tinsert(orb.bubbles, createGalaxy(scrollChild,orb.type,0,0,orb.size-0,20,"orb_rotation_bubbles2",-7,-360))
+	for i, bubble in pairs(orb.bubbles) do
+		bubble:SetVertexColor(orbcfg.filling.color.r,orbcfg.filling.color.g,orbcfg.filling.color.b)
+	end
+	
 
     --overlay frame
     local overlay = CreateFrame("Frame","$parentOverlay",scrollFrame)
@@ -669,6 +715,11 @@ end
     if cfg.playerclass == "WARLOCK" and self.cfg.soulshards.show then
       bars.createSoulShardPowerBar(self)
     end
+	
+	--mage bars
+	if cfg.playerclass == "MAGE" and self.cfg.arcbar.show then
+		bars.createArcBar(self)
+	end
 
     --holypower
     if cfg.playerclass == "PALADIN" and self.cfg.holypower.show then

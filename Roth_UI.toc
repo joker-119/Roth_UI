@@ -21,7 +21,7 @@ embeds\rRaidManager\rManager.xml
 embeds\rTooltip\rTooltip.xml
 embeds\tullaRange\tulla.xml
 
-
+modules\oUF_acharges.lua
 modules\oUF_AuraWatch.lua
 modules\oUF_BurningEmbers.lua
 modules\oUF_ComboPoints.lua
