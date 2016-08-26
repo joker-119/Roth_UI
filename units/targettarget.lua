@@ -158,6 +158,7 @@
 
     --icons
     self.RaidIcon = func.createIcon(self,"BACKGROUND",20,self.Name,"BOTTOM","TOP",0,0,-1)
+	self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
 
     --add heal prediction
     func.healPrediction(self)

@@ -72,7 +72,7 @@ end
     h:SetPoint("TOP",0,-21.9)
     h:SetPoint("LEFT",24.5,0)
     h:SetPoint("RIGHT",-24.5,0)
-    h:SetPoint("BOTTOM",0,28.7)
+    h:SetPoint("BOTTOM",0,29.7)
 
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"TOOLTIP",nil,-6)
@@ -81,10 +81,6 @@ end
 
     h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
     h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_hpglow")
-    h:SetPoint("TOP",0,-21.9)
-    h:SetPoint("LEFT",24,0)
-    h:SetPoint("RIGHT",-24.5,0)
-    h:SetPoint("BOTTOM",0,28.7)
     h.glow:SetVertexColor(0,0,0,1)
 
     h.highlight = h:CreateTexture(nil,"OVERLAY",nil,-4)
@@ -106,7 +102,7 @@ end
     h:SetPoint("TOP",0,-20)
     h:SetPoint("LEFT",11,0)
     h:SetPoint("RIGHT",-12,0)
-    h:SetPoint("BOTTOM",0,-13)
+    h:SetPoint("BOTTOM",0,-14)
 
     h:SetStatusBarTexture(cfg.texture)
 
@@ -333,6 +329,7 @@ end
 
     --icons
     self.RaidIcon = func.createIcon(self,"BACKGROUND",24,self.Name,"BOTTOM","TOP",0,0,-1)
+	self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
 
     --create portrait
     if self.cfg.portrait.show then

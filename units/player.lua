@@ -94,7 +94,6 @@ local createActionBarBackground = function(self)
 				else
 					artifactbar = false
 				end
-		
 				--Select actionbar background and align related elements to fit within artwork (actionbars 1-3 are pre-set, we only need to change micromenubar, stancebar, bagbar, expbar, artifactpowerbar and repbar)
 				--If player is in vehicle, display vehicleUI artwork
 				if bar == "vehicle" then
@@ -109,7 +108,6 @@ local createActionBarBackground = function(self)
 					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 141*cfg.scale)
 					Roth_UIRepBar:SetSize(367*cfg.scale, 8*cfg.scale)
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (129*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (129*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (129*cfg.scale))
 				--If we are displaying 3 action bars and only 2 'exp' bars, determing types and set positions accordingly. Exp/rep bars are static, Artifact will take free space
 				elseif (bar == "3" and repbar and levelbar) or (bar == "3" and repbar and artifactbar) or (bar == "3" and levelbar and artifactbar) then
@@ -126,7 +124,6 @@ local createActionBarBackground = function(self)
 						Roth_UIArtifactPower:SetSize(367*cfg.scale, 8*cfg.scale)
 					end
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (129*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (129*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (129*cfg.scale))
 				--If we are displaying all 3 actionbars but only 1 'exp' bar, since only one bar is displayed, set position for all to avoid unecessary if/then/else functions
 				elseif (bar == "3" and levelbar) or (bar == "3" and repbar) or (bar == "3" and artifactbar) then
@@ -138,7 +135,6 @@ local createActionBarBackground = function(self)
 					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
 					Roth_UIArtifactPower:SetSize(367*cfg.scale, 8*cfg.scale)
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (129*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (129*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (129*cfg.scale))
 				--If we are displaying 2 actionbars and all 3 'exp' bars, set positions for all bars.
 				elseif bar == "2" and repbar and levelbar and artifactbar then
@@ -150,7 +146,6 @@ local createActionBarBackground = function(self)
 					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
 					Roth_UIExpBar:SetSize(400*cfg.scale, 8*cfg.scale)
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (95*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (95*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (95*cfg.scale))
 				--If we are displaying 2 action bars and 2 'exp' bars, set position for bars, and determine where artifact bar goes
 				elseif (bar == "2" and repbar and levelbar) or (bar == "2" and repbar and artifactbar) or (bar == "2" and levelbar and artifactbar) then
@@ -167,7 +162,6 @@ local createActionBarBackground = function(self)
 						Roth_UIArtifactPower:SetSize(400*cfg.scale, 8*cfg.scale)
 					end
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (95*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (95*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (95*cfg.scale))
 				--If we are displaying 2 actionbars and 1 'exp' bar, set position for all bars to avoid unecessary if/then/else functions
 				elseif (bar == "2" and repbar) or (bar == "2" and levelbar) or (bar == "2" and artifactbar) then
@@ -179,7 +173,6 @@ local createActionBarBackground = function(self)
 					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 101*cfg.scale)
 					Roth_UIArtifactPower:SetSize(389*cfg.scale, 8*cfg.scale)
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (95*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (95*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (95*cfg.scale))
 				--If we are displaying 1 actionbar and 3 'exp' bars, set positions for all bars.
 				elseif bar == "1" and repbar and levelbar and artifactbar then
@@ -188,7 +181,6 @@ local createActionBarBackground = function(self)
 					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 64*cfg.scale)
 					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 74*cfg.scale)
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (50*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (50*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (50*cfg.scale))
 				--If 1 actionbar and 2 'exp' set static positions then determine location for artifact power
 				elseif (bar == "1" and repbar and levelbar) or (bar == "1" and repbar and artifactbar) or (bar == "1" and levelbar and artifactbar) then
@@ -201,7 +193,6 @@ local createActionBarBackground = function(self)
 --						Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 64*cfg.scale)
 --					end
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (50*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (50*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (50*cfg.scale))
 				--If 1 actionbar and 1 'exp' set all locations as static
 				elseif (bar == "1" and repbar) or (bar == "1" and levelbar) or (bar == "1" and artifactbar) then
@@ -210,28 +201,24 @@ local createActionBarBackground = function(self)
 --					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 57)
 --					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 57)
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (95*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (95*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (95*cfg.scale))
 				--If displaying 3 actionbars and no exp bars; checking status of exp bars not necessary, as they would have fired in previous elseif conditions if they existed
 				--Do not bother setting exp bar locations since none are displayed
 				elseif bar == "3"  then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_0")
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (129*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (129*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (129*cfg.scale))
 				--If displaying 2 actionbar and no exp bars; checking status of exp bars not necessary, as they would have fired in previous elseif conditions if they existed
 				--Do not bother setting exp bar locations since none are displayed
 				elseif bar == "2" then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_0")
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (95*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (95*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (95*cfg.scale))
 				--If displaying 1 actionbar and no exp bars; checking status of exp bars not necessary, as they would have fired in previous elseif conditions if they existed
 				--Do not bother setting exp bar locations since none are displayed
 				elseif bar == "1" then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_1_0")
 					rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (50*cfg.scale))
-					rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 165, (50*cfg.scale))
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (50*cfg.scale))
 				end
 			end
@@ -441,6 +428,7 @@ end
       self.DebuffHighlightFilter = false
     end
 
+
     --background
     local bg = orb:CreateTexture("$parentBG","BACKGROUND",nil,-6)
     bg:SetAllPoints()
@@ -648,8 +636,59 @@ end
     end
     --print(addon..": orb created "..orb.type)
   end
+  
+local DruidMana = function(self)
+	local class = select(2, UnitClass("player"))
+	 --Create DruidMana frame
+	local DM = CreateFrame("StatusBar", "Roth_DruidMana", Roth_UIPowerOrb)
+		DM:SetSize(20,20)
+		DM:SetPoint("TOP",0,13)
+		DM:SetPoint("LEFT")
+		DM:SetPoint("RIGHT")
+		DM:SetFrameStrata("BACKGROUND")
+		
+		
+		--Add Artwork
+		local b = CreateFrame("Frame",nil,Roth_UIPowerOrb)
+			b:SetSize(20,20)
+			b:SetPoint("TOP",0,13)
+			b:SetPoint("LEFT")
+			b:SetPoint("RIGHT")
+			b:SetFrameStrata("TOOLTIP")
+		local SetBorder = function()
+		
+			local br = b:CreateTexture(nil,"HIGH")
+				br:SetPoint("TOP",0,9)
+				br:SetPoint("LEFT",-50,0)
+				br:SetPoint("RIGHT",50,0)
+				br:SetPoint("BOTTOM",0,-9)
+				br:SetTexture("Interface\\AddOns\\Roth_UI\\media\\d3_altpower_border")
+		end
+		b:RegisterEvent("PLAYER_ENTERING_WORLD")
+		b:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
+		b:RegisterEvent("PLAYER_SPEC_CHANGED")
+		b:SetScript("OnEvent", function(...)
+			local self, event, unit = ...
+			if unit and unit ~= "player" then return end
+			local playerclass = select(2, UnitClass("player"))
+			if playerclass == "PRIEST" and GetSpecialization() == 3 then
+				SetBorder()
+			elseif playerclass == "DRUID" and GetSpecialization() ~= 4 then
+				SetBorder()
+			elseif playerclass == "SHAMAN" and GetSpecialization() ~= 3 then
+				SetBorder()
+			end
+		end)
+		--Register with oUF
+		self.DruidMana = DM
+		self.DruidMana.colorPower = DM
+		self.DruidMana.bg = nil
+
+		
+end
 
 
+	
   ---------------------------------------------
   -- PLAYER STYLE FUNC
   ---------------------------------------------
@@ -670,6 +709,9 @@ end
     createOrb(self,"HEALTH")
     --create the power orb
     createOrb(self,"POWER")
+	
+	--druidmana
+	DruidMana(self)
 
     --create art textures do this now for correct frame stacking
     createAngelFrame(self)

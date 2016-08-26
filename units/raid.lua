@@ -419,6 +419,7 @@
 
     --icons
     self.RaidIcon = func.createIcon(self.Health,"TOOLTIP",14,self.Health,"CENTER","CENTER",0,0,-1)
+	self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
     self.ReadyCheck = func.createIcon(self.Health,"TOOLTIP",24,self.Health,"CENTER","CENTER",0,0,-1)
     self.LFDRole = func.createIcon(self.Health,"OVERLAY",14,self.Health,"CENTER","CENTER",0,0,-1)
     self.LFDRole:SetTexture("Interface\\AddOns\\Roth_UI\\media\\lfd_role")

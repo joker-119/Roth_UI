@@ -172,7 +172,7 @@ local Enable = function(self, unit)
 		self:RegisterEvent('UNIT_DISPLAYPOWER', VisibilityPath)
 
 		if(druidmana:IsObjectType'StatusBar' and not druidmana:GetStatusBarTexture()) then
-			druidmana:SetStatusBarTexture[[Interface\TargetingFrame\UI-StatusBar]]
+			druidmana:SetStatusBarTexture("Interface\\AddOns\\Roth_UI\\media\\statusbar3")
 		end
 
 		return true

@@ -1,5 +1,5 @@
 -- rNamePlates: core
--- Galaxy/zork, 2016
+-- Galaxy 2016
 
 -----------------------------
 -- Variables
@@ -64,10 +64,14 @@ h:RegisterEvent("NAME_PLATE_CREATED")
 h:SetScript("OnEvent", function(h, event, ...)
     if event == "NAME_PLATE_CREATED" then
         hooksecurefunc("DefaultCompactNamePlateFrameSetupInternal", function(frame, setupOptions, frameOptions, ...)
+		local unit = ...
             --Health Bar
             frame.healthBar:SetStatusBarTexture(mediapath.."statusbar_fill")
             frame.healthBar:SetSize(256,32)
             frame.healthBar:SetScale(0.35)
+			frame.RaidTargetFrame.RaidTargetIcon:SetTexture(mediapath.."raidicons")
+			frame.RaidTargetFrame:SetPoint("RIGHT", frame.healthBar,"RIGHT",35,0)
+			frame.ClassificationFrame:Hide()
   
             --Left Edge artwork
 			if (not frame.healthBar.le) then
@@ -127,7 +131,7 @@ h:SetScript("OnEvent", function(h, event, ...)
                 frame.castBar.Icon:SetSize(17,17)
                 frame.castBar.Icon:ClearAllPoints()
                 frame.castBar.Icon:SetPoint("BOTTOMRIGHT",frame.castBar,"BOTTOMLEFT",-2,0)
-            end
+			end
         end)
     end
 end)
@@ -144,10 +148,10 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 		hexColor = GetHexColorFromRGB(1,0,0)
 	elseif level >= UnitLevel("player")+3 then
 		hexColor = "ff6600"
-	elseif level <= UnitLevel("player")-3 then
-		hexColor = GetHexColorFromRGB(0,1,0)
 	elseif level <= UnitLevel("player")-5 then
 		hexColor = GetHexColorFromRGB(.5,.5,.5)
+	elseif level <= UnitLevel("player")-3 then
+		hexColor = GetHexColorFromRGB(0,1,0)
 	else
 		hexColor = GetHexColorFromRGB(1,1,0)
 	end

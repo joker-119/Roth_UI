@@ -101,7 +101,7 @@
         size            = 26,
         margin          = 5,
       },
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 72 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 70 },
       userplaced      = {
         enable          = false,
       },
@@ -202,6 +202,10 @@
         size            = 26,
         margin          = 5,
       },
+	  pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 60, y = -4  },
+	  userplaced      = {
+		enable        = true,
+	  },
       mouseover       = {
         enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
