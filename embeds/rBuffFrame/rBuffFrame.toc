@@ -1,7 +1,0 @@
-## Interface: 70000
-## Author: zork
-## Title: rBuffFrame
-## Notes: Blizzard buffframe framework
-## RequiredDeps: rLib
-
-core.lua

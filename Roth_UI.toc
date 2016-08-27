@@ -10,8 +10,6 @@ embeds\oUF\oUF.xml
 embeds\rLib\rLib.xml
 embeds\rChat\rChat.xml
 embeds\rActionBarStyler\rActionBar.xml
-embeds\rBuffFrame\rBuff.xml
-embeds\rBuffFrame_Default\rBuff_Default.xml
 embeds\rButtonTemplate\rButton.xml
 embeds\rButtonTemplate_Default\rButton_Default.xml
 embeds\rMinimap\rMinimap.xml
@@ -20,6 +18,7 @@ embeds\rInfoStrings\rInfo.xml
 embeds\rRaidManager\rManager.xml
 embeds\rTooltip\rTooltip.xml
 embeds\tullaRange\tulla.xml
+embeds\RothBuffs\rothbuff.xml
 
 modules\oUF_acharges.lua
 modules\oUF_AuraWatch.lua

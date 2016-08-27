@@ -179,4 +179,4 @@ MINUTE_ONELETTER_ABBR = "%dm"
 SECOND_ONELETTER_ABBR = "%ds"
 
 --rButtonTemplate:StyleAllAuraButtons
-rButtonTemplate:StyleAllAuraButtons(auraButtonConfig)
+--rButtonTemplate:StyleAllAuraButtons(auraButtonConfig)
