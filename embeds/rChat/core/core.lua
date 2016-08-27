@@ -73,9 +73,9 @@
     --self:SetFading(false)
 
     --set font, outline and shadow for chat text
-    self:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
+    self:SetFont("Interface\\AddOns\\Roth_UI\\media\\Lycanthrope.ttf", 12, "THINOUTLINE")
     self:SetShadowOffset(1,-1)
-    self:SetShadowColor(0,0,0,0.6)
+    self:SetShadowColor(0,0,0,.5)
 
     --fix the buttonframe
     local frame = _G[name.."ButtonFrame"]

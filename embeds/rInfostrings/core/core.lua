@@ -75,7 +75,7 @@ L.addonShortcut    = "ris"
 
   local function rsiCreateFontString(f,size)
     local t = f:CreateFontString(nil, "BACKGROUND")
-    t:SetFont(STANDARD_TEXT_FONT, size, "THINOUTLINE")
+    t:SetFont(cfg.font, size, "THINOUTLINE")
     t:SetPoint("CENTER", f)
     return t
   end
@@ -248,5 +248,5 @@ L.addonShortcut    = "ris"
   end)
 
   -- Create slash commands (hopefully this works?)  IT DOES, but this frame is anchored to minimap so no need
-  rLib:CreateDragFrame(f1, L.dragFrames, -2, true)
+  rLib:CreateDragFrame(frame, L.dragFrames, -2, true)
  rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)

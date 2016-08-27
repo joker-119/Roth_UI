@@ -6,6 +6,13 @@
 ## SavedVariables: Roth_UI_DB_GLOB
 ## SavedVariablesPerCharacter: Roth_UI_DB_CHAR
 
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\AceConfig-3.0\AceConfig-3.0.xml
+Libs\LibSharedMedia-3.0\lib.xml
+Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
+
 embeds\oUF\oUF.xml
 embeds\rLib\rLib.xml
 embeds\rChat\rChat.xml

@@ -699,7 +699,7 @@
   oUF.colors.power["MANA"] = {0, 0.4, 1}
 
   --font
-  cfg.font = STANDARD_TEXT_FONT
+  cfg.font = "Interface\\AddOns\\Roth_UI\\media\\Lycanthrope.ttf"
 
   --backdrop
   cfg.backdrop = {

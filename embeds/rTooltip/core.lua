@@ -17,10 +17,11 @@
   cfg.pos   = { "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 180 }
   cfg.scale = 1.15
   cfg.font = {}
-  cfg.font.family = STANDARD_TEXT_FONT
-  cfg.backdrop = { bgFile = "Interface\\Buttons\\WHITE8x8", edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",  tiled = false, edgeSize = 16, insets = {left=3, right=3, top=3, bottom=3} }
-  cfg.backdrop.bgColor = {0.08,0.08,0.1,0.92}
-  cfg.backdrop.borderColor = {0.3,0.3,0.33,1}
+  cfg.font.family = "Interface\\AddOns\\Roth_UI\\media\\Lycanthrope.ttf"
+  cfg.backdrop = { bgFile = "Interface\\AddOns\\Roth_UI\\media\\Tooltip_Background", edgeFile = "Interface\\AddOns\\Roth_UI\\media\\Tooltip_Border",  tiled = false, edgeSize = 10, insets = {left=8, right=8, top=8, bottom=8} }
+  cfg.backdrop.bgColor = {1,1,1,1}
+  cfg.backdrop.borderColor = {1,1,1,1}
+  cfg.cursorfocus = true
 
   ---------------------------------------------
   --  VARIABLES
@@ -64,12 +65,12 @@
 
   --hooksecurefunc GameTooltip_SetDefaultAnchor
   hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
-    if cursor and GetMouseFocus() == WorldFrame then
+    if cfg.cursorfocus then
       tooltip:SetOwner(parent, "ANCHOR_CURSOR")
     else
-      tooltip:SetOwner(parent, "ANCHOR_CURSOR")
---      tooltip:ClearAllPoints()
---      tooltip:SetPoint(unpack(cfg.pos))
+      tooltip:SetOwner(parent, "ANCHOR_NONE")
+      tooltip:ClearAllPoints()
+      tooltip:SetPoint(unpack(cfg.pos))
     end
   end)
 
@@ -79,12 +80,14 @@
     tooltip:Show()
   end
 
-  --func AddCasterRow
-  local function AddCasterRow(tooltip,caster)
-    tooltip:AddDoubleLine("|cff0099ffCaster|r",caster)
-    tooltip:Show()
-  end
-
+  -- ArtifactPowerIDs
+hooksecurefunc(GameTooltip, "SetArtifactPowerByID", function(self, id)
+    if id then 
+    	local spellid = C_ArtifactUI.GetPowerInfo(id)
+        addLine(self, id, types.artifactpower);
+        addLine(self, spellid, types.spell)
+    end
+end)
   --func AddBossDebuffRow
   local function AddBossDebuffRow(tooltip,isBossDebuff)
     tooltip:AddDoubleLine("|cff0099ffBossDebuff|r","Yes")
@@ -95,16 +98,12 @@
   hooksecurefunc(GameTooltip, "SetUnitBuff", function(self,...)
     local spellid = select(11,UnitBuff(...))
     if spellid then AddSpellIdRow(self,spellid) end
-    local caster = select(8,UnitBuff(...))
-    if caster then AddCasterRow(self,caster) end
   end)
 
   --hooksecurefunc GameTooltip SetUnitDebuff
   hooksecurefunc(GameTooltip, "SetUnitDebuff", function(self,...)
     local spellid = select(11,UnitDebuff(...))
     if spellid then AddSpellIdRow(self,spellid) end
-    local caster = select(8,UnitDebuff(...))
-    if caster then AddCasterRow(self,caster) end
     local isBossDebuff = select(13,UnitDebuff(...))
     if isBossDebuff then AddBossDebuffRow(self,isBossDebuff) end
   end)
@@ -113,8 +112,6 @@
   hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
     local spellid = select(11,UnitAura(...))
     if spellid then AddSpellIdRow(self,spellid) end
-    local caster = select(8,UnitAura(...))
-    if caster then AddCasterRow(self,caster) end
     local isBossDebuff = select(13,UnitAura(...))
     if isBossDebuff then AddBossDebuffRow(self,isBossDebuff) end
   end)
