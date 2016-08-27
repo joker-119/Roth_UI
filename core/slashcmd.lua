@@ -24,6 +24,7 @@
     "Roth_UIRuneBar",
     "Roth_UIComboPoints",
 	"Roth_UIArcanePower",
+	"Roth_DruidMana",
 --	"Roth_UIArtifactPower",
   }
   Roth_UI_Orbs = {

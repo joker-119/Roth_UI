@@ -248,4 +248,5 @@ L.addonShortcut    = "ris"
   end)
 
   -- Create slash commands (hopefully this works?)  IT DOES, but this frame is anchored to minimap so no need
--- rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)
+  rLib:CreateDragFrame(f1, L.dragFrames, -2, true)
+ rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)

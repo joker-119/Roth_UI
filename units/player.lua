@@ -641,42 +641,45 @@ local DruidMana = function(self)
 	local class = select(2, UnitClass("player"))
 	 --Create DruidMana frame
 	local DM = CreateFrame("StatusBar", "Roth_DruidMana", Roth_UIPowerOrb)
-		DM:SetSize(20,20)
-		DM:SetPoint("TOP",0,13)
+		DM:SetSize(140,20)
+		DM:SetPoint("TOP",0,15)
 		DM:SetPoint("LEFT")
 		DM:SetPoint("RIGHT")
-		DM:SetFrameStrata("BACKGROUND")
+		DM:SetFrameStrata("LOW")
+		
+		func.applyDragFunctionality(DM)
 		
 		
 		--Add Artwork
-		local b = CreateFrame("Frame",nil,Roth_UIPowerOrb)
+		local b = CreateFrame("Frame",nil,Roth_DruidMana)
 			b:SetSize(20,20)
-			b:SetPoint("TOP",0,13)
+			b:SetPoint("TOP")
 			b:SetPoint("LEFT")
 			b:SetPoint("RIGHT")
-			b:SetFrameStrata("TOOLTIP")
-		local SetBorder = function()
+			b:SetFrameStrata("LOW")
 		
-			local br = b:CreateTexture(nil,"HIGH")
-				br:SetPoint("TOP",0,9)
-				br:SetPoint("LEFT",-50,0)
-				br:SetPoint("RIGHT",50,0)
-				br:SetPoint("BOTTOM",0,-9)
-				br:SetTexture("Interface\\AddOns\\Roth_UI\\media\\d3_altpower_border")
-		end
+		local br = b:CreateTexture(nil,"MEDIUM")
+			br:SetPoint("TOP",0,8)
+			br:SetPoint("LEFT",-50,0)
+			br:SetPoint("RIGHT",50,0)
+			br:SetPoint("BOTTOM",0,-8)
+			br:SetTexture("Interface\\AddOns\\Roth_UI\\media\\d3_altpower_border")
+		
 		b:RegisterEvent("PLAYER_ENTERING_WORLD")
 		b:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
-		b:RegisterEvent("PLAYER_SPEC_CHANGED")
+		b:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 		b:SetScript("OnEvent", function(...)
 			local self, event, unit = ...
 			if unit and unit ~= "player" then return end
 			local playerclass = select(2, UnitClass("player"))
 			if playerclass == "PRIEST" and GetSpecialization() == 3 then
-				SetBorder()
-			elseif playerclass == "DRUID" and GetSpecialization() ~= 4 then
-				SetBorder()
+				b:Show()
+			elseif playerclass == "DRUID" and GetSpecialization() ~= 4 and GetSpecialization() ~= 2 and GetSpecialization() ~= 3 and GetShapeshiftForm() ~= 1 and GetShapeshiftForm() ~= 2 and GetShapeshiftForm() ~= 3 and GetShapeshiftForm() ~= 6 then
+				b:Show()
 			elseif playerclass == "SHAMAN" and GetSpecialization() ~= 3 then
-				SetBorder()
+				b:Show()
+			else
+				b:Hide()
 			end
 		end)
 		--Register with oUF
