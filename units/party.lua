@@ -110,13 +110,13 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self.Health, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
+    local name = func.createFontString(self.Health, cfg.font.base, self.cfg.misc.NameFontSize, "THINOUTLINE")
 	name:SetPoint("BOTTOM", self, "TOP", 0, -13)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
 	self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, self.cfg.health.fontSize, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.font.base, self.cfg.health.fontSize, "THINOUTLINE")
     hpval:SetPoint(self.cfg.health.point, self.cfg.health.x,self.cfg.health.y)
 
     self:Tag(name, "[diablo:name]")
@@ -163,15 +163,15 @@
         else
 			if self.cfg.vertical then
 				self:SetHitRectInsets(-35,0, -17, 0)
-			else 
+			else
 				self:SetHitRectInsets(0,0,-100,0)
 			end
-        end      
+        end
         self.PortraitHolder:SetScript("OnEvent", function(...)
           self.PortraitHolder:UnregisterEvent("PLAYER_REGEN_ENABLED")
           self:SetHitRectInsets(0, 0, -100, 0)
         end)
-      end      
+      end
     end
 
     --auras
@@ -216,7 +216,7 @@
 
     --add heal prediction
     func.healPrediction(self)
-    
+
     --add total absorb
     func.totalAbsorb(self)
 
@@ -224,12 +224,12 @@
     self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", func.checkThreat)
 
   end
-  
+
 --------------------------------------------
 -- Drag Frame (time for hacks)
 --------------------------------------------
 local A, L = ...
-L.addonName     = A 
+L.addonName     = A
 L.dragFrames    = {}
 L.addonColor    = "00FFFFFF"
 L.addonShortcut = "dparty"
@@ -245,8 +245,8 @@ rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)
     oUF:SetActiveStyle("diablo:party")
 
     local attr = cfg.units.party.attributes
-	
-	
+
+
 
     local partyDragFrame = CreateFrame("Frame", "Roth_UIPartyDragFrame", UIParent)
     partyDragFrame:SetSize(50,50)

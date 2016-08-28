@@ -99,7 +99,7 @@
     button.count:ClearAllPoints()
     button.count:SetPoint("TOPRIGHT", 4, 4)
     button.count:SetTextColor(0.9,0.9,0.9)
-    button.count:SetFont(cfg.font,bw/1.8,"THINOUTLINE")
+    button.count:SetFont(cfg.font.base,bw/1.8,"THINOUTLINE")
     button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
     button.overlay:SetTexture("Interface\\AddOns\\Roth_UI\\media\\default_border")
     button.overlay:SetTexCoord(0,1,0,1)
@@ -112,16 +112,16 @@
 
   --create aura watch func
    local createAuraWatch = function(self)
-   
+
       local auras = {}
 	  local spellIDs
-    if cfg.playerclass == "PRIEST" then 
+    if cfg.playerclass == "PRIEST" then
       spellIDs = {
         139, -- Renew
 		17, -- Power Word Shield
 		77489, -- Echo of Light
 		41635, --Prayer of mending
-		
+
       }
     elseif cfg.playerclass == "PALADIN" then
       spellIDs = {
@@ -150,7 +150,7 @@
 		}
 	else -- Non Healer Classes
 		spellIDs = {
-		
+
 		}
 	end
       local dir = {
@@ -350,14 +350,14 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, 12, "THINOUTLINE")
+    local name = func.createFontString(self, cfg.font.base, 12, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -14)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     --name:SetJustifyH("LEFT")
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.font.base, 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
     self:Tag(name, "[diablo:name]")
@@ -427,7 +427,7 @@
 
     --add heal prediction
     func.healPrediction(self)
-    
+
     --add total absorb
     func.totalAbsorb(self)
 
@@ -445,7 +445,7 @@
 
     local attr = cfg.units.raid.attributes
 
-    
+
     local groups, group = {}, nil
     for i=1, NUM_RAID_GROUPS do
       local name = "Roth_UIRaidGroup"..i
@@ -454,19 +454,19 @@
     raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,cfg.units.raid.pos.y)
 	if i == 2 then
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-250)
-	elseif i == 3 then 
+	elseif i == 3 then
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-250*2)
-	elseif i == 4 then 
+	elseif i == 4 then
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-250*3)
-	elseif i == 5 then 
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,cfg.units.raid.pos.y)	
-	elseif i == 6 then 
+	elseif i == 5 then
+	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,cfg.units.raid.pos.y)
+	elseif i == 6 then
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-250)
-	elseif i == 7 then 
+	elseif i == 7 then
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-250*2)
-	elseif i == 8 then 
+	elseif i == 8 then
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-250*3)
-	
+
 	end
     func.applyDragFunctionality(raidDragFrame)
     table.insert(Roth_UI_Units,"Roth_UIRaidDragFrame"..i) --add frames to the slash command function
@@ -491,7 +491,7 @@
           self:SetHeight(%d)
         ]]):format(128, 64)
       )
-		group:SetPoint("TOPLEFT", raidDragFrame, 0, 0)		
+		group:SetPoint("TOPLEFT", raidDragFrame, 0, 0)
 		groups[i] = group
     end
   end

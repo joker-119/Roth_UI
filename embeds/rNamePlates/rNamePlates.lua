@@ -43,7 +43,6 @@ local options = {
   showClassificationIndicator = true,
 }
 local cfg = {}
-cfg.font = (mediapath.."Cracked-Narrow.ttf")
 
 for i, group  in next, groups do
   for key, value in next, options do
@@ -74,7 +73,7 @@ h:SetScript("OnEvent", function(h, event, ...)
 			frame.RaidTargetFrame.RaidTargetIcon:SetTexture(mediapath.."raidicons")
 			frame.RaidTargetFrame:SetPoint("RIGHT", frame.healthBar,"RIGHT",35,0)
 			frame.ClassificationFrame:Hide()
-  
+
             --Left Edge artwork
 			if (not frame.healthBar.le) then
 				frame.healthBar.le = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
@@ -82,7 +81,7 @@ h:SetScript("OnEvent", function(h, event, ...)
 				frame.healthBar.le:SetSize(64,64)
 				frame.healthBar.le:SetPoint("RIGHT",frame.healthBar,"LEFT",0,0)
 			end
-	
+
             --Right Edge artwork
 			if (not frame.healthBar.re) then
 				frame.healthBar.re = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
@@ -90,14 +89,14 @@ h:SetScript("OnEvent", function(h, event, ...)
 				frame.healthBar.re:SetSize(64,64)
 				frame.healthBar.re:SetPoint("LEFT",frame.healthBar,"RIGHT",0,0)
             end
-			
+
             --Healthbar Background
 			if (not frame.healthBar.bg) then
 				frame.healthBar.bg = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
 				frame.healthBar.bg:SetTexture(mediapath.."statusbar_bg")
 				frame.healthBar.bg:SetAllPoints()
 			end
-			
+
             --Name shadow
 			if (not frame.healthBar.shadow) then
 				frame.healthBar.shadow = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
@@ -107,14 +106,14 @@ h:SetScript("OnEvent", function(h, event, ...)
 				frame.healthBar.shadow:SetTexCoord(1,1,1,0,0,1,0,0)
 				frame.healthBar.shadow:SetAlpha(0.5)
 			end
-  
+
             --Highlight Frame
 			if (not frame.healthBar.hlf) then
 				frame.healthBar.hlf = CreateFrame("Frame",nil,frame.healthBar)
 				frame.healthBar.hlf:SetAllPoints(frame.healthBar)
 				frame.healthBar.hlf = frame.healthBar.hlf
 			end
-  
+
             --Highlight
 			if (not frame.healthBar.hl) then
 				frame.healthBar.hl = frame.healthBar.hlf:CreateTexture(nil,"BACKGROUND",nil,-8)
@@ -124,7 +123,7 @@ h:SetScript("OnEvent", function(h, event, ...)
 				frame.healthBar.hl:SetPoint("RIGHT",30,0)
 				frame.healthBar.hl:SetPoint("BOTTOM",40,0)
 			end
-  
+
             --Cast Bar
             frame.castBar:SetStatusBarTexture(mediapath.."statusbar_fill")
             if GetCVar("NamePlateVerticalScale") == "1" then
@@ -141,11 +140,11 @@ end)
 --Name
 hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
    --Set the tag based on UnitClassification, can return "worldboss", "rare", "rareelite", "elite", "normal", "minus"
-	local tag 
+	local tag
 	local level = UnitLevel(frame.unit)
 	local name = UnitName(frame.unit)
 	local hexColor
-   
+
 	if level >= UnitLevel("player")+5 then
 		hexColor = GetHexColorFromRGB(1,0,0)
 	elseif level >= UnitLevel("player")+3 then
@@ -171,7 +170,7 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 	end
 	--Set the nameplate name to include tag(if any), name and level
 	frame.name:SetText("|cff"..hexColor.."("..level..")|r "..name)
-	frame.name:SetFont(cfg.font, 12)
+	frame.name:SetFont(roth_config.font.nameplates, 12)
 end)
 
 

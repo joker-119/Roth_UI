@@ -75,7 +75,7 @@ L.addonShortcut    = "ris"
 
   local function rsiCreateFontString(f,size)
     local t = f:CreateFontString(nil, "BACKGROUND")
-    t:SetFont(cfg.font, size, "THINOUTLINE")
+    t:SetFont(roth_config.font.nameplates, size, "THINOUTLINE")
     t:SetPoint("CENTER", f)
     return t
   end

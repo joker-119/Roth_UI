@@ -190,7 +190,7 @@
     button.count:SetPoint("TOPRIGHT", 4, 4)
     button.count:SetTextColor(0.9,0.9,0.9)
     --fix fontsize to be based on button size
-    button.count:SetFont(cfg.font,size/1.8,"THINOUTLINE")
+    button.count:SetFont(cfg.font.base,size/1.8,"THINOUTLINE")
     button.overlay:SetTexture(mediapath.."gloss2")
     button.overlay:SetTexCoord(0,1,0,1)
     button.overlay:SetPoint("TOPLEFT", -1, 1)
@@ -250,7 +250,7 @@
     t:SetBlendMode("BLEND")
     t:SetTexture(mediapath.."combo_highlight2")
 
-    f = func.createFontString(g, cfg.font, 24, "THINOUTLINE")
+    f = func.createFontString(g, cfg.font.base, 24, "THINOUTLINE")
     f:SetPoint("CENTER", 0, 0)
     f:SetTextColor(0.8,0.8,0.8)
     self:Tag(f, "[diablo:altpower]")
@@ -263,7 +263,7 @@
 
     --create aura watch func
 func.createAuraWatch = function(self)
- 
+
     local auras = {}
     local spellIDs
     if cfg.playerclass == "PRIEST" then --Priest
@@ -277,8 +277,8 @@ func.createAuraWatch = function(self)
             109964, -- Spirit Shell
             152118, -- Clairity of Will
         }
- 
-    elseif cfg.playerclass == "PALADIN" then --Paladin    
+
+    elseif cfg.playerclass == "PALADIN" then --Paladin
         spellIDs = {
             86273, -- Illuminated Healing
             53563, -- Beacon of Light
@@ -306,7 +306,7 @@ func.createAuraWatch = function(self)
            740, -- Tranquility
            102351, -- Cenarion Ward
          }
-           
+
     elseif cfg.playerclass == "SHAMAN" then --Shaman
         spellIDs = {
 		61295, -- Riptide
@@ -314,11 +314,11 @@ func.createAuraWatch = function(self)
     else -- Non-Healer
 	spellIDs = { }
     end
- 
+
     auras.onlyShowPresent = false
     auras.presentAlpha = 1
     auras.PostCreateIcon = func.createAuraIcon
- 
+
     -- Set any other AuraWatch settings
     auras.icons = {}
    if cfg.units.party.vertical == false then
@@ -353,7 +353,7 @@ end
 
   --update health func
   func.updateHealth = function(bar, unit, min, max)
-  
+
     local d = floor(min/max*100)
     local color
     local dead
@@ -458,18 +458,18 @@ end
 
   --create portrait func
   func.createPortrait = function(self)
-  
+
 
     local back = CreateFrame("Frame",nil,self)
     back:SetSize(self.cfg.width,self.cfg.width)
-	
+
 	if self.cfg.style == "party" then
 		if cfg.units.party.vertical == false then
 			back:SetPoint("BOTTOM", self, "TOP", 0, -35)
 		else
 			back:SetPoint("BOTTOM", self, "LEFT", 10, -38)
 		end
-	else 
+	else
 		back:SetPoint("BOTTOM", self, "TOP", 0, -35)
 	end
     self.PortraitHolder = back
@@ -559,9 +559,9 @@ end
 				gloss:SetTexture(mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
-		end	
+		end
 	end
-		
+
 	if self.cfg.vertical == true then
     self.Name:SetPoint("CENTER", 0, 0)
 	else
@@ -656,11 +656,11 @@ end
     c.bg:SetAllPoints(c)
     c.bg:SetVertexColor(f.cfg.castbar.color.bg.r,f.cfg.castbar.color.bg.g,f.cfg.castbar.color.bg.b,f.cfg.castbar.color.bg.a)
 
-    c.Text =  func.createFontString(c, cfg.font, f.cfg.castbar.TextSize, "THINOUTLINE")
+    c.Text =  func.createFontString(c, cfg.font.base, f.cfg.castbar.TextSize, "THINOUTLINE")
     c.Text:SetPoint("LEFT", 5, 0)
     c.Text:SetJustifyH("LEFT")
 
-    c.Time =  func.createFontString(c, cfg.font, f.cfg.castbar.TextSize, "THINOUTLINE")
+    c.Time =  func.createFontString(c, cfg.font.base, f.cfg.castbar.TextSize, "THINOUTLINE")
     c.Time:SetPoint("RIGHT", -2, 0)
 
     c.Text:SetPoint("RIGHT", -50, 0)
@@ -685,7 +685,7 @@ end
     c.highlight:SetPoint("LEFT",-35,0)
     c.highlight:SetPoint("RIGHT",35,0)
     c.highlight:SetPoint("BOTTOM",0,-24.2)
-	
+
 
     if f.cfg.style == "target" then
       c.Shield = c:CreateTexture(nil,"BACKGROUND",nil,-8)
@@ -832,9 +832,9 @@ end
   --total absorb
   func.totalAbsorb = function(self)
     if not self.cfg.totalabsorb or (self.cfg.totalabsorb and not self.cfg.totalabsorb.show) then return end
-	
+
     local w = self.Health:GetWidth()
-	
+
 	if self.cfg.style == "party" then
 		if cfg.units.party.verical == false then
 			if w == 0 then
@@ -857,12 +857,12 @@ end
     absorbBar:SetPoint("BOTTOMRIGHT", self.Health, 0, 0)
     absorbBar:SetWidth(w)
     absorbBar:SetStatusBarTexture(self.cfg.totalabsorb.texture)
-    absorbBar:SetStatusBarColor(self.cfg.totalabsorb.color.bar.r,self.cfg.totalabsorb.color.bar.g,self.cfg.totalabsorb.color.bar.b,self.cfg.totalabsorb.color.bar.a)    
+    absorbBar:SetStatusBarColor(self.cfg.totalabsorb.color.bar.r,self.cfg.totalabsorb.color.bar.g,self.cfg.totalabsorb.color.bar.b,self.cfg.totalabsorb.color.bar.a)
     absorbBar:SetReverseFill(true)
     -- Register with oUF
-    self.TotalAbsorb = absorbBar    
+    self.TotalAbsorb = absorbBar
   end
-  
+
 --Register LSM media
 LSM:Register("border", "RB border", "Interface\\AddOns\\Roth_UI\\embeds\\RothBuffs\\media\\5.tga")
 LSM:Register("statusbar", "Solid", "Interface\\AddOns\\Roth_UI\\embeds\\RothBuffs\\media\\RothBuffs\\Solid.tga")
@@ -877,4 +877,3 @@ LSM:Register("statusbar", "Roth_Statusbar8", "Interface\\AddOns\\Roth_UI\\media\
 LSM:Register("statusbar", "Roth_Statusbar9", "Interface\\AddOns\\Roth_UI\\media\\statusbar256_2")
 LSM:Register("statusbar", "Roth_Statusbar10", "Interface\\AddOns\\Roth_UI\\media\\statusbar256_3")
 LSM:Register("background", "Solid", "Interface\\AddOns\\Roth_UI\\embeds\\RothBuffs\\media\\RothBuffs\\Solid.tga")
-LSM:Register("font", "Cracked", "Interface\\AddOns\\Roth_UI\\media\\Cracked-Narrow.ttf")

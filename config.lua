@@ -699,7 +699,8 @@
   oUF.colors.power["MANA"] = {0, 0.4, 1}
 
   --font
-  cfg.font = (mediapath.."Cracked-Narrow.ttf")
+  cfg.font = {}
+  cfg.font.base = roth_config.font.base
 
   --backdrop
   cfg.backdrop = {

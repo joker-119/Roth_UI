@@ -108,7 +108,7 @@ end
 local function SetupFontString(fontString,cfg)
   if not fontString or not cfg then return end
   ApplyPoints(fontString, cfg.points)
-  ApplyFont(fontString,cfg.font)
+  ApplyFont(fontString,cfg.font.base)
   ApplyAlpha(fontString,cfg.alpha)
 end
 
@@ -309,7 +309,7 @@ function rButtonTemplate:StyleAuraButton(button, cfg)
     local normalTexture = button:GetNormalTexture()
     SetupTexture(normalTexture,cfg.normalTexture,"SetNormalTexture",button)
   end
-	
+
 
   --count,duration,symbol
   SetupFontString(count,cfg.count)
@@ -335,7 +335,7 @@ function rButtonTemplate:StyleBuffButtons(cfg)
   hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", UpdateBuffButtons)
 end
 
- 
+
 
 --style player BuffFrame debuff buttons
 function rButtonTemplate:StyleDebuffButtons(cfg)
