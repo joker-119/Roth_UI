@@ -5,7 +5,6 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
-  --  Version 1.9.6
   ---------------------------------------------
 
   --get the addon namespace
@@ -700,7 +699,7 @@
   oUF.colors.power["MANA"] = {0, 0.4, 1}
 
   --font
-  cfg.font = (mediapath.."ufonts.com_devils-snare.ttf")
+  cfg.font = (mediapath.."Cracked-Narrow.ttf")
 
   --backdrop
   cfg.backdrop = {

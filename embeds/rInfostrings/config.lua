@@ -21,6 +21,6 @@
     pos             = { a1 = "TOP", af = Minimap, a2 = "BOTTOM", x = 0, y = -25 },
     userplaced      = true, --want to place the bar somewhere else?
   }
-  cfg.font = (mediapath.."ufonts.com_devils-snare.ttf")
+  cfg.font = (mediapath.."Cracked-Narrow.ttf")
   cfg.showXpRep     = true --show xp or reputation as string
   cfg.showMail      = false --show mail as text

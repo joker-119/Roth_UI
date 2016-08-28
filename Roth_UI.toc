@@ -3,8 +3,8 @@
 ## Title: Roth UI
 ## Notes: Galaxy's oUF layout with Diablo flavor!
 ## RequiredDeps:
-## SavedVariables: Roth_UI_DB_GLOB
-## SavedVariablesPerCharacter: Roth_UI_DB_CHAR
+## SavedVariables: Roth_UI_DB_GLOB, ShinyBuffsDB
+## SavedVariablesPerCharacter: Roth_UI_DB_CHAR, ShinyBuffsPCDB
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
@@ -25,7 +25,7 @@ embeds\rInfoStrings\rInfo.xml
 embeds\rRaidManager\rManager.xml
 embeds\rTooltip\rTooltip.xml
 embeds\tullaRange\tulla.xml
-embeds\RothBuffs\rothbuff.xml
+embeds\Roth_ShinyBuffs\shinybuff.xml
 
 modules\oUF_acharges.lua
 modules\oUF_AuraWatch.lua

@@ -15,7 +15,7 @@
   -----------------------------
   -- CONFIG
   -----------------------------
-	cfg.font = (mediapath.."ufonts.com_devils-snare.ttf")
+  cfg.font = (mediapath.."Cracked-Narrow.ttf")
   cfg.hideChatTabBackgrounds  = true
   cfg.selectedTabColor        = {1,0.75,0}
   cfg.selectedTabAlpha        = 1

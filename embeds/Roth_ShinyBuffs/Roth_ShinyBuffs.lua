@@ -1,4 +1,4 @@
-local RB = CreateFrame("Frame")
+local SB = CreateFrame("Frame")
 local numBuffsSkinned = 0
 local numDebuffsSkinned = 0
 local LSM = LibStub("LibSharedMedia-3.0")
@@ -8,7 +8,7 @@ local bgs = AceGUIWidgetLSMlists.background
 local borders = AceGUIWidgetLSMlists.border
 local fontFlags = {"None", "Outline", "Monochrome Outline"}	--, "Monochrome"}
 local _, class = UnitClass("player")
-local classColor, RBmover, moverShown, db
+local classColor, SBmover, moverShown, db
 local BuffFrame = BuffFrame
 
 local defaults = {
@@ -30,7 +30,7 @@ local defaults = {
 	bg = "Solid",
 	bgColor = {r = .32, g = .32, b = .32},
 	classbg = false,
-	border = "RB border",
+	border = "SB border",
 	borColor = {r = .5, g = .5, b = .5},
 	classbor = false,
 	sbar = "Roth_Statusbar3",
@@ -253,32 +253,32 @@ end
 --BuffFrame.SetPoint = Position
 
 local function ShowMover()
-	if not RBmover then
-		RBmover = CreateFrame("Frame", nil, UIParent)
-		RBmover:SetBackdrop({bgFile = "Interface\\BUTTONS\\WHITE8X8.blp"})
-		RBmover:SetBackdropColor(.2,.2,.9,.5)
-		RBmover:SetPoint("TOPRIGHT", BuffFrame, "TOPRIGHT", 5, 5)
-		RBmover:SetSize(200, 150)
-		RBmover:SetFrameStrata("TOOLTIP")
-		RBmover:EnableMouse(1)
-		RBmover:SetMovable(1)
-		RBmover:SetScript("OnMouseDown", function(self) self:StartMoving() end)
-		RBmover:SetScript("OnMouseUp", function(self)
+	if not SBmover then
+		SBmover = CreateFrame("Frame", nil, UIParent)
+		SBmover:SetBackdrop({bgFile = "Interface\\BUTTONS\\WHITE8X8.blp"})
+		SBmover:SetBackdropColor(.2,.2,.9,.5)
+		SBmover:SetPoint("TOPRIGHT", BuffFrame, "TOPRIGHT", 5, 5)
+		SBmover:SetSize(200, 150)
+		SBmover:SetFrameStrata("TOOLTIP")
+		SBmover:EnableMouse(1)
+		SBmover:SetMovable(1)
+		SBmover:SetScript("OnMouseDown", function(self) self:StartMoving() end)
+		SBmover:SetScript("OnMouseUp", function(self)
 				self:StopMovingOrSizing()
 				_, _, _, db.posX, db.posY = self:GetPoint()
 				Position()
 				--manually refresh the options display (x,y weren't updating...)
-				if RB.optionsFrame:IsShown() then
-					InterfaceOptionsFrame_OpenToCategory("RothBuffs")
+				if SB.optionsFrame:IsShown() then
+					InterfaceOptionsFrame_OpenToCategory("Roth_ShinyBuffs")
 				end
 			end)
 	end
-	RBmover:SetAlpha(moverShown and 1 or 0)
-	RBmover:EnableMouse(moverShown and 1 or 0)
+	SBmover:SetAlpha(moverShown and 1 or 0)
+	SBmover:EnableMouse(moverShown)
 end
 
 local options = {
-	name = "RothBuffs Options",
+	name = "Roth_ShinyBuffs Options",
 	type = "group",
 	args = {
 		header1 = {
@@ -761,9 +761,9 @@ local options = {
 			type = "toggle",
 			width = "full",
 			confirm = true,
-			get = function() return RothBuffsDB.charSpec end,
+			get = function() return ShinyBuffsDB.charSpec end,
 			set = function()
-						RothBuffsPCDB.charSpec = not RothBuffsPCDB.charSpec
+						ShinyBuffsPCDB.charSpec = not ShinyBuffsPCDB.charSpec
 						ReloadUI()
 					end,
 			order = 20,
@@ -773,10 +773,10 @@ local options = {
 			desc = "Copy all settings from the default, global profile to this character's profile.  This will not effect other characters' specific profiles.\n\n|c00E30016WARNING:|r Your UI will be reloaded in the process!",
 			type = "execute",
 			confirm = true,
-			disabled = function() return not RothBuffsPCDB.charSpec end,
+			disabled = function() return not ShinyBuffsPCDB.charSpec end,
 			func = function()
-						RothBuffsPCDB = RothBuffsDB
-						RothBuffsPCDB.charSpec = true
+						ShinyBuffsPCDB = ShinyBuffsDB
+						ShinyBuffsPCDB.charSpec = true
 						ReloadUI()
 					end,
 			order = 21,
@@ -787,10 +787,10 @@ local options = {
 			type = "execute",
 			confirm = true,
 			func = function()
-						if RothBuffsPCDB.charSpec then
-							RothBuffsPCDB = {charSpec = true}
+						if ShinyBuffsPCDB.charSpec then
+							ShinyBuffsPCDB = {charSpec = true}
 						else
-							RothBuffsDB = {}
+							ShinyBuffsDB = {}
 						end
 						ReloadUI()
 					end,
@@ -801,28 +801,28 @@ local options = {
 
 
 local function SetUpDB()
-	if RothBuffsPCDB.charSpec then
+	if ShinyBuffsPCDB.charSpec then
 		--set defaults if new charSpec DB
 		for k,v in pairs(defaults) do
-			if type(RothBuffsPCDB[k]) == "nil" then
-				RothBuffsPCDB[k] = v
+			if type(ShinyBuffsPCDB[k]) == "nil" then
+				ShinyBuffsPCDB[k] = v
 			end
 		end
-		db = RothBuffsPCDB
+		db = ShinyBuffsPCDB
 	else
-		db = RothBuffsDB
+		db = ShinyBuffsDB
 	end
 end
 
 local function PEW()
-	RothBuffsDB = RothBuffsDB or {}
-	RothBuffsPCDB = RothBuffsPCDB or {}
-		if RothBuffsPCDB.charSpec == nil then
-			RothBuffsPCDB.charSpec = false
+	ShinyBuffsDB = ShinyBuffsDB or {}
+	ShinyBuffsPCDB = ShinyBuffsPCDB or {}
+		if ShinyBuffsPCDB.charSpec == nil then
+			ShinyBuffsPCDB.charSpec = false
 		end
 	for k,v in pairs(defaults) do
-	    if type(RothBuffsDB[k]) == "nil" then
-	        RothBuffsDB[k] = v
+	    if type(ShinyBuffsDB[k]) == "nil" then
+	        ShinyBuffsDB[k] = v
 	    end
 	end
 	SetUpDB()
@@ -844,11 +844,11 @@ local function PEW()
 			end)
 	end
 	
-	LibStub("AceConfig-3.0"):RegisterOptionsTable("RothBuffs", options)
-	RB.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("RothBuffs", "RothBuffs")
-	SlashCmdList["ROTHBUFFS"] = function() InterfaceOptionsFrame_OpenToCategory("RothBuffs") end
-	SLASH_ROTHBUFFS1 = "/rothbuffs"
-	SLASH_ROTHBUFFS2 = "/rb"
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("Roth_ShinyBuffs", options)
+	SB.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Roth_ShinyBuffs", "Roth_ShinyBuffs")
+	SlashCmdList["SHINYBUFFS"] = function() InterfaceOptionsFrame_OpenToCategory("Roth_ShinyBuffs") end
+	SLASH_SHINYBUFFS1 = "/rothbuffs"
+	SLASH_SHINYBUFFS2 = "/rb"
 
 	if db.allWhiteText then
 		BUFF_DURATION_WARNING_TIME = 7200
@@ -872,9 +872,9 @@ local function PEW()
 
 	WhoCast()
 	
-	RB:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	RB:RegisterEvent("UNIT_AURA")
-	RB:SetScript("OnEvent", function(s,e,unit)
+	SB:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	SB:RegisterEvent("UNIT_AURA")
+	SB:SetScript("OnEvent", function(s,e,unit)
 			if unit == "player" then
 				if BUFF_ACTUAL_DISPLAY > numBuffsSkinned then
 					for i = numBuffsSkinned+1, BUFF_ACTUAL_DISPLAY do
@@ -888,29 +888,14 @@ local function PEW()
 				end
 				--don't bother checking if they're all skinned
 				if numBuffsSkinned == BUFF_MAX_DISPLAY and numDebuffsSkinned == DEBUFF_MAX_DISPLAY then
-					RB:UnregisterEvent("UNIT_AURA")
-					RB:SetScript("OnEvent", nil)
+					SB:UnregisterEvent("UNIT_AURA")
+					SB:SetScript("OnEvent", nil)
 				end
 			end
 		end)
 	PEW = nil
 end
 
+SB:SetScript("OnEvent", PEW)
 
-LSM:Register("border", "RB border", "Interface\\AddOns\\Roth_UI\\embeds\\RothBuffs\\media\\5.tga")
-LSM:Register("statusbar", "Solid", "Interface\\AddOns\\Roth_UI\\embeds\\RothBuffs\\media\\RothBuffs\\Solid.tga")
-LSM:Register("statusbar", "Roth_Statusbar1", "Interface\\AddOns\\Roth_UI\\media\\statusbar")
-LSM:Register("statusbar", "Roth_Statusbar2", "Interface\\AddOns\\Roth_UI\\media\\statusbar2")
-LSM:Register("statusbar", "Roth_Statusbar3", "Interface\\AddOns\\Roth_UI\\media\\statusbar3")
-LSM:Register("statusbar", "Roth_Statusbar4", "Interface\\AddOns\\Roth_UI\\media\\statusbar4")
-LSM:Register("statusbar", "Roth_Statusbar5", "Interface\\AddOns\\Roth_UI\\media\\statusbar5")
-LSM:Register("statusbar", "Roth_Statusbar6", "Interface\\AddOns\\Roth_UI\\media\\statusbar128")
-LSM:Register("statusbar", "Roth_Statusbar7", "Interface\\AddOns\\Roth_UI\\media\\statusbar128_3")
-LSM:Register("statusbar", "Roth_Statusbar8", "Interface\\AddOns\\Roth_UI\\media\\statusbar256")
-LSM:Register("statusbar", "Roth_Statusbar9", "Interface\\AddOns\\Roth_UI\\media\\statusbar256_2")
-LSM:Register("statusbar", "Roth_Statusbar10", "Interface\\AddOns\\Roth_UI\\media\\statusbar256_3")
-LSM:Register("background", "Solid", "Interface\\AddOns\\Roth_UI\\embeds\\RothBuffs\\media\\RothBuffs\\Solid.tga")
-
-RB:SetScript("OnEvent", PEW)
-
-RB:RegisterEvent("PLAYER_ENTERING_WORLD")
+SB:RegisterEvent("PLAYER_ENTERING_WORLD")

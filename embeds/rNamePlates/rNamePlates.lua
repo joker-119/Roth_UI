@@ -43,7 +43,7 @@ local options = {
   showClassificationIndicator = true,
 }
 local cfg = {}
-cfg.font = (mediapath.."ufonts.com_devils-snare.ttf")
+cfg.font = (mediapath.."Cracked-Narrow.ttf")
 
 for i, group  in next, groups do
   for key, value in next, options do
