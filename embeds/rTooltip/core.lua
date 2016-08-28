@@ -16,8 +16,6 @@
 
   cfg.pos   = { "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 180 }
   cfg.scale = 1.15
-  cfg.font = {}
-  cfg.font.family = "Interface\\AddOns\\Roth_UI\\media\\Cracked-Narrow.ttf"
   cfg.backdrop = { bgFile = "Interface\\AddOns\\Roth_UI\\media\\Tooltip_Background", edgeFile = "Interface\\AddOns\\Roth_UI\\media\\Tooltip_Border",  tiled = false, edgeSize = 10, insets = {left=8, right=8, top=8, bottom=8} }
   cfg.backdrop.bgColor = {1,1,1,1}
   cfg.backdrop.borderColor = {1,1,1,1}
@@ -39,9 +37,9 @@
   ---------------------------------------------
 
   --change some text sizes
-  GameTooltipHeaderText:SetFont(cfg.font.family, 14, "THINOUTLINE")
-  GameTooltipText:SetFont(cfg.font.family, 12, "THINOUTLINE")
-  Tooltip_Small:SetFont(cfg.font.family, 11, "THINOUTLINE")
+  GameTooltipHeaderText:SetFont(roth_config.font.tooltips, 14, "THINOUTLINE")
+  GameTooltipText:SetFont(roth_config.font.tooltips, 12, "THINOUTLINE")
+  Tooltip_Small:SetFont(roth_config.font.tooltips, 11, "THINOUTLINE")
 
   --gametooltip statusbar
   GameTooltipStatusBar:ClearAllPoints()
@@ -82,7 +80,7 @@
 
   -- ArtifactPowerIDs
 hooksecurefunc(GameTooltip, "SetArtifactPowerByID", function(self, id)
-    if id then 
+    if id then
     	local spellid = C_ArtifactUI.GetPowerInfo(id)
         addLine(self, id, types.artifactpower);
         addLine(self, spellid, types.spell)
@@ -245,7 +243,7 @@ end)
       end
     end
   end
-  
+
   --func TooltipOnShow
   local function TooltipOnHide(self,...)
     self:SetBackdropColor(unpack(cfg.backdrop.bgColor))

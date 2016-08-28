@@ -40,7 +40,7 @@
     t:SetPoint("LEFT",-62,0)
     t:SetPoint("RIGHT",60,0)
     t:SetPoint("BOTTOM",0,-15)
-		
+
 	self.RareIcon = t
 end
 
@@ -124,25 +124,25 @@ end
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
+    local name = func.createFontString(self, cfg.font.base, self.cfg.misc.NameFontSize, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, 0)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, self.cfg.health.fontSize, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.font.base, self.cfg.health.fontSize, "THINOUTLINE")
     hpval:SetPoint(self.cfg.health.point, self.cfg.health.x,self.cfg.health.y)
 
-    local perphp = func.createFontString(self.Health, cfg.font, self.cfg.healper.fontSize, "THINOUTLINE") 
-    perphp:SetPoint(self.cfg.healper.point, self.cfg.healper.x,self.cfg.healper.y)    
+    local perphp = func.createFontString(self.Health, cfg.font.base, self.cfg.healper.fontSize, "THINOUTLINE")
+    perphp:SetPoint(self.cfg.healper.point, self.cfg.healper.x,self.cfg.healper.y)
 
-    local perpp = func.createFontString(self.Power, cfg.font, self.cfg.powper.fontSize, "THINOUTLINE")
+    local perpp = func.createFontString(self.Power, cfg.font.base, self.cfg.powper.fontSize, "THINOUTLINE")
     perpp:SetPoint(self.cfg.powper.point, self.cfg.powper.x,self.cfg.powper.y)
-	
-	local ppval = func.createFontString(self.Health, cfg.font, self.cfg.power.fontSize, "THINOUTLINE")
+
+	local ppval = func.createFontString(self.Health, cfg.font.base, self.cfg.power.fontSize, "THINOUTLINE")
 	ppval:SetPoint(self.cfg.power.point, self.cfg.power.x,self.cfg.power.y)
 
-    local classtext = func.createFontString(self, cfg.font, self.cfg.misc.classFontSize, "THINOUTLINE")
+    local classtext = func.createFontString(self, cfg.font.base, self.cfg.misc.classFontSize, "THINOUTLINE")
     classtext:SetPoint("BOTTOM", self, "TOP", 0, -15)
 
     self:Tag(name, "[diablo:name]")
@@ -284,7 +284,7 @@ end
     --createhealthPower
     createHealthFrame(self)
     createPowerFrame(self)
-	
+
 	--Classification
 	--[[self:RegisterEvent("PLAYER_TARGET_CHANGED", classification)
 	self.Health:SetScript("OnShow",function(s)
@@ -338,7 +338,7 @@ end
 
     --add heal prediction
     func.healPrediction(self)
-	
+
     --add total absorb
     func.totalAbsorb(self)
 

@@ -49,12 +49,12 @@ local createActionBarBackground = function(self)
 		f:SetSize(788,220)
 		f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
 		f:SetScale(cfg.scale)
-		
+
 		func.applyDragFunctionality(f)
-		
+
 		local t = f:CreateTexture(nil,"BACKGROUND",nil,-8)
 			t:SetAllPoints(f)
-	
+
 			--Setup Actionbars
 			local setupBarTexture = function()
 			--Establish Variables
@@ -62,7 +62,7 @@ local createActionBarBackground = function(self)
 			local levelbar
 			local repbar
 			local artifactbar
-			
+
 				--Determine ActionBar Status and report vehicle, 3, 2 or 1 depending on actionbars displayed
 				if ((HasVehicleActionBar() and UnitVehicleSkin("player") and UnitVehicleSkin("player") ~= "") or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= "")) or UnitHasVehicleUI("player") then
 					bar = "vehicle"
@@ -80,14 +80,14 @@ local createActionBarBackground = function(self)
 				else
 					levelbar = true
 				end
-		
+
 				--Determine if player is 'watching' a faction (show rep as exp bar)
 				if GetWatchedFactionInfo() and self.cfg.repbar.show then
 					repbar = true
 				else
 					repbar = false
 				end
-		
+
 				--Determine if player has an artifact weapon equipped
 				if C_ArtifactUI.GetArtifactInfo() and self.cfg.ArtifactPower.show then
 					artifactbar = true
@@ -222,14 +222,14 @@ local createActionBarBackground = function(self)
 					rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (50*cfg.scale))
 				end
 			end
-	
+
 	--Rerun function upon ActionBars 2&3 being hidden/shown to update artwork and exp/menu/bag/stance bar locations
 	setupBarTexture()
 	MultiBarBottomRight:HookScript("OnShow", setupBarTexture)
 	MultiBarBottomRight:HookScript("OnHide", setupBarTexture)
 	MultiBarBottomLeft:HookScript("OnShow", setupBarTexture)
 	MultiBarBottomLeft:HookScript("OnHide", setupBarTexture)
-		
+
 	--Register events to force re-run
 	--Used for updating when exp/rep/artifact bars are hidden/shown and when vehicles are entered/exited
 	f:RegisterEvent("UPDATE_FACTION")
@@ -369,7 +369,7 @@ end
       orb.spark:Show()
     end
   end
-  
+
     --create galaxy func
   local createGalaxy = function(frame,type,x,y,size,duration,texture,sublevel,degree)
     local t = frame:CreateTexture(nil, "MEDIUM", nil, sublevel)
@@ -385,7 +385,7 @@ end
     t.ag:SetLooping("REPEAT")
     return t
   end
-  
+
   --create orb func
   local createOrb = function(self,type)
     --get the orb config
@@ -444,18 +444,18 @@ end
     fill:SetOrientation("VERTICAL")
     fill:SetScript("OnValueChanged", updateOrb)
     orb.fill = fill
-	
-	
+
+
     --scroll frame
 	local scrollFrame = CreateFrame("ScrollFrame", "$parentScrollFrame", orb)
 	scrollFrame:SetPoint("BOTTOM")
 	scrollFrame:SetSize(orb:GetSize())
-	
+
 	--scroll child
 	local scrollChild = CreateFrame("Frame",nil,scrollFrame)
 	scrollChild:SetSize(orb:GetSize())
 	scrollFrame:SetScrollChild(scrollChild)
-	
+
 
     --orb model
     local model = CreateFrame("PlayerModel",nil,scrollChild)
@@ -481,7 +481,7 @@ end
     model:SetScript("OnShow", function(self) self:Update() end)
     model:Update()
     orb.model = model
-	
+
     --galaxies
     orb.galaxies = {}
     tinsert(orb.galaxies, createGalaxy(scrollChild,orb.type,0,0,orb.size-0,120,"galaxy2",-8,360))
@@ -490,7 +490,7 @@ end
     for i, galaxy in pairs(orb.galaxies) do
       galaxy:SetVertexColor(orbcfg.filling.color.r,orbcfg.filling.color.g,orbcfg.filling.color.b)
     end
-	
+
 	--bubbles
 	orb.bubbles = {}
 	tinsert(orb.bubbles, createGalaxy(scrollChild,orb.type,0,0,orb.size-12,10,"orb_rotation_bubbles1",-8,-360))
@@ -500,7 +500,7 @@ end
 	for i, bubble in pairs(orb.bubbles) do
 		bubble:SetVertexColor(orbcfg.filling.color.r,orbcfg.filling.color.g,orbcfg.filling.color.b)
 	end
-	
+
 
     --overlay frame
     local overlay = CreateFrame("Frame","$parentOverlay",scrollFrame)
@@ -555,11 +555,11 @@ end
     local values = CreateFrame("Frame","$parentValues",overlay)
     values:SetAllPoints(orb)
     --top value
-    values.top = func.createFontString(values, cfg.font, 28, "THINOUTLINE")
+    values.top = func.createFontString(values, cfg.font.base, 28, "THINOUTLINE")
     values.top:SetPoint("CENTER", 0, 10)
     values.top:SetTextColor(orbcfg.value.top.color.r,orbcfg.value.top.color.g,orbcfg.value.top.color.b)
     --bottom value
-    values.bottom = func.createFontString(values, cfg.font, 16, "THINOUTLINE")
+    values.bottom = func.createFontString(values, cfg.font.base, 16, "THINOUTLINE")
     values.bottom:SetPoint("CENTER", 0, -10)
     values.bottom:SetTextColor(orbcfg.value.top.color.r,orbcfg.value.top.color.g,orbcfg.value.top.color.b)
     orb.values = values
@@ -572,19 +572,19 @@ end
       self:Tag(orb.values.top, "[diablo:PowerOrbTop]")
       self:Tag(orb.values.bottom, "[diablo:PowerOrbBottom]")
     end
-    
+
     --new absorb display directly on the orb
-    if self.cfg.absorb.show and orb.type == "HEALTH" then    
+    if self.cfg.absorb.show and orb.type == "HEALTH" then
       local absorbBar = CreateFrame("StatusBar", nil, values)
       --absorbBar:SetAllPoints()
       absorbBar:SetPoint("CENTER")
-      absorbBar:SetSize(self.cfg.size-5,self.cfg.size-5)      
-      
+      absorbBar:SetSize(self.cfg.size-5,self.cfg.size-5)
+
       absorbBar.bg = absorbBar:CreateTexture(nil,"BACKGROUND",nil,-8)
       absorbBar.bg:SetAllPoints()
       absorbBar.bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\orb_absorb_glow")
       absorbBar.bg:SetAlpha(0.2)
-      
+
       absorbBar.texture = absorbBar:CreateTexture(nil,"OVERLAY",nil,-8)
       absorbBar.texture:SetPoint("TOPLEFT")
       absorbBar.texture:SetPoint("TOPRIGHT")
@@ -611,8 +611,8 @@ end
         bar.texture:SetTexCoord(0,1,0,absorb/maxHealth)
         bar.texture:SetHeight(absorbBar.texture.maxHeight*absorb/maxHealth)
       end)
-      self.TotalAbsorb = absorbBar   
-      self.TotalAbsorb.Smooth = self.cfg.absorb.smooth or false      
+      self.TotalAbsorb = absorbBar
+      self.TotalAbsorb.Smooth = self.cfg.absorb.smooth or false
     end
 
     if orb.type == "POWER" then
@@ -636,7 +636,7 @@ end
     end
     --print(addon..": orb created "..orb.type)
   end
-  
+
 local DruidMana = function(self)
 	local class = select(2, UnitClass("player"))
 	 --Create DruidMana frame
@@ -646,10 +646,10 @@ local DruidMana = function(self)
 		DM:SetPoint("LEFT")
 		DM:SetPoint("RIGHT")
 		DM:SetFrameStrata("LOW")
-		
+
 		func.applyDragFunctionality(DM)
-		
-		
+
+
 		--Add Artwork
 		local b = CreateFrame("Frame",nil,Roth_DruidMana)
 			b:SetSize(20,20)
@@ -657,14 +657,14 @@ local DruidMana = function(self)
 			b:SetPoint("LEFT")
 			b:SetPoint("RIGHT")
 			b:SetFrameStrata("LOW")
-		
+
 		local br = b:CreateTexture(nil,"MEDIUM")
 			br:SetPoint("TOP",0,8)
 			br:SetPoint("LEFT",-50,0)
 			br:SetPoint("RIGHT",50,0)
 			br:SetPoint("BOTTOM",0,-8)
 			br:SetTexture("Interface\\AddOns\\Roth_UI\\media\\d3_altpower_border")
-		
+
 		b:RegisterEvent("PLAYER_ENTERING_WORLD")
 		b:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 		b:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
@@ -687,11 +687,11 @@ local DruidMana = function(self)
 		self.DruidMana.colorPower = DM
 		self.DruidMana.bg = nil
 
-		
+
 end
 
 
-	
+
   ---------------------------------------------
   -- PLAYER STYLE FUNC
   ---------------------------------------------
@@ -712,7 +712,7 @@ end
     createOrb(self,"HEALTH")
     --create the power orb
     createOrb(self,"POWER")
-	
+
 	--druidmana
 	DruidMana(self)
 
@@ -728,7 +728,7 @@ end
 
 	--artifact bar
 	bars.createArtifactPowerBar(self)
-	
+
     --bottomline
     createBottomLine(self)
 
@@ -760,7 +760,7 @@ end
     if cfg.playerclass == "WARLOCK" and self.cfg.soulshards.show then
       bars.createSoulShardPowerBar(self)
     end
-	
+
 	--mage bars
 	if cfg.playerclass == "MAGE" and self.cfg.arcbar.show then
 		bars.createArcBar(self)
@@ -781,7 +781,7 @@ end
       --position deathknight runes
       bars.createRuneBar(self)
     end
-    
+
     --combobar
     if self.cfg.combobar.show then
       bars.createComboBar(self)

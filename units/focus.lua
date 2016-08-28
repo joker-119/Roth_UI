@@ -101,13 +101,13 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, 14, "THINOUTLINE")
+    local name = func.createFontString(self, cfg.font.base, 14, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -13)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.font.base, 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
     self:Tag(name, "[diablo:name]")
@@ -182,7 +182,7 @@
 
     --add heal prediction
     func.healPrediction(self)
-    
+
     --add total absorb
     func.totalAbsorb(self)
 

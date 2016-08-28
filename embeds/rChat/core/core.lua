@@ -51,7 +51,8 @@
   BNToastFrame:SetClampedToScreen(true)
   BNToastFrame:SetClampRectInsets(-15,15,15,-15)
 
-  ChatFontNormal:SetFont(cfg.font, 12, "THINOUTLINE")
+
+  ChatFontNormal:SetFont(roth_config.font.chat, 12, "THINOUTLINE")
   ChatFontNormal:SetShadowOffset(1,-1)
   ChatFontNormal:SetShadowColor(0,0,0,0.6)
 
@@ -73,7 +74,7 @@
     --self:SetFading(false)
 
     --set font, outline and shadow for chat text
-    self:SetFont(cfg.font, 15, "THINOUTLINE")
+    self:SetFont(roth_config.font.chat, 15, "THINOUTLINE")
     self:SetShadowOffset(1,-1)
     self:SetShadowColor(0,0,0,.5)
 
@@ -99,7 +100,7 @@
     --chat tab skinning
     local tab = _G[name.."Tab"]
     local tabFs = tab:GetFontString()
-    tabFs:SetFont(cfg.font, 11, "THINOUTLINE")
+    tabFs:SetFont(roth_config.font.chat, 11, "THINOUTLINE")
     tabFs:SetShadowOffset(1,-1)
     tabFs:SetShadowColor(0,0,0,0.6)
     tabFs:SetTextColor(unpack(cfg.selectedTabColor))
