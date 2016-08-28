@@ -6,7 +6,7 @@
 -----------------------------
 
 local A, L = ...
-local mediapath = "Interface\\AddOns\\Roth_UI\\embeds\\rNamePlates\\media\\"
+local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 local EliteTag = "+"
 local RareTag = "^"
 local BossTag = "*"
@@ -42,6 +42,8 @@ local options = {
   defaultBorderColor = CreateColor(0, 0, 0, 1),
   showClassificationIndicator = true,
 }
+local cfg = {}
+cfg.font = (mediapath.."ufonts.com_devils-snare.ttf")
 
 for i, group  in next, groups do
   for key, value in next, options do
@@ -169,6 +171,7 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 	end
 	--Set the nameplate name to include tag(if any), name and level
 	frame.name:SetText("|cff"..hexColor.."("..level..")|r "..name)
+	frame.name:SetFont(cfg.font, 12)
 end)
 
 

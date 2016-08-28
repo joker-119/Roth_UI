@@ -10,6 +10,7 @@
   local addon, ns = ...
   local cfg = CreateFrame("Frame")
   ns.cfg = cfg
+  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
   -----------------------------
   -- CONFIG
@@ -20,6 +21,6 @@
     pos             = { a1 = "TOP", af = Minimap, a2 = "BOTTOM", x = 0, y = -25 },
     userplaced      = true, --want to place the bar somewhere else?
   }
-  cfg.font = "Interface\\AddOns\\Roth_UI\\media\\Lycanthrope.ttf"
+  cfg.font = (mediapath.."ufonts.com_devils-snare.ttf")
   cfg.showXpRep     = true --show xp or reputation as string
   cfg.showMail      = false --show mail as text

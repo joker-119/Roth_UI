@@ -21,7 +21,6 @@ cfg.font = (mediapath.."ufonts.com_devils-snare.ttf")
 
 local MenuSetup = function() end
 	GameMenuFrame:SetBackdrop(cfg.backdrop)
-	PaperDollItemsFrame.Text:SetFont(cfg.font, 13, "THINOUTLINE")
 		
 for id, btn in pairs({GameMenuFrame:GetChildren()}) do
 	btn.Left:SetTexture(nil);
