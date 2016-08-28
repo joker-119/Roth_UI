@@ -7,6 +7,7 @@
 
   --get the config
   local cfg = ns.cfg
+  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
   --object container
   local func = CreateFrame("Frame")
@@ -189,7 +190,7 @@
     button.count:SetTextColor(0.9,0.9,0.9)
     --fix fontsize to be based on button size
     button.count:SetFont(cfg.font,size/1.8,"THINOUTLINE")
-    button.overlay:SetTexture("Interface\\AddOns\\Roth_UI\\media\\gloss2")
+    button.overlay:SetTexture(mediapath.."gloss2")
     button.overlay:SetTexCoord(0,1,0,1)
     button.overlay:SetPoint("TOPLEFT", -1, 1)
     button.overlay:SetPoint("BOTTOMRIGHT", 1, -1)
@@ -199,7 +200,7 @@
     local back = button:CreateTexture(nil, "BACKGROUND")
     back:SetPoint("TOPLEFT",button.icon,"TOPLEFT",-0.18*size,0.18*size)
     back:SetPoint("BOTTOMRIGHT",button.icon,"BOTTOMRIGHT",0.18*size,-0.18*size)
-    back:SetTexture("Interface\\AddOns\\Roth_UI\\media\\simplesquare_glow")
+    back:SetTexture(mediapath.."simplesquare_glow")
     back:SetVertexColor(0, 0, 0, 1)
   end
 
@@ -223,19 +224,19 @@
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",-64,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_left")
+    t:SetTexture(mediapath.."combo_left")
     bar.leftedge = t
 
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",64,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_right")
+    t:SetTexture(mediapath.."combo_right")
     bar.rightedge = t
 
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64*num,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_back")
+    t:SetTexture(mediapath.."combo_back")
     bar.back = t
 
     local g = CreateFrame("Frame",nil,bar)
@@ -246,7 +247,7 @@
     t:SetPoint("LEFT",0,0)
     t:SetAlpha(0.7)
     t:SetBlendMode("BLEND")
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_highlight2")
+    t:SetTexture(mediapath.."combo_highlight2")
 
     f = func.createFontString(g, cfg.font, 24, "THINOUTLINE")
     f:SetPoint("CENTER", 0, 0)
@@ -422,9 +423,9 @@ end
   func.createDebuffGlow = function(self)
     local t = self:CreateTexture(nil,"LOW",nil,-5)
     if self.cfg.style == "target" then
-      t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_debuffglow")
+      t:SetTexture(mediapath.."target_debuffglow")
     else
-      t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_debuffglow")
+      t:SetTexture(mediapath.."targettarget_debuffglow")
     end
     t:SetAllPoints(self)
     t:SetBlendMode("BLEND")
@@ -474,7 +475,7 @@ end
 
     local t = back:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetAllPoints(back)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_back")
+    t:SetTexture(mediapath.."portrait_back")
     t:SetVertexColor(0.1,0.1,0.1,0.9)
     self.PortraitBack = t
 
@@ -490,14 +491,14 @@ end
 
 			local border = borderholder:CreateTexture(nil,"BACKGROUND",nil,-6)
 				border:SetAllPoints(borderholder)
-				border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_border")
+				border:SetTexture(mediapath.."portrait_border")
 				border:SetVertexColor(0.6,0.5,0.5)
 				--border:SetVertexColor(1,0,0,1) --threat test
 				self.Border = border
 
 			local gloss = borderholder:CreateTexture(nil,"BACKGROUND",nil,-5)
 				gloss:SetAllPoints(borderholder)
-				gloss:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_gloss")
+				gloss:SetTexture(mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
 		else
@@ -508,13 +509,13 @@ end
 
 			local border = back:CreateTexture(nil,"BACKGROUND",nil,-6)
 				border:SetAllPoints(back)
-				border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_border")
+				border:SetTexture(mediapath.."portrait_border")
 				border:SetVertexColor(0.6,0.5,0.5)
 				self.Border = border
 
 			local gloss = back:CreateTexture(nil,"BACKGROUND",nil,-5)
 				gloss:SetAllPoints(back)
-				gloss:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_gloss")
+				gloss:SetTexture(mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
 		end
@@ -530,14 +531,14 @@ end
 
 			local border = borderholder:CreateTexture(nil,"BACKGROUND",nil,-6)
 				border:SetAllPoints(borderholder)
-				border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_border")
+				border:SetTexture(mediapath.."portrait_border")
 				border:SetVertexColor(0.6,0.5,0.5)
 				--border:SetVertexColor(1,0,0,1) --threat test
 				self.Border = border
 
 			local gloss = borderholder:CreateTexture(nil,"BACKGROUND",nil,-5)
 				gloss:SetAllPoints(borderholder)
-				gloss:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_gloss")
+				gloss:SetTexture(mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
 		else
@@ -548,13 +549,13 @@ end
 
 			local border = back:CreateTexture(nil,"BACKGROUND",nil,-6)
 				border:SetAllPoints(back)
-				border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_border")
+				border:SetTexture(mediapath.."portrait_border")
 				border:SetVertexColor(0.6,0.5,0.5)
 				self.Border = border
 
 			local gloss = back:CreateTexture(nil,"BACKGROUND",nil,-5)
 				gloss:SetAllPoints(back)
-				gloss:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_gloss")
+				gloss:SetTexture(mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
 		end	
@@ -588,7 +589,7 @@ end
 
     local t = back:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetAllPoints(back)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_back")
+    t:SetTexture(mediapath.."portrait_back")
     t:SetVertexColor(0.1,0.1,0.1,0.9)
 
     if pcfg.use3D then
@@ -601,12 +602,12 @@ end
 
       local border = borderholder:CreateTexture(nil,"BACKGROUND",nil,-6)
       border:SetAllPoints(borderholder)
-      border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_border")
+      border:SetTexture(mediapath.."portrait_border")
       border:SetVertexColor(0.6,0.5,0.5)
 
       local gloss = borderholder:CreateTexture(nil,"BACKGROUND",nil,-5)
       gloss:SetAllPoints(borderholder)
-      gloss:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_gloss")
+      gloss:SetTexture(mediapath.."portrait_gloss")
       gloss:SetVertexColor(0.9,0.95,1,0.6)
 
     else
@@ -617,12 +618,12 @@ end
 
       local border = back:CreateTexture(nil,"BACKGROUND",nil,-6)
       border:SetAllPoints(back)
-      border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_border")
+      border:SetTexture(mediapath.."portrait_border")
       border:SetVertexColor(0.6,0.5,0.5)
 
       local gloss = back:CreateTexture(nil,"BACKGROUND",nil,-5)
       gloss:SetAllPoints(back)
-      gloss:SetTexture("Interface\\AddOns\\Roth_UI\\media\\portrait_gloss")
+      gloss:SetTexture(mediapath.."portrait_gloss")
       gloss:SetVertexColor(0.9,0.95,1,0.6)
 
     end
@@ -643,7 +644,7 @@ end
     --c:SetStatusBarColor(0,0,0,1)
 
     c.background = c:CreateTexture(nil,"BACKGROUND",nil,-8)
-    c.background:SetTexture("Interface\\AddOns\\Roth_UI\\media\\castbar")
+    c.background:SetTexture(mediapath.."castbar")
     c.background:SetPoint("TOP",0,24.9)
     c.background:SetPoint("LEFT",-170,0)
     c.background:SetPoint("RIGHT",170,0)
@@ -670,7 +671,7 @@ end
     c.Spark:SetVertexColor(0.8,0.6,0,1)
 
     c.glow = c:CreateTexture(nil, "OVERLAY",nil,-4)
-    c.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\castbar_glow")
+    c.glow:SetTexture(mediapath.."castbar_glow")
     c.glow:SetPoint("TOP",0,26.5)
     c.glow:SetPoint("LEFT",-35,0)
     c.glow:SetPoint("RIGHT",35,0)
@@ -678,7 +679,7 @@ end
     c.glow:SetVertexColor(0,0,0,1)
 
     c.highlight = c:CreateTexture(nil,"OVERLAY",nil,-3)
-    c.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\castbar_highlight")
+    c.highlight:SetTexture(mediapath.."castbar_highlight")
     c.highlight:SetPoint("TOP",0,26.5)
     c.highlight:SetPoint("LEFT",-35,0)
     c.highlight:SetPoint("RIGHT",35,0)

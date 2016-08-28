@@ -10,6 +10,7 @@
   local func = ns.func
   local cfg = ns.cfg
   local barposition = ns.player
+  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
   ---------------------------------------------
   -- FUNCTIONS
@@ -170,14 +171,14 @@ end
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_left")
+    t:SetTexture(mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_right")
+    t:SetTexture(mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -194,19 +195,19 @@ end
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_bar_bg")
+      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_bg")
+      orb.bg:SetTexture(mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
       orb.fill:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
-      orb.fill:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_fill1")
+      orb.fill:SetTexture(mediapath.."combo_orb_fill1")
       orb.fill:SetVertexColor(self.cfg.harmony.color.r,self.cfg.harmony.color.g,self.cfg.harmony.color.b)
       --orb.fill:SetBlendMode("ADD")
 
@@ -214,13 +215,13 @@ end
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_border")
+      orb.border:SetTexture(mediapath.."combo_orb_border")
 
       --orb glow
       orb.glow = orb:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_glow")
+      orb.glow:SetTexture(mediapath.."combo_orb_glow")
       orb.glow:SetVertexColor(self.cfg.harmony.color.r,self.cfg.harmony.color.g,self.cfg.harmony.color.b)
       orb.glow:SetBlendMode("BLEND")
 
@@ -228,7 +229,7 @@ end
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_highlight")
+      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
 
     end
 
@@ -265,14 +266,14 @@ end
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_left")
+    t:SetTexture(mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_right")
+    t:SetTexture(mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -289,19 +290,19 @@ end
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_bar_bg")
+      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_bg")
+      orb.bg:SetTexture(mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
       orb.fill:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
-      orb.fill:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_fill1")
+      orb.fill:SetTexture(mediapath.."combo_orb_fill1")
       orb.fill:SetVertexColor(self.cfg.holypower.color.r,self.cfg.holypower.color.g,self.cfg.holypower.color.b)
       --orb.fill:SetBlendMode("ADD")
 
@@ -309,13 +310,13 @@ end
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_border")
+      orb.border:SetTexture(mediapath.."combo_orb_border")
 
       --orb glow
       orb.glow = orb:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_glow")
+      orb.glow:SetTexture(mediapath.."combo_orb_glow")
       orb.glow:SetVertexColor(self.cfg.holypower.color.r,self.cfg.holypower.color.g,self.cfg.holypower.color.b)
       orb.glow:SetBlendMode("BLEND")
 
@@ -323,7 +324,7 @@ end
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_highlight")
+      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
 
     end
 
@@ -361,14 +362,14 @@ end
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_left")
+    t:SetTexture(mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_right")
+    t:SetTexture(mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -385,19 +386,19 @@ end
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_bar_bg")
+      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_gem_bg")
+      orb.bg:SetTexture(mediapath.."combo_gem_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
       orb.fill:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
-      orb.fill:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_gem_fill1")
+      orb.fill:SetTexture(mediapath.."combo_gem_fill1")
       orb.fill:SetVertexColor(self.cfg.soulshards.color.r,self.cfg.soulshards.color.g,self.cfg.soulshards.color.b)
       --orb.fill:SetBlendMode("ADD")
 
@@ -405,13 +406,13 @@ end
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_gem_border")
+      orb.border:SetTexture(mediapath.."combo_gem_border")
 
       --orb glow
       orb.glow = orb:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_gem_glow")
+      orb.glow:SetTexture(mediapath.."combo_gem_glow")
       orb.glow:SetVertexColor(self.cfg.soulshards.color.r,self.cfg.soulshards.color.g,self.cfg.soulshards.color.b)
       orb.glow:SetBlendMode("BLEND")
 
@@ -419,7 +420,7 @@ end
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_gem_highlight")
+      orb.highlight:SetTexture(mediapath.."combo_gem_highlight")
 
     end
 
@@ -454,14 +455,14 @@ end
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_left")
+    t:SetTexture(mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_right")
+    t:SetTexture(mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -477,20 +478,20 @@ end
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_bar_bg")
+      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_bg")
+      orb.bg:SetTexture(mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = CreateFrame("StatusBar",nil,orb)
       orb.fill:SetSize(64*orbSizeMultiplier,64*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
       local fill = orb.fill:CreateTexture(nil,"BACKGROUND",nil,-6)
-      fill:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_fill64_1")
+      fill:SetTexture(mediapath.."combo_orb_fill64_1")
       orb.fill:SetStatusBarTexture(fill)
       orb.fill:SetOrientation("VERTICAL")
 
@@ -502,13 +503,13 @@ end
       orb.border = helper:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_border")
+      orb.border:SetTexture(mediapath.."combo_orb_border")
 
       --orb glow
       orb.glow = helper:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_glow")
+      orb.glow:SetTexture(mediapath.."combo_orb_glow")
       orb.glow:SetBlendMode("BLEND")
       orb.glow:Hide()
 
@@ -516,7 +517,7 @@ end
       orb.highlight = helper:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_highlight")
+      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
 
     end
 
@@ -552,14 +553,14 @@ end
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_left")
+    t:SetTexture(mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_right")
+    t:SetTexture(mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, MAX_COMBO_POINTS do
@@ -579,19 +580,19 @@ end
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_bar_bg")
+      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_bg")
+      orb.bg:SetTexture(mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
       orb.fill:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
-      orb.fill:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_fill1")
+      orb.fill:SetTexture(mediapath.."combo_orb_fill1")
       orb.fill:SetVertexColor(self.cfg.combobar.color.r,self.cfg.combobar.color.g,self.cfg.combobar.color.b)
       --orb.fill:SetBlendMode("ADD")
 
@@ -599,13 +600,13 @@ end
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_border")
+      orb.border:SetTexture(mediapath.."combo_orb_border")
 
       --orb glow
       orb.glow = orb:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_glow")
+      orb.glow:SetTexture(mediapath.."combo_orb_glow")
       orb.glow:SetVertexColor(self.cfg.combobar.color.r,self.cfg.combobar.color.g,self.cfg.combobar.color.b)
       orb.glow:SetBlendMode("BLEND")
 
@@ -613,7 +614,7 @@ end
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_highlight")
+      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
 
     end
 
@@ -648,14 +649,14 @@ end
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_left")
+    t:SetTexture(mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",65,0)
-    t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_right")
+    t:SetTexture(mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -672,13 +673,13 @@ end
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_bar_bg")
+      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_bg")
+      orb.bg:SetTexture(mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
@@ -692,14 +693,14 @@ end
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_border")
+      orb.border:SetTexture(mediapath.."combo_orb_border")
 
 
       --orb highlight
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\combo_orb_highlight")
+      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
 
     end
 

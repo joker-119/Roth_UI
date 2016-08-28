@@ -51,7 +51,7 @@
   BNToastFrame:SetClampedToScreen(true)
   BNToastFrame:SetClampRectInsets(-15,15,15,-15)
 
-  ChatFontNormal:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
+  ChatFontNormal:SetFont(cfg.font, 12, "THINOUTLINE")
   ChatFontNormal:SetShadowOffset(1,-1)
   ChatFontNormal:SetShadowColor(0,0,0,0.6)
 
@@ -73,7 +73,7 @@
     --self:SetFading(false)
 
     --set font, outline and shadow for chat text
-    self:SetFont("Interface\\AddOns\\Roth_UI\\media\\Lycanthrope.ttf", 12, "THINOUTLINE")
+    self:SetFont(cfg.font, 15, "THINOUTLINE")
     self:SetShadowOffset(1,-1)
     self:SetShadowColor(0,0,0,.5)
 
@@ -99,7 +99,7 @@
     --chat tab skinning
     local tab = _G[name.."Tab"]
     local tabFs = tab:GetFontString()
-    tabFs:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE")
+    tabFs:SetFont(cfg.font, 11, "THINOUTLINE")
     tabFs:SetShadowOffset(1,-1)
     tabFs:SetShadowColor(0,0,0,0.6)
     tabFs:SetTextColor(unpack(cfg.selectedTabColor))

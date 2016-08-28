@@ -17,7 +17,7 @@
   cfg.pos   = { "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 180 }
   cfg.scale = 1.15
   cfg.font = {}
-  cfg.font.family = "Interface\\AddOns\\Roth_UI\\media\\Lycanthrope.ttf"
+  cfg.font.family = "Interface\\AddOns\\Roth_UI\\media\\ufonts.com_devils-snare.ttf"
   cfg.backdrop = { bgFile = "Interface\\AddOns\\Roth_UI\\media\\Tooltip_Background", edgeFile = "Interface\\AddOns\\Roth_UI\\media\\Tooltip_Border",  tiled = false, edgeSize = 10, insets = {left=8, right=8, top=8, bottom=8} }
   cfg.backdrop.bgColor = {1,1,1,1}
   cfg.backdrop.borderColor = {1,1,1,1}

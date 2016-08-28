@@ -54,6 +54,8 @@ core\lib.lua
 core\tags.lua
 core\units.lua
 core\bars.lua
+core\mainmenu.lua
+
 
 units\player.lua
 units\target.lua

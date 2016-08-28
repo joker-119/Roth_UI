@@ -10,11 +10,12 @@
   local addon, ns = ...
   local cfg = CreateFrame("Frame")
   ns.cfg = cfg
+  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
   -----------------------------
   -- CONFIG
   -----------------------------
-
+	cfg.font = (mediapath.."ufonts.com_devils-snare.ttf")
   cfg.hideChatTabBackgrounds  = true
   cfg.selectedTabColor        = {1,0.75,0}
   cfg.selectedTabAlpha        = 1
