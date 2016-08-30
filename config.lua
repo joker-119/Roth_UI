@@ -5,12 +5,13 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
+  --  Version 1.9.8
   ---------------------------------------------
 
   --get the addon namespace
   local addon, ns = ...
   local oUF = ns.oUF
-  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
+  mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
   --object container
   local cfg = {}
@@ -668,6 +669,280 @@
 
   }
 
+  ----------------------------------------
+  -- Action Bars
+  ----------------------------------------
+    cfg.bars = {
+    --BAR 1
+    bar1 = {
+      enable          = true, --enable module
+      uselayout2x6    = false,
+      scale           = 1,
+      padding         = 2, --frame padding
+      buttons         = {
+        size            = 26,
+        margin          = 5,
+      },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 16 },
+      userplaced      = {
+        enable          = false,
+      },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+      combat          = { --fade the bar in/out in combat/out of combat
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --OVERRIDE BAR (vehicle ui)
+    overridebar = { --the new vehicle and override bar
+      enable          = true, --enable module
+      scale           = 1,
+      padding         = 2, --frame padding
+      buttons         = {
+        size            = 57,
+        margin          = 5,
+      },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 16 },
+      userplaced      = {
+        enable          = false,
+      },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+      combat          = { --fade the bar in/out in combat/out of combat
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --BAR 2
+    bar2 = {
+      enable          = true, --enable module
+      uselayout2x6    = false,
+      scale           = 1,
+      padding         = 2, --frame padding
+      buttons         = {
+        size            = 26,
+        margin          = 5,
+      },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 42 },
+      userplaced      = {
+        enable          = false,
+      },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+      combat          = { --fade the bar in/out in combat/out of combat
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --BAR 3
+    bar3 = {
+      enable          = true, --enable module
+      scale           = 1,
+      padding         = 2, --frame padding
+      buttons         = {
+        size            = 26,
+        margin          = 5,
+      },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 70 },
+      userplaced      = {
+        enable          = false,
+      },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+      combat          = { --fade the bar in/out in combat/out of combat
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --BAR 4
+    bar4 = {
+      enable          = true, --enable module
+	  vert = false, --choosing this will make the bar stack vertically instead of horizontally
+      combineBar4AndBar5  = true, --by choosing true both bar 4 and 5 will react to the same hover effect, thus true/false at the same time, settings for bar5 will be ignored
+      scale           = 1.2,
+      padding         = 10, --frame padding
+      buttons         = {
+        size            = 26,
+        margin          = 5,
+      },
+      pos             = { a1 = "RIGHT", a2 = "RIGHT", af = "UIParent", x = -0, y = 0 },
+      userplaced      = {
+        enable          = true,
+      },
+      mouseover       = {
+        enable          = true,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0},
+      },
+      combat          = { --fade the bar in/out in combat/out of combat
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --BAR 5
+    bar5 = {
+      enable          = true, --enable module
+	  vert = true, --choosing this will make the bar stack vertically instead of horizontally
+      scale           = 1.2,
+      padding         = 10, --frame padding
+      buttons         = {
+        size            = 26,
+        margin          = 5,
+      },
+      pos             = { a1 = "RIGHT", a2 = "RIGHT", af = "UIParent", x = -36, y = 0 },
+      userplaced      = {
+        enable          = true,
+      },
+      mouseover       = {
+        enable          = true,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+      combat          = { --fade the bar in/out in combat/out of combat
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --PETBAR
+    petbar = {
+      enable          = true, --enable module
+      show            = true, --true/false
+      scale           = 1.2,
+      padding         = 2, --frame padding
+      buttons         = {
+        size            = 26,
+        margin          = 5,
+      },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 180 },
+      userplaced      = {
+        enable          = true,
+      },
+      mouseover       = {
+        enable          = true,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.4},
+      },
+      combat          = { --fade the bar in/out in combat/out of combat
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --STANCE- + POSSESSBAR
+    stancebar = {
+      enable          = true, --enable module
+      show            = true, --true/false
+      scale           = 0.78,
+      padding         = 2, --frame padding
+      buttons         = {
+        size            = 26,
+        margin          = 5,
+      },
+	  pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 60, y = -4  },
+	  userplaced      = {
+		enable        = true,
+	  },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.4},
+      },
+      combat          = { --fade the bar in/out in combat/out of combat
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --EXTRABAR
+    extrabar = {
+      enable          = true, --enable module
+      scale           = 0.82,
+      padding         = 10, --frame padding
+      buttons         = {
+        size            = 36,
+        margin          = 5,
+      },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -210, y = 220 },
+      userplaced      = {
+        enable          = true,
+      },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --VEHICLE EXIT (no vehicleui)
+    leave_vehicle = {
+      enable          = true, --enable module
+      scale           = 1.2,
+      padding         = 10, --frame padding
+      buttons         = {
+        size            = 26,
+        margin          = 5,
+      },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 210, y = 135 },
+      userplaced      = {
+        enable          = true,
+      },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
+    --MICROMENU
+    micromenu = {
+      enable          = true, --enable module
+      show            = true, --true/false
+      scale           = 0.7,
+      padding         = 10, --frame padding
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -120, y = 130 },
+      userplaced      = {
+        enable          = false,
+      },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0},
+      },
+    },
+    --BAGS
+    bags = {
+      enable          = true, --enable module
+      show            = true, --true/false
+      scale           = .7,
+      padding         = 15, --frame padding
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 190, y = 131 },
+      userplaced      = {
+        enable          = false,
+      },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0},
+      },
+    },
+  }
 
   ----------------------------------------
   -- frame movement
@@ -690,9 +965,47 @@
   cfg.playerspec = GetSpecialization()
 
   ----------------------------------------
+  -- Embeds
+  ----------------------------------------
+--rTooltip
+cfg.rtooltip = {
+	scale = 1.15,
+	pos = { "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 100 },
+	cursorfocus = true,
+}
+
+--rObjectiveTracker
+cfg.tracker = {
+	scale = 1,
+	point = { "TOPRIGHT", -190, -200},
+}
+   --rInfostrings
+ cfg.frame = {
+    scale           = 0.95,
+    pos             = { a1 = "TOP", af = Minimap, a2 = "BOTTOM", x = 0, y = -25 },
+    userplaced      = true, --want to place the bar somewhere else?
+  }
+  cfg.showXpRep     = true --show xp or reputation as string
+  cfg.showMail      = false --show mail as text
+  
+  --rChat
+  cfg.hideChatTabBackgrounds  = true
+  cfg.selectedTabColor        = {1,0.75,0}
+  cfg.selectedTabAlpha        = 1
+  cfg.notSelectedTabColor     = {0.5,0.5,0.5}
+  cfg.notSelectedTabAlpha     = 0.3
+  
+  --rMinimap
+  cfg.minimap = {
+	scale = 1,
+	point = {"TOPRIGHT", 0, -18},
+  }
+
+  
+  ----------------------------------------
   -- other
   ----------------------------------------
-
+  
   cfg.powercolors = PowerBarColor
   cfg.powercolors["MANA"] = { r = 0, g = 0.4, b = 1 }
   --fix the oUF mana color

@@ -59,9 +59,11 @@ local Visibility = function(self, event, unit)
     or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= ""))
   then
     bar:Hide()
+  elseif (GetSpecialization() == 2) then
+    bar:Hide()
   else
     bar:Show()
-    element.ForceUpdate(element)
+	element.ForceUpdate(element)
   end
 end
 

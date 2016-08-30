@@ -9,12 +9,7 @@
 -----------------------------
 
 local A, L = ...
-
------------------------------
--- mediapath
------------------------------
-
-local mediapath = "Interface\\AddOns\\Roth_UI\\embeds\\rButtonTemplate_Default\\media\\"
+local addon, ns = ...
 
 -----------------------------
 -- actionButtonConfig

@@ -3,7 +3,11 @@ local parent, ns = ...
 local oUF = ns.oUF or oUF
 
 local GetComboPoints = GetComboPoints
-local MAX_COMBO_POINTS = MAX_COMBO_POINTS
+if (select(2, GetTalentTierInfo(3,1))) == 1 then 
+	MAX_COMBO_POINTS = 6
+else
+	MAX_COMBO_POINTS = 5
+end
 local class = select(2, UnitClass("player"))
 
 local Update = function(self, event, unit, powerType)

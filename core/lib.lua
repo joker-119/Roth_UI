@@ -864,8 +864,8 @@ end
   end
   
 --Register LSM media
-LSM:Register("border", "RB border", "Interface\\AddOns\\Roth_UI\\embeds\\RothBuffs\\media\\5.tga")
-LSM:Register("statusbar", "Solid", "Interface\\AddOns\\Roth_UI\\embeds\\RothBuffs\\media\\RothBuffs\\Solid.tga")
+LSM:Register("border", "RB border", "Interface\\AddOns\\Roth_UI\\media\\5.tga")
+LSM:Register("statusbar", "Solid", "Interface\\AddOns\\Roth_UI\\media\\RothBuffs\\Solid.tga")
 LSM:Register("statusbar", "Roth_Statusbar1", "Interface\\AddOns\\Roth_UI\\media\\statusbar")
 LSM:Register("statusbar", "Roth_Statusbar2", "Interface\\AddOns\\Roth_UI\\media\\statusbar2")
 LSM:Register("statusbar", "Roth_Statusbar3", "Interface\\AddOns\\Roth_UI\\media\\statusbar3")
@@ -876,5 +876,5 @@ LSM:Register("statusbar", "Roth_Statusbar7", "Interface\\AddOns\\Roth_UI\\media\
 LSM:Register("statusbar", "Roth_Statusbar8", "Interface\\AddOns\\Roth_UI\\media\\statusbar256")
 LSM:Register("statusbar", "Roth_Statusbar9", "Interface\\AddOns\\Roth_UI\\media\\statusbar256_2")
 LSM:Register("statusbar", "Roth_Statusbar10", "Interface\\AddOns\\Roth_UI\\media\\statusbar256_3")
-LSM:Register("background", "Solid", "Interface\\AddOns\\Roth_UI\\embeds\\RothBuffs\\media\\RothBuffs\\Solid.tga")
+LSM:Register("background", "Solid", "Interface\\AddOns\\Roth_UI\\media\\Solid.tga")
 LSM:Register("font", "Cracked", "Interface\\AddOns\\Roth_UI\\media\\Cracked-Narrow.ttf")

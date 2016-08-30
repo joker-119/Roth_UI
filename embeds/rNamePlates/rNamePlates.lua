@@ -5,12 +5,11 @@
 -- Variables
 -----------------------------
 
-local A, L = ...
-local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
+local addon, ns = ...
 local EliteTag = "+"
 local RareTag = "^"
 local BossTag = "*"
-
+local cfg = ns.cfg
 -----------------------------
 -- SetCVar
 -----------------------------
@@ -42,8 +41,6 @@ local options = {
   defaultBorderColor = CreateColor(0, 0, 0, 1),
   showClassificationIndicator = true,
 }
-local cfg = {}
-cfg.font = (mediapath.."Cracked-Narrow.ttf")
 
 for i, group  in next, groups do
   for key, value in next, options do

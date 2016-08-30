@@ -12,9 +12,9 @@ local classColor, SBmover, moverShown, db
 local BuffFrame = BuffFrame
 
 local defaults = {
-	font = "Friz Quadrata TT",
+	font = "Cracked",
 	fstyle = "Outline",
-	allWhiteText = true,
+	allWhiteText = false,
 	whoCast = true,
 	buffs = {
 		dfsize = 10,
@@ -30,7 +30,7 @@ local defaults = {
 	bg = "Solid",
 	bgColor = {r = .32, g = .32, b = .32},
 	classbg = false,
-	border = "SB border",
+	border = "RB border",
 	borColor = {r = .5, g = .5, b = .5},
 	classbor = false,
 	sbar = "Roth_Statusbar3",

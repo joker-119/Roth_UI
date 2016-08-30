@@ -3,8 +3,14 @@
 ## Title: Roth UI
 ## Notes: Galaxy's oUF layout with Diablo flavor!
 ## RequiredDeps:
-## SavedVariables: Roth_UI_DB_GLOB, ShinyBuffsDB
+## SavedVariables: Roth_UI_DB_GLOB, ShinyBuffsDB, PhanxFontDB
 ## SavedVariablesPerCharacter: Roth_UI_DB_CHAR, ShinyBuffsPCDB
+
+embeds\oUF\oUF.xml
+embeds\rLib\rLib.xml
+
+config.lua
+charspecific.lua
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
@@ -13,12 +19,11 @@ Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\LibSharedMedia-3.0\lib.xml
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 
-embeds\oUF\oUF.xml
-embeds\rLib\rLib.xml
+
 embeds\rChat\rChat.xml
 embeds\rActionBarStyler\rActionBar.xml
 embeds\rButtonTemplate\rButton.xml
-embeds\rButtonTemplate_Default\rButton_Default.xml
+embeds\rButtonTemplate_Roth\rButton_Roth.xml
 embeds\rMinimap\rMinimap.xml
 embeds\rNamePlates\rNamePlates.xml
 embeds\rInfoStrings\rInfo.xml
@@ -26,6 +31,7 @@ embeds\rRaidManager\rManager.xml
 embeds\rTooltip\rTooltip.xml
 embeds\tullaRange\tulla.xml
 embeds\Roth_ShinyBuffs\shinybuff.xml
+embeds\rObjectiveTracker\core.lua
 
 modules\oUF_acharges.lua
 modules\oUF_AuraWatch.lua
@@ -43,9 +49,6 @@ modules\oUF_Smooth.lua
 modules\oUF_SoulShards.lua
 modules\oUF_TotalAbsorb.lua
 modules\oUF_ArtifactPower.lua
-
-config.lua
-charspecific.lua
 
 core\db.lua
 core\panel.lua

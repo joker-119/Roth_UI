@@ -7,22 +7,10 @@
   --  Galaxy - 2016
 
   ---------------------------------------------
-
-  ---------------------------------------------
-  --  CONFIG
-  ---------------------------------------------
-
-  local cfg = {}
-
-  cfg.pos   = { "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 180 }
-  cfg.scale = 1.15
-  cfg.font = {}
-  cfg.font.family = "Interface\\AddOns\\Roth_UI\\media\\Cracked-Narrow.ttf"
-  cfg.backdrop = { bgFile = "Interface\\AddOns\\Roth_UI\\media\\Tooltip_Background", edgeFile = "Interface\\AddOns\\Roth_UI\\media\\Tooltip_Border",  tiled = false, edgeSize = 10, insets = {left=8, right=8, top=8, bottom=8} }
-  cfg.backdrop.bgColor = {1,1,1,1}
-  cfg.backdrop.borderColor = {1,1,1,1}
-  cfg.cursorfocus = true
-
+local addon, ns = ...
+local cfg = ns.cfg
+cfg.rtooltip.backdrop = { bgFile = (mediapath.."Tooltip_Background"), edgeFile = (mediapath.."Tooltip_Border"),  tiled = false, edgeSize = 10, insets = {left=8, right=8, top=8, bottom=8} }
+  
   ---------------------------------------------
   --  VARIABLES
   ---------------------------------------------
@@ -39,9 +27,9 @@
   ---------------------------------------------
 
   --change some text sizes
-  GameTooltipHeaderText:SetFont(cfg.font.family, 14, "THINOUTLINE")
-  GameTooltipText:SetFont(cfg.font.family, 12, "THINOUTLINE")
-  Tooltip_Small:SetFont(cfg.font.family, 11, "THINOUTLINE")
+  GameTooltipHeaderText:SetFont(cfg.font, 14, "THINOUTLINE")
+  GameTooltipText:SetFont(cfg.font, 12, "THINOUTLINE")
+  Tooltip_Small:SetFont(cfg.font, 11, "THINOUTLINE")
 
   --gametooltip statusbar
   GameTooltipStatusBar:ClearAllPoints()
@@ -59,18 +47,18 @@
   --HookScript GameTooltip OnTooltipCleared
   GameTooltip:HookScript("OnTooltipCleared", function(self)
     GameTooltip_ClearStatusBars(self)
-    self:SetBackdropColor(unpack(cfg.backdrop.bgColor))
-    self:SetBackdropBorderColor(unpack(cfg.backdrop.borderColor))
+    self:SetBackdropColor(1,1,1,1)
+    self:SetBackdropBorderColor(1,1,1,1)
   end)
 
   --hooksecurefunc GameTooltip_SetDefaultAnchor
   hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
-    if cfg.cursorfocus then
+    if cfg.rtooltip.cursorfocus then
       tooltip:SetOwner(parent, "ANCHOR_CURSOR")
     else
       tooltip:SetOwner(parent, "ANCHOR_NONE")
       tooltip:ClearAllPoints()
-      tooltip:SetPoint(unpack(cfg.pos))
+      tooltip:SetPoint(unpack(cfg.rtooltip.pos))
     end
   end)
 
@@ -235,8 +223,8 @@ end)
 
   --func TooltipOnShow
   local function TooltipOnShow(self,...)
-    self:SetBackdropColor(unpack(cfg.backdrop.bgColor))
-    self:SetBackdropBorderColor(unpack(cfg.backdrop.borderColor))
+    self:SetBackdropColor(1,1,1,1)
+    self:SetBackdropBorderColor(1,1,1,1)
     local itemName, itemLink = self:GetItem()
     if itemLink then
       local itemRarity = select(3,GetItemInfo(itemLink))
@@ -248,15 +236,15 @@ end)
   
   --func TooltipOnShow
   local function TooltipOnHide(self,...)
-    self:SetBackdropColor(unpack(cfg.backdrop.bgColor))
-    self:SetBackdropBorderColor(unpack(cfg.backdrop.borderColor))
+    self:SetBackdropColor(1,1,1,1)
+    self:SetBackdropBorderColor(1,1,1,1)
   end
 
   --loop over tooltips
   local tooltips = { GameTooltip, ItemRefTooltip, ShoppingTooltip1, ShoppingTooltip2, ShoppingTooltip3, WorldMapTooltip, }
   for idx, tooltip in ipairs(tooltips) do
-    tooltip:SetBackdrop(cfg.backdrop)
-    tooltip:SetScale(cfg.scale)
+    tooltip:SetBackdrop(cfg.rtooltip.backdrop)
+    tooltip:SetScale(cfg.rtooltip.scale)
     tooltip:HookScript("OnShow", TooltipOnShow)
     tooltip:HookScript("OnHide", TooltipOnHide)
   end
@@ -267,5 +255,5 @@ end)
     DropDownList2MenuBackdrop,
   }
   for idx, menu in ipairs(menues) do
-    menu:SetScale(cfg.scale)
+    menu:SetScale(cfg.rtooltip.scale)
   end

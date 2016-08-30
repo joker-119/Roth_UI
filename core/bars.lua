@@ -346,7 +346,7 @@ end
 
     local t
     local bar = CreateFrame("Frame","Roth_UISoulShardPower",self)
-    bar.maxOrbs = 4
+    bar.maxOrbs = 5
     local w = 64*(bar.maxOrbs+2) --create the bar for
     local h = 64
     --bar:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
@@ -368,7 +368,7 @@ end
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
-    t:SetPoint("RIGHT",0,0)
+    t:SetPoint("RIGHT",64,0)
     t:SetTexture(mediapath.."combo_right")
     bar.rightEdge = t
 

@@ -7,32 +7,25 @@
 -----------------------------
 
 local A, L = ...
+local addon, ns = ...
+local cfg = ns.cfg
 
 L.addonName       = A
 L.dragFrames      = {}
 L.addonColor      = "00FFAA00"
 L.addonShortcut   = "rmm"
 
------------------------------
--- Config
------------------------------
-
-local cfg = {
-  scale = 1,
-  point = { "TOPRIGHT", 0, -18},
-}
 
 -----------------------------
 -- Init
 -----------------------------
 
 --MinimapCluster
-MinimapCluster:SetScale(cfg.scale)
+MinimapCluster:SetScale(cfg.minimap.scale)
 MinimapCluster:ClearAllPoints()
-MinimapCluster:SetPoint(unpack(cfg.point))
+MinimapCluster:SetPoint(unpack(cfg.minimap.point))
 
 --Minimap
-local mediapath = "Interface\\AddOns\\Roth_UI\\embeds\\rMinimap\\media\\"
 Minimap:SetMaskTexture(mediapath.."mask2")
 Minimap:ClearAllPoints()
 Minimap:SetPoint("CENTER")
