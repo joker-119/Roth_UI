@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
-  --  Version 1.9.10
+  --  Version 1.9.13
   ---------------------------------------------
 
   --get the addon namespace

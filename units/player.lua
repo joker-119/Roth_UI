@@ -237,7 +237,8 @@ local createActionBarBackground = function(self)
 	f:RegisterEvent("PLAYER_LEVEL_UP")
 	f:RegisterEvent("UNIT_ENTERED_VEHICLE")
 	f:RegisterEvent("UNIT_EXITED_VEHICLE")
-	f:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+	f:RegisterEvent("UNIT_INVENTORY_CHANGED")
+	f:RegisterEvent("ARTIFACT_XP_UPDATE")
 	f:SetScript("OnEvent", function(...)
 	local self, event, unit = ...
 	if unit and unit ~= "player" then return end
