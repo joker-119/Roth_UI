@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
-  --  Version 1.9.8
+  --  Version 1.9.10
   ---------------------------------------------
 
   --get the addon namespace
@@ -971,7 +971,7 @@
 cfg.rtooltip = {
 	scale = 1.15,
 	pos = { "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 100 },
-	cursorfocus = true,
+	cursorfocus = false,
 }
 
 --rObjectiveTracker
@@ -1013,6 +1013,9 @@ cfg.tracker = {
 
   --font
   cfg.font = (mediapath.."Cracked-Narrow.ttf")
+  cfg.chat = {
+   font = (mediapath.."Cracked-Narrow.ttf"),
+   }
 
   --backdrop
   cfg.backdrop = {

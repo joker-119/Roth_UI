@@ -75,7 +75,7 @@ local createActionBarBackground = function(self)
 				end
 
 				--Determine is player is max level
-				if UnitLevel("player") == 100 or (not self.cfg.expbar.show) then
+				if UnitLevel("player") == 110 or (not self.cfg.expbar.show) then
 					levelbar = false
 				else
 					levelbar = true
@@ -89,7 +89,7 @@ local createActionBarBackground = function(self)
 				end
 		
 				--Determine if player has an artifact weapon equipped
-				if C_ArtifactUI.GetArtifactInfo() and self.cfg.ArtifactPower.show then
+				if HasArtifactEquipped() and self.cfg.ArtifactPower.show then
 					artifactbar = true
 				else
 					artifactbar = false
@@ -237,6 +237,7 @@ local createActionBarBackground = function(self)
 	f:RegisterEvent("PLAYER_LEVEL_UP")
 	f:RegisterEvent("UNIT_ENTERED_VEHICLE")
 	f:RegisterEvent("UNIT_EXITED_VEHICLE")
+	f:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 	f:SetScript("OnEvent", function(...)
 	local self, event, unit = ...
 	if unit and unit ~= "player" then return end
@@ -340,7 +341,7 @@ end
     end
 	if orb.bubbles then
 		for i, bubble in pairs(orb.bubbles) do
-			bubble:SetVertexColor(r,b,g)
+			bubble:SetVertexColor(r,g,b)
 		end
 	end
   end

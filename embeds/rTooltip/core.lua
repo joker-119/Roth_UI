@@ -72,8 +72,7 @@ cfg.rtooltip.backdrop = { bgFile = (mediapath.."Tooltip_Background"), edgeFile =
 hooksecurefunc(GameTooltip, "SetArtifactPowerByID", function(self, id)
     if id then 
     	local spellid = C_ArtifactUI.GetPowerInfo(id)
-        addLine(self, id, types.artifactpower);
-        addLine(self, spellid, types.spell)
+        if spellid then AddSpellIdRow(self,spellid) end
     end
 end)
   --func AddBossDebuffRow
@@ -197,11 +196,11 @@ end)
         end
         self:AppendText(" |TInterface\\TargetingFrame\\UI-TargetingFrame-Skull:14:14|t")
       elseif unitClassification == "rare" then
-        self:AppendText(" |TInterface\\AddOns\\Roth_UI\\embeds\\rTooltip\\diablo:14:14:0:0:16:16:0:15:0:14|t")
+        self:AppendText(" |TInterface\\AddOns\\Roth_UI\\media\\diablo:14:14:0:0:16:16:0:15:0:14|t")
       elseif unitClassification == "rareelite" then
-        self:AppendText(" |TInterface\\AddOns\\Roth_UI\\embeds\\rTooltip\\diablo:14:14:0:0:16:16:0:15:0:14|t")
+        self:AppendText(" |TInterface\\AddOns\\Roth_UI\\media\\diablo:14:14:0:0:16:16:0:15:0:14|t")
       elseif unitClassification == "elite" then
-        self:AppendText(" |TInterface\\AddOns\\Roth_UI\\embeds\\rTooltip\\plus:14:14|t")
+        self:AppendText(" |TInterface\\AddOns\\Roth_UI\\media\\plus:14:14|t")
       end
 
     end

@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 706000
 ## Author: Galaxy
 ## Title: Roth UI
 ## Notes: Galaxy's oUF layout with Diablo flavor!
@@ -32,6 +32,7 @@ embeds\rTooltip\rTooltip.xml
 embeds\tullaRange\tulla.xml
 embeds\Roth_ShinyBuffs\shinybuff.xml
 embeds\rObjectiveTracker\core.lua
+embeds\RothFont\font.xml
 
 modules\oUF_acharges.lua
 modules\oUF_AuraWatch.lua

@@ -5,7 +5,7 @@ local cfg = ns.cfg
 PhanxFontDB = {
 	normal = "Lato",
 	bold   = "Lato Black",
-	scale  = 1.25,
+	scale  = 1,
 }
 
 local NORMAL       = cfg.font
@@ -13,9 +13,10 @@ local BOLD         = cfg.font
 local BOLDITALIC   = BOLD
 local ITALIC       = NORMAL
 local NUMBER       = BOLD
+local STANDARD     = cfg.chat.font
 
 ------------------------------------------------------------------------
-
+if cfg.font == STANDARD_TEXT_FONT then return end
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	if not obj then return end -- TODO: prune things that don't exist anymore
 	obj:SetFont(font, floor(size * PhanxFontDB.scale + 0.5), style)
@@ -39,10 +40,10 @@ function Addon:SetFonts(event, addon)
 	ITALIC     = NORMAL
 	NUMBER     = BOLD
 
-	UNIT_NAME_FONT     = NORMAL
-	NAMEPLATE_FONT     = BOLD
+	UNIT_NAME_FONT     = STANDARD_TEXT_FONT
+	NAMEPLATE_FONT     = STANDARD_TEXT_FONT
 	DAMAGE_TEXT_FONT   = NUMBER
-	STANDARD_TEXT_FONT = NORMAL
+	
 
 	-- Base fonts in Fonts.xml
 	SetFont(AchievementFont_Small,                BOLD, 12)
@@ -95,7 +96,7 @@ function Addon:SetFonts(event, addon)
 	SetFont(SystemFont_OutlineThick_Huge2,      NORMAL, 22, "THICKOUTLINE")
 	SetFont(SystemFont_OutlineThick_Huge4,  BOLDITALIC, 27, "THICKOUTLINE")
 	SetFont(SystemFont_OutlineThick_WTF,    BOLDITALIC, 31, "THICKOUTLINE", nil, nil, nil, 0, 0, 0, 1, -1)
---	SetFont(SystemFont_OutlineThick_WTF2,   BOLDITALIC, 36) -- SharedFonts.xml
+	SetFont(SystemFont_OutlineThick_WTF2,   BOLDITALIC, 36) -- SharedFonts.xml
 	SetFont(SystemFont_Shadow_Huge1,              BOLD, 20) -- SharedFonts.xml
 	SetFont(SystemFont_Shadow_Huge2,              BOLD, 24) -- SharedFonts.xml
 	SetFont(SystemFont_Shadow_Huge3,              BOLD, 25) -- SharedFonts.xml
@@ -177,7 +178,7 @@ hooksecurefunc("FCF_SetChatWindowFontSize", function(self, frame, size)
 	for i = 1, 10 do
 		local f = _G["ChatFrame"..i]
 		if f then
-			f:SetFont(NORMAL, size)
+			f:SetFont(STANDARD, size)
 			SetChatWindowSize(i, size)
 		end
 	end

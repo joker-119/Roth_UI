@@ -26,7 +26,7 @@ ObjectiveTrackerFrame:ClearAllPoints()
 ObjectiveTrackerFrame:SetPoint(unpack(cfg.tracker.point))
 
 --drag frame
-rLib:CreateDragFrame(ObjectiveTrackerFrame, L.dragFrames, -2, true)
+rLib:CreateDragResizeFrame(ObjectiveTrackerFrame, L.dragFrames, -2, true)
 
 --create slash commands
 rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)
