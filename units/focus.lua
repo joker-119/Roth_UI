@@ -125,10 +125,7 @@
     --apply config to self
     self.cfg = cfg.units.focus
     self.cfg.style = "focus"
-
-    self.cfg.width = 128
-    self.cfg.height = 64
-
+	
     --init
     initUnitParameters(self)
 

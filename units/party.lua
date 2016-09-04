@@ -256,7 +256,7 @@
         self:SetWidth(%d)
         self:SetHeight(%d)
         self:SetScale(%f)
-      ]]):format(228, 64, cfg.units.party.scale)
+      ]]):format(cfg.units.party.vertwidth, cfg.units.party.vertheight, cfg.units.party.scale)
     )
     party:SetPoint("TOPLEFT",partyDragFrame,0,0)
  else
@@ -273,7 +273,7 @@
         self:SetWidth(%d)
         self:SetHeight(%d)
         self:SetScale(%f)
-      ]]):format(128, 64, cfg.units.party.scale)
+      ]]):format(cfg.units.party.width, cfg.units.party.height, cfg.units.party.scale)
     )
     party:SetPoint("TOPLEFT",partyDragFrame,0,0)
   end

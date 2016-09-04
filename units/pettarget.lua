@@ -123,9 +123,6 @@
     self.cfg = cfg.units.pettarget
     self.cfg.style = "pettarget"
 
-    self.cfg.width = 128
-    self.cfg.height = 64
-
     --init
     initUnitParameters(self)
 

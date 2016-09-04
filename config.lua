@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
-  --  Version 1.9.13b
+  --  Version 1.9.14
   ---------------------------------------------
 
   --get the addon namespace
@@ -240,6 +240,8 @@
     target = {
       show = true,
       scale = 1.5,
+	  width = 300,
+      height = 64,
       pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = -100 },
       health = {
 	frequentUpdates = true,
@@ -248,7 +250,7 @@
 		fontSize = 7,
 		point = "RIGHT",
 		x = 25,
-		y = -25,
+		y = -30,
       },
 	  healper = {
 	frequentUpdates = true,
@@ -260,7 +262,6 @@
 	  },
 	  powper = {
 	frequentUpdates = true,
-		texture = (mediapath.."statusbar3"),
 		tag = "[perpp]%",
 		fontSize = 7,
 		point = "CENTER",
@@ -274,7 +275,7 @@
 		fontSize = 7,
 		point = "LEFT",
 		x = -25,
-		y = -25,
+		y = -30,
       },
 	  misc = {
 		classFontSize = 13,
@@ -341,6 +342,8 @@
     --TARGETTARGET
     targettarget = {
       show = true,
+	  width = 150,
+      height = 64,
       scale = 1.3,
       pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = -238, y = -115 },
       auras = {
@@ -371,6 +374,8 @@
     pet = {
       show = true,
       scale = 0.85,
+	  width = 128,
+      height = 64,
       pos = { a1 = "RIGHT", a2 = "RIGHT", af = "UIParent", x = -30, y = -140 },
       auras = {
         show = true,
@@ -419,6 +424,8 @@
     --FOCUS
     focus = {
       show = true,
+	  width = 128,
+      height = 64,	  
       scale = 0.85,
       pos = { a1 = "RIGHT", a2 = "RIGHT", af = "UIParent", x = -30, y = 40 },
       aurawatch = {
@@ -477,6 +484,8 @@
     --PETTARGET
     pettarget = {
       show = false,
+	  width = 128,
+      height = 64,
       scale = 0.85,
       pos = { a1 = "LEFT", a2 = "LEFT", af = "UIParent", x = 140, y = -140 },
       auras = {
@@ -501,6 +510,8 @@
     --FOCUSTARGET
     focustarget = {
       show = false,
+	  width = 128,
+      height = 64,
       scale = 0.85,
       pos = { a1 = "LEFT", a2 = "LEFT", af = "UIParent", x = 140, y = 40 },
       auras = {
@@ -530,6 +541,10 @@
         notinrange = 0.5,
       },
       scale = 1.1,
+	  vertwidth = 228,
+      vertheight = 64,
+	  width = 128,
+      height = 64,
       pos = { a1 = "TOPLEFT", a2 = "TOPLEFT", af = "UIParent", x = 35, y = -40 },
       aurawatch = {
         show            = false,
@@ -592,6 +607,8 @@
     --RAID
     raid = {
       show = true,
+	  width = 128,
+      height = 64,
       special = {
         chains = false, --should the raidframe include the chain textures?
       },
@@ -673,6 +690,8 @@
     boss = {
       show = true,
       scale = 1,
+	  width = 128,
+      height = 64,
       pos = { a1 = "TOP", a2 = "BOTTOM", af = "Minimap", x = 0, y = -80 },
       health = {
         texture = (mediapath.."statusbar3"),

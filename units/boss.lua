@@ -134,9 +134,6 @@
     self.cfg = cfg.units.boss
     self.cfg.style = "boss"
 
-    self.cfg.width = 128
-    self.cfg.height = 64
-
     --init
     initUnitParameters(self)
 

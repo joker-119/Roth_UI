@@ -377,9 +377,6 @@
     self.cfg = cfg.units.raid
     self.cfg.style = "raid"
 
-    self.cfg.width = 128
-    self.cfg.height = 64
-
     --init
     initUnitParameters(self)
 

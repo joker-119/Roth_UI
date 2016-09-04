@@ -128,9 +128,6 @@
     self.cfg = cfg.units.targettarget
     self.cfg.style = "targettarget"
 
-    self.cfg.width = 150
-    self.cfg.height = 64
-
     --init
     initUnitParameters(self)
 

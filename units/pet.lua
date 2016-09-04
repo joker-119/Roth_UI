@@ -126,9 +126,6 @@
     self.cfg = cfg.units.pet
     self.cfg.style = "pet"
 
-    self.cfg.width = 128
-    self.cfg.height = 64
-
     --init
     initUnitParameters(self)
 

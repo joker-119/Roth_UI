@@ -31,11 +31,13 @@
     func.applyDragFunctionality(self)
     self:SetHitRectInsets(10,10,10,10)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
+	ZoneTextFrame:SetFrameStrata("HIGH")
+	SubZoneTextFrame:SetFrameStrata("HIGH")
   end
 
   --Target Frame
 	local createArtwork = function(self)
-    local t = self:CreateTexture(nil,"HIGH",nil,-8)
+    local t = self:CreateTexture(nil,"LOW",nil,-8)
     t:SetPoint("TOP",0,25)
     t:SetPoint("LEFT",-62,0)
     t:SetPoint("RIGHT",60,0)
@@ -73,7 +75,7 @@ end
     h:SetPoint("LEFT",24.5,0)
     h:SetPoint("RIGHT",-24.5,0)
     h:SetPoint("BOTTOM",0,29.7)
-	h:SetFrameStrata("LOW")
+	h:SetFrameStrata("BACKGROUND")
 	
 
     h:SetStatusBarTexture(cfg.texture)
@@ -274,8 +276,7 @@ end
     self.cfg = cfg.units.target
     self.cfg.style = "target"
 
-    self.cfg.width = 300
-    self.cfg.height = 64
+
 
     --init
     initUnitParameters(self)
