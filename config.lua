@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
-  --  Version 1.9.13
+  --  Version 1.9.13a
   ---------------------------------------------
 
   --get the addon namespace
@@ -16,6 +16,7 @@
   --object container
   local cfg = {}
   ns.cfg = cfg
+  local locale = GetLocale()
 
   ---------------------------------------------
   -- // CONFIG // --
@@ -1012,10 +1013,17 @@ cfg.tracker = {
   oUF.colors.power["MANA"] = {0, 0.4, 1}
 
   --font
-  cfg.font = (mediapath.."Cracked-Narrow.ttf")
-  cfg.chat = {
-   font = (mediapath.."Cracked-Narrow.ttf"),
-   }
+	if locale == "enUS" or locale == "enGB" then
+		cfg.font = (mediapath.."Cracked-Narrow.ttf")
+		cfg.chat = {
+		font = (mediapath.."Cracked-Narrow.ttf"),
+		}
+	else
+		cfg.font = STANDARD_TEXT_FONT
+		cfg.chat = {
+		font = STANDARD_TEXT_FONT,
+		}
+	end
 
   --backdrop
   cfg.backdrop = {
