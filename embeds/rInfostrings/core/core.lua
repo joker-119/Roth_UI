@@ -18,6 +18,7 @@ L.addonShortcut    = "ris"
   ---------------------------------------
   -- FUNCTIONS
   ---------------------------------------
+if not cfg.embeds.rInfoStrings then return end
 
   local memformat = function(number)
     if number > 1024 then
@@ -60,7 +61,7 @@ L.addonShortcut    = "ris"
     end
   end)
 
-  local frame = CreateFrame("Frame", "rIS_DragFrame", petbattleHandler)
+  local frame = CreateFrame("Frame", "riS_DragFrame", petbattleHandler)
   frame:SetSize(50,50)
   frame:SetScale(cfg.frame.scale)
   frame:SetPoint(cfg.frame.pos.a1,cfg.frame.pos.af,cfg.frame.pos.a2,cfg.frame.pos.x,cfg.frame.pos.y)

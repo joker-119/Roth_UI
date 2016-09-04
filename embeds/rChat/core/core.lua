@@ -6,7 +6,7 @@
   --get the addon namespace
   local addon, ns = ...
   local cfg = ns.cfg
-
+if not cfg.embeds.rChat then return end
   --new fadein func
   FCF_FadeInChatFrame = function(self)
     self.hasBeenFaded = true
@@ -40,8 +40,7 @@
   end
 
   --hide the menu button
-  ChatFrameMenuButton:HookScript("OnShow", ChatFrameMenuButton.Hide)
-  ChatFrameMenuButton:Hide()
+
 
   --hide the friend micro button
   FriendsMicroButton:HookScript("OnShow", FriendsMicroButton.Hide)
@@ -68,6 +67,7 @@
     self:SetClampRectInsets(0, 0, 0, 0)
     self:SetMaxResize(UIParent:GetWidth(), UIParent:GetHeight())
     self:SetMinResize(100, 50)
+	self:SetFrameStrata("HIGH")
 
     --chat fading
     --self:SetFading(false)
@@ -77,10 +77,23 @@
     self:SetShadowOffset(1,-1)
     self:SetShadowColor(0,0,0,.5)
 
-    --fix the buttonframe
-    local frame = _G[name.."ButtonFrame"]
-    frame:Hide()
-    frame:HookScript("OnShow", frame.Hide)
+	--Skin Buttons
+	ChatFrameMenuButton:SetNormalTexture(mediapath.."ChatButtons_36x36_ChatMenu")
+	ChatFrameMenuButton:SetDisabledTexture(mediapath.."ChatButtons_36x36_ChatMenuDisabled", "BLEND")
+	ChatFrameMenuButton:SetPushedTexture(mediapath.."ChatButtons_36x36_ChatMenuDisabled","BLEND")
+	ChatFrameMenuButton:SetHighlightTexture(mediapath.."ChatButtons_36x36_ChatMenuHighlight", "BLEND")
+	_G[name.."ButtonFrameUpButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Up")
+	_G[name.."ButtonFrameUpButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_UpDisabled", "BLEND")
+	_G[name.."ButtonFrameUpButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_UpDisabled", "BLEND")
+	_G[name.."ButtonFrameUpButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_UpHighlight", "BLEND")
+	_G[name.."ButtonFrameDownButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Down")
+	_G[name.."ButtonFrameDownButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_DownDisabled", "BLEND")
+	_G[name.."ButtonFrameDownButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_DownDisabled", "BLEND")
+	_G[name.."ButtonFrameDownButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_DownHighlight", "BLEND")
+	_G[name.."ButtonFrameBottomButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Bottom")
+	_G[name.."ButtonFrameBottomButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
+	_G[name.."ButtonFrameBottomButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
+	_G[name.."ButtonFrameBottomButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_BottomHighlight", "BLEND")
 
     --editbox skinning
     _G[name.."EditBoxLeft"]:Hide()

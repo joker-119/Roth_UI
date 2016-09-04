@@ -10,6 +10,7 @@ local EliteTag = "+"
 local RareTag = "^"
 local BossTag = "*"
 local cfg = ns.cfg
+if not cfg.embeds.rNamePlates then return end
 -----------------------------
 -- SetCVar
 -----------------------------

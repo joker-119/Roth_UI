@@ -5,9 +5,10 @@
 -----------------------------
 -- Variables
 -----------------------------
-local ns = ...
+local addon, ns = ...
 local A, L = ...
-
+local cfg = ns.cfg
+if not cfg.embeds.rButtonTemplate then return end
 -----------------------------
 -- rButtonTemplate Global
 -----------------------------

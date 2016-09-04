@@ -11,7 +11,8 @@
   ---------------------------
 
   local addon, ns = ...
-
+  local cfg = ns.cfg
+  if not cfg.embeds.rRaidManager then return end
   ---------------------------
   -- VARIABLES
   ---------------------------

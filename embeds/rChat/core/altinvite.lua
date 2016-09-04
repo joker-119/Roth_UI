@@ -1,3 +1,6 @@
+local addon, ns = ...
+local cfg = ns.cfg
+if not cfg.embeds.rChat then return end
 local origSetItemRef = SetItemRef
 SetItemRef = function(link, text, button)
   local linkType = string.sub(link, 1, 6)

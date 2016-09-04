@@ -1,4 +1,3 @@
-
   -----------------------------
   -- INIT
   -----------------------------
@@ -13,8 +12,8 @@
   -----------------------------
   -- FUNCTIONS
   -----------------------------
-
-  if not cfg.enable then return end
+if not gcfg.embeds.rActionBarStyler then return end
+if not cfg.enable then return end
 
   --bag button objects
   local buttonList = {

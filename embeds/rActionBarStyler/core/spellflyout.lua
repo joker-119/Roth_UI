@@ -1,9 +1,10 @@
 
   --spell flyout fader
-
+local addon, ns = ...
+local gcfg = ns.cfg
   --this one is tricky...when hovering a bar with mouveover fading you want the bar to stay when leaving the bar but hovering the flyoutframe
   --thus on loadup of the flyout frame the fader has to adept to the current flyout button
-
+if not gcfg.embeds.rActionBarStyler then return end
   local function addFlyoutFramesToFader(self)
     --print(self:GetParent():GetParent():GetParent():GetName())
     local frame = self:GetParent():GetParent():GetParent()

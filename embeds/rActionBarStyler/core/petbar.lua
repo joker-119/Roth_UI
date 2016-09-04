@@ -13,7 +13,7 @@
   -----------------------------
   -- FUNCTIONS
   -----------------------------
-
+if not gcfg.embeds.rActionBarStyler then return end
   if not cfg.enable then return end
 
   local num = NUM_PET_ACTION_SLOTS

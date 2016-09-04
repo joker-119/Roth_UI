@@ -298,6 +298,7 @@
     h:SetPoint("LEFT",24.5,0)
     h:SetPoint("RIGHT",-24.5,0)
     h:SetPoint("BOTTOM",0,28.7)
+	h:SetFrameStrata("LOW")
 
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
@@ -418,10 +419,10 @@
     end
 
     --icons
-    self.RaidIcon = func.createIcon(self.Health,"TOOLTIP",14,self.Health,"CENTER","CENTER",0,0,-1)
+    self.RaidIcon = func.createIcon(self,"TOOLTIP",14,self.Health,"CENTER","CENTER",0,0,-1)
 	self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
-    self.ReadyCheck = func.createIcon(self.Health,"TOOLTIP",24,self.Health,"CENTER","CENTER",0,0,-1)
-    self.LFDRole = func.createIcon(self.Health,"OVERLAY",14,self.Health,"CENTER","CENTER",0,0,-1)
+    self.ReadyCheck = func.createIcon(self,"TOOLTIP",24,self.Health,"CENTER","CENTER",0,0,-1)
+    self.LFDRole = func.createIcon(self,"OVERLAY",14,self.Health,"CENTER","CENTER",0,0,-1)
     self.LFDRole:SetTexture("Interface\\AddOns\\Roth_UI\\media\\lfd_role")
     self.LFDRole:SetDesaturated(1)
 
@@ -494,4 +495,10 @@
 		group:SetPoint("TOPLEFT", raidDragFrame, 0, 0)		
 		groups[i] = group
     end
+	   local scale = cfg.units.raid.scale
+        for idx, group in pairs(groups) do
+          if group then
+            group:SetScale(scale)
+          end
+        end
   end

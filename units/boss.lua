@@ -48,6 +48,7 @@
     h:SetPoint("LEFT",24.5,0)
     h:SetPoint("RIGHT",-24.5,0)
     h:SetPoint("BOTTOM",0,28.7)
+	h:SetFrameStrata("LOW")
 
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
@@ -80,6 +81,7 @@
      h:SetPoint("LEFT",5,0)
      h:SetPoint("RIGHT",-5,0)
      h:SetPoint("BOTTOM",0,-10)
+	 h:SetFrameStrata("LOW")
 
     h:SetStatusBarTexture(cfg.texture)
 

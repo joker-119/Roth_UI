@@ -633,14 +633,17 @@ end
 
   --create castbar func
   func.createCastbar = function(f)
-
-    local c = CreateFrame("StatusBar", "$parentCastbar", f)
+	local frame = CreateFrame("Frame", "$parentCastBarDragFrame", f)
+	frame:SetPoint(f.cfg.castbar.pos.a1, f.cfg.castbar.pos.af, f.cfg.castbar.pos.a2, f.cfg.castbar.pos.x+8, f.cfg.castbar.pos.y)
+	frame:SetSize(100,10)
+    local c = CreateFrame("StatusBar", "$parentCastbar", frame)
     --wow is this outdated...man I really need to rewrite how the drag stuff is handled
-    tinsert(Roth_UI_Bars,c:GetName())
+    tinsert(Roth_UI_Bars,frame:GetName())
     c:SetSize(265,15)
     c:SetStatusBarTexture(f.cfg.castbar.texture)
     c:SetScale(f.cfg.castbar.scale)
-    c:SetPoint(f.cfg.castbar.pos.a1, f.cfg.castbar.pos.af, f.cfg.castbar.pos.a2, f.cfg.castbar.pos.x+8, f.cfg.castbar.pos.y)
+    c:SetPoint("CENTER", frame, 0,0)
+	c:SetFrameStrata("LOW")
     c:SetStatusBarColor(f.cfg.castbar.color.bar.r,f.cfg.castbar.color.bar.g,f.cfg.castbar.color.bar.b,f.cfg.castbar.color.bar.a)
     --c:SetStatusBarColor(0,0,0,1)
 
@@ -701,7 +704,7 @@ end
       c.SafeZone:SetPoint("BOTTOMRIGHT")
     end
 
-    func.applyDragFunctionality(c)
+    func.applyDragFunctionality(frame)
 
     f.Castbar = c
 

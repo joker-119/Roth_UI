@@ -13,7 +13,7 @@
   -----------------------------
   -- FUNCTIONS
   -----------------------------
-
+if not gcfg.embeds.rActionBarStyler then return end
   if not cfg.enable then return end
 
   --micro menu button objects

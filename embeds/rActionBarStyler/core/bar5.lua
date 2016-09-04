@@ -13,7 +13,7 @@
   -----------------------------
   -- FUNCTIONS
   -----------------------------
-
+if not gcfg.embeds.rActionBarStyler then return end
   if not cfg.enable then return end
   if gcfg.bars.bar4.combineBar4AndBar5 then return end
 

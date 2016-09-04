@@ -6,6 +6,9 @@
 
 --locals and speed
 local AddonName, Addon, ns = ...
+local addon, ns = ...
+local cfg = ns.cfg
+if not cfg.embeds.tullaRange then return end
 local _G = _G
 local next = next
 local pairs = pairs

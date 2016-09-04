@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
-  --  Version 1.9.13a
+  --  Version 1.9.13b
   ---------------------------------------------
 
   --get the addon namespace
@@ -17,11 +17,27 @@
   local cfg = {}
   ns.cfg = cfg
   local locale = GetLocale()
-
   ---------------------------------------------
   -- // CONFIG // --
   ---------------------------------------------
 
+  ---------------------------------------------
+  -- // Embeds // --
+  ---------------------------------------------
+  cfg.embeds = {
+	rChat = true, -- Simple chat frame
+	rActionBarStyler = true, -- Simple actionbar styler for Roth UI 
+	rButtonTemplate = true, -- Simple button skinning mod
+	rMinimap = true, -- Simplistic square minimap
+	rNamePlates = true, -- Diablo style Nameplates
+	rInfoStrings = true, -- Information text displayed under Minimap
+	rRaidManager = true, -- Replacement for blizzard's pull-out raid manager
+	rTooltip = true, -- Diablo styled tooltips
+	tullaRange = true, -- Creates Red/Blue overlay over icons that are not useable due to range or lack of resources
+	Roth_ShinyBuffs = true, -- ShinyBuffs buff frame, edited for use with Roth UI
+	rObjectiveTracker = true, -- Simple drag and resizeable Objective Tracker frame
+	RothFont = true, -- makes game client use a font (as defined in config file) for all game text
+  }
   ----------------------------------------
   -- colorswitcher define your color for healthbars here
   ----------------------------------------
@@ -296,7 +312,7 @@
           shieldbar = { r = 0.5, g = 0.5, b = 0.5, a = 1, }, --the castbar color while target casting a shielded spell
           shieldbg = { r = 0.1, g = 0.1, b = 0.1, a = 0.7, },  --the castbar background color while target casting a shielded spell
         },
-        pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = -300 },
+        pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = -155 },
       },
       portrait = {
         pos = { a1 = "CENTER", a2 = "CENTER", af = "UIParent", x = 100, y = 0 },
@@ -534,7 +550,7 @@
         tag = "[diablo:misshp]",
 		fontSize = 11,
 		point = "RIGHT",
-		x = -3,
+		x = -20,
 		y = 0,
       },
       power = {
@@ -553,7 +569,7 @@
         showPlayer          = true,     --make this true to show player in party
         showSolo            = false,    --make this true to show while solo (only works if solo is in visiblity aswell
         showParty           = true,     --make this true to show headerin party
-        showRaid            = true,    --show in raid
+        showRaid            = false,    --show in raid
       },
       healprediction = {
         show = true,
@@ -582,7 +598,7 @@
       alpha = {
         notinrange = 0.4,
       },
-      scale = .98,
+      scale = 1,
       pos = { a1 = "TOPLEFT", a2 = "TOPLEFT", af = "UIParent", x = 5, y = -5 },
       health = {
         texture = (mediapath.."statusbar3"),
@@ -624,7 +640,7 @@
       attributes = {
         visibility          = "custom [group:raid] show; hide",
         showPlayer          = true,  --make this true to show player in party
-        showSolo            = false,  --make this true to show while solo (only works if solo is in visiblity aswell
+        showSolo            = true,  --make this true to show while solo (only works if solo is in visiblity aswell
         showParty           = true,  --make this true to show raid in party
         showRaid            = true,   --show in raid
         point               = "TOP",

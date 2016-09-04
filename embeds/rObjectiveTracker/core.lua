@@ -14,7 +14,7 @@ L.dragFrames      = {}
 L.addonColor      = "00FF00AA"
 L.addonShortcut   = "rot"
 
-
+if not cfg.embeds.rObjectiveTracker then return end
 
 -----------------------------
 -- Init

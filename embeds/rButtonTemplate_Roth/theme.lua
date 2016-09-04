@@ -10,7 +10,8 @@
 
 local A, L = ...
 local addon, ns = ...
-
+local cfg = ns.cfg
+if not cfg.embeds.rButtonTemplate then return end
 -----------------------------
 -- actionButtonConfig
 -----------------------------

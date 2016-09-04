@@ -1,7 +1,7 @@
 ﻿local ADDON, Addon = ...
 local addon, ns = ...
 local cfg = ns.cfg
-
+if not cfg.embeds.RothFont then return end
 PhanxFontDB = {
 	normal = "Lato",
 	bold   = "Lato Black",

@@ -627,7 +627,7 @@ end
 
   end
 
-  
+  --Arcane Charges
   bars.createArcBar = function(self)
 	self.ACharges = {}
 

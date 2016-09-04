@@ -15,7 +15,7 @@ L.dragFrames      = {}
 L.addonColor      = "00FFAA00"
 L.addonShortcut   = "rmm"
 
-
+if not cfg.embeds.rMinimap then return end
 -----------------------------
 -- Init
 -----------------------------

@@ -1,3 +1,6 @@
+local addon, ns = ...
+local cfg = ns.cfg
+if not cfg.embeds.rChat then return end
 
   local color = "0099FF"
   local foundurl = false

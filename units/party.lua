@@ -29,7 +29,10 @@
   --actionbar background
   local createArtwork = function(self)
     local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetAllPoints(self)
+	t:SetPoint("TOP",0,40)
+	t:SetPoint("LEFT",-0,0)
+	t:SetPoint("RIGHT",0,0)
+	t:SetPoint("BOTTOM",0,-20)
     t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget")
   end
 
@@ -41,15 +44,17 @@
     --health
     local h = CreateFrame("StatusBar", nil, self)
 	if self.cfg.vertical == true then
-	 h:SetPoint("TOP",0,-29)
-	 h:SetPoint("LEFT",46,0)
-	 h:SetPoint("RIGHT",-46,0)
-	 h:SetPoint("BOTTOM",0,26)
+	 h:SetPoint("TOP",0,-30)
+	 h:SetPoint("LEFT",35,0)
+	 h:SetPoint("RIGHT",-35,0)
+	 h:SetPoint("BOTTOM",0,52)
+	 h:SetFrameStrata("LOW")
 	else
      h:SetPoint("TOP",0,-29)
      h:SetPoint("LEFT",21,0)
      h:SetPoint("RIGHT",-21,0)
      h:SetPoint("BOTTOM",0,26)
+	 h:SetFrameStrata("LOW")
 	end
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
@@ -58,11 +63,8 @@
 
     h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
     h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_hpglow")
-	h.glow:SetPoint("TOP",0,-42)
-	h.glow:SetPoint("LEFT",-40,0)
-	h.glow:SetPoint("RIGHT",42,0)
-	h.glow:SetPoint("BOTTOM",0,36)
-    h.glow:SetVertexColor(0,0,0,1)
+	h.glow:SetAllPoints(self)
+    h.glow:SetVertexColor(1,0,0,1)
 
     h.highlight = h:CreateTexture(nil,"OVERLAY",nil,-4)
     h.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_highlight")
@@ -80,10 +82,11 @@
     --power
     local h = CreateFrame("StatusBar", nil, self.Health)
 	if self.cfg.vertical == true then
-     h:SetPoint("TOP",0,-12.5)
-     h:SetPoint("LEFT",7,0)
-     h:SetPoint("RIGHT",-7,0)
-     h:SetPoint("BOTTOM",0,-8)
+     h:SetPoint("TOP",0,-25.5)
+     h:SetPoint("LEFT",18,0)
+     h:SetPoint("RIGHT",-18,0)
+     h:SetPoint("BOTTOM",0,-20)
+	 h:SetFrameStrata("LOW")
 	else
      h:SetPoint("TOP",0,-12.5)
      h:SetPoint("LEFT",7,0)
@@ -96,11 +99,6 @@
     h.bg:SetTexture(cfg.texture)
     h.bg:SetAllPoints(h)
 
-    h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
-    h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_ppglow")
-    h.glow:SetAllPoints(self)
-    h.glow:SetVertexColor(0,0,0,1)
-
     self.Power = h
     self.Power.Smooth = true
     self.Power.frequentUpdates = self.cfg.power.frequentUpdates or false
@@ -111,7 +109,7 @@
   local createHealthPowerStrings = function(self)
 
     local name = func.createFontString(self.Health, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
-	name:SetPoint("BOTTOM", self, "TOP", 0, -13)
+	name:SetPoint("BOTTOM", self, "TOP", 0, -7)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
 	self.Name = name
@@ -197,9 +195,9 @@
     }
 
     --icons
-    self.RaidIcon = func.createIcon(self,"OVERLAY",18,self.Name,"RIGHT","LEFT",20,0,-1)
+    self.RaidIcon = func.createIcon(self,"OVERLAY",18,self.Name,"RIGHT","LEFT",25,0,-1)
 	self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
-    self.ReadyCheck = func.createIcon(self.Health,"OVERLAY",24,self.Health,"CENTER","CENTER",0,0,-1)
+    self.ReadyCheck = func.createIcon(self,"OVERLAY",24,self.Health,"CENTER","CENTER",0,0,-1)
     if self.Border then
       self.Leader = func.createIcon(self,"OVERLAY",13,self.Border,"BOTTOMRIGHT","TOPRIGHT",-5,-27,-1)
       if self.cfg.portrait.use3D then
@@ -225,17 +223,7 @@
 
   end
   
---------------------------------------------
--- Drag Frame (time for hacks)
---------------------------------------------
-local A, L = ...
-L.addonName     = A 
-L.dragFrames    = {}
-L.addonColor    = "00FFFFFF"
-L.addonShortcut = "dparty"
 
-rLib:CreateDragFrame(frame, L.dragFrames, -2, true)
-rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)
   ---------------------------------------------
   -- SPAWN PARTY UNIT
   ---------------------------------------------

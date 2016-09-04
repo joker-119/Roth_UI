@@ -13,7 +13,7 @@
   -----------------------------
   -- FUNCTIONS
   -----------------------------
-
+if not gcfg.embeds.rActionBarStyler then return end
   if not cfg.enable then return end
 
   local num = 6 --NUM_ACTIONBAR_BUTTONS --there seems to be no MAX_OVERRIDE_NUM or the like

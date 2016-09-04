@@ -20,7 +20,7 @@
 
   --init parameters
   local initUnitParameters = function(self)
-    self:SetFrameStrata("BACKGROUND")
+    self:SetFrameStrata("MEDIUM")
     self:SetFrameLevel(1)
     self:SetSize(self.cfg.width, self.cfg.height)
     self:SetScale(self.cfg.scale)
@@ -34,7 +34,7 @@
 
   --actionbar background
   local createArtwork = function(self)
-    local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
+    local t = self:CreateTexture(nil,"HIGH",nil,-8)
     t:SetAllPoints(self)
     t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget")
   end
@@ -49,7 +49,8 @@
     h:SetPoint("TOP",0,-29)
     h:SetPoint("LEFT",30.5,0)
     h:SetPoint("RIGHT",-30.5,0)
-    h:SetPoint("BOTTOM",0,28.7)
+    h:SetPoint("BOTTOM",0,25.7)
+	h:SetFrameStrata("LOW")
 
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)

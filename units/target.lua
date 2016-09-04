@@ -35,7 +35,7 @@
 
   --Target Frame
 	local createArtwork = function(self)
-    local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
+    local t = self:CreateTexture(nil,"HIGH",nil,-8)
     t:SetPoint("TOP",0,25)
     t:SetPoint("LEFT",-62,0)
     t:SetPoint("RIGHT",60,0)
@@ -73,9 +73,11 @@ end
     h:SetPoint("LEFT",24.5,0)
     h:SetPoint("RIGHT",-24.5,0)
     h:SetPoint("BOTTOM",0,29.7)
+	h:SetFrameStrata("LOW")
+	
 
     h:SetStatusBarTexture(cfg.texture)
-    h.bg = h:CreateTexture(nil,"TOOLTIP",nil,-6)
+    h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
     h.bg:SetTexture(cfg.texture)
     h.bg:SetAllPoints(h)
 

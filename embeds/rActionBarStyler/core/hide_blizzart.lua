@@ -10,7 +10,7 @@
   -----------------------------
   -- HIDE FRAMES
   -----------------------------
-
+if not gcfg.embeds.rActionBarStyler then return end
   --hide blizzard
   local pastebin = CreateFrame("Frame")
   pastebin:Hide()

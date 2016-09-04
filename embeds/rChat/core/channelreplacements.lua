@@ -1,4 +1,6 @@
-  
+local addon, ns = ...
+local cfg = ns.cfg
+if not cfg.embeds.rChat then return end  
   --guild
   CHAT_GUILD_GET = "|Hchannel:GUILD|hG|h %s "
   CHAT_OFFICER_GET = "|Hchannel:OFFICER|hO|h %s "

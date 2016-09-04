@@ -10,7 +10,9 @@ local fontFlags = {"None", "Outline", "Monochrome Outline"}	--, "Monochrome"}
 local _, class = UnitClass("player")
 local classColor, SBmover, moverShown, db
 local BuffFrame = BuffFrame
-
+local addon, ns = ...
+local cfg = ns.cfg
+if not cfg.embeds.Roth_ShinyBuffs then return end
 local defaults = {
 	font = "Cracked",
 	fstyle = "Outline",
