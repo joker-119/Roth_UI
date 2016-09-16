@@ -1,7 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
-
+  local addonName, Roth_UI = ...
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
 
@@ -42,7 +42,7 @@
     t:SetPoint("LEFT",-62,0)
     t:SetPoint("RIGHT",60,0)
     t:SetPoint("BOTTOM",0,-15)
-		
+
 	self.RareIcon = t
 end
 
@@ -76,7 +76,7 @@ end
     h:SetPoint("RIGHT",-24.5,0)
     h:SetPoint("BOTTOM",0,29.7)
 	h:SetFrameStrata("BACKGROUND")
-	
+
 
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
@@ -137,12 +137,12 @@ end
     local hpval = func.createFontString(self.Health, cfg.font, self.cfg.health.fontSize, "THINOUTLINE")
     hpval:SetPoint(self.cfg.health.point, self.cfg.health.x,self.cfg.health.y)
 
-    local perphp = func.createFontString(self.Health, cfg.font, self.cfg.healper.fontSize, "THINOUTLINE") 
-    perphp:SetPoint(self.cfg.healper.point, self.cfg.healper.x,self.cfg.healper.y)    
+    local perphp = func.createFontString(self.Health, cfg.font, self.cfg.healper.fontSize, "THINOUTLINE")
+    perphp:SetPoint(self.cfg.healper.point, self.cfg.healper.x,self.cfg.healper.y)
 
     local perpp = func.createFontString(self.Power, cfg.font, self.cfg.powper.fontSize, "THINOUTLINE")
     perpp:SetPoint(self.cfg.powper.point, self.cfg.powper.x,self.cfg.powper.y)
-	
+
 	local ppval = func.createFontString(self.Health, cfg.font, self.cfg.power.fontSize, "THINOUTLINE")
 	ppval:SetPoint(self.cfg.power.point, self.cfg.power.x,self.cfg.power.y)
 
@@ -287,7 +287,7 @@ end
     --createhealthPower
     createHealthFrame(self)
     createPowerFrame(self)
-	
+
 	--Classification
 	--[[self:RegisterEvent("PLAYER_TARGET_CHANGED", classification)
 	self.Health:SetScript("OnShow",function(s)
@@ -341,7 +341,7 @@ end
 
     --add heal prediction
     func.healPrediction(self)
-	
+
     --add total absorb
     func.totalAbsorb(self)
 
@@ -354,9 +354,10 @@ end
   ---------------------------------------------
   -- SPAWN TARGET UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.target.show then
     oUF:RegisterStyle("diablo:target", createStyle)
     oUF:SetActiveStyle("diablo:target")
     oUF:Spawn("target", "Roth_UITargetFrame")
   end
+end)

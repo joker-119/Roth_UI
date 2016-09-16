@@ -19,27 +19,53 @@ local defaults = {
 --  @param profileDefaults Any defaults to be added at the profile level.
 --  @param characterDefaults Any defaults to be added at the character level.
 function Roth_UI:AddConfig(key, newOptions, profileDefaults, characterDefaults)
-  newOptions.order = order
-  if profileDefaults then
-    for k,v in pairs(profileDefaults) do defaults.profile[k] = v end
-  end
-  if characterDefaults then
-    for k,v in pairs(characterDefaults) do defaults.char[k] = v end
-  end
-  options.args[key] = newOptions
-  order = order + 1
+	newOptions.order = order
+	if profileDefaults then
+		for k,v in pairs(profileDefaults) do defaults.profile[k] = v end
+	end
+	if characterDefaults then
+		for k,v in pairs(characterDefaults) do defaults.char[k] = v end
+	end
+	options.args[key] = newOptions
+	order = order + 1
 end
 
 --- Method to both load configuration from the SavedVariables and initialize the options window.
 function Roth_UI:LoadConfig()
-  Roth_UI.db = LibStub("AceDB-3.0"):New("Roth_UI_DB", defaults)
-  Roth_UI.db.RegisterCallback(Roth_UI, "OnProfileChanged", function()
-    ReloadUI()
-  end)
-  options.args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(Roth_UI.db)
-  LibStub("AceConfig-3.0"):RegisterOptionsTable("Roth_Config", options, {"roth_config"})
-  -- TODO Need to have this open up via slash command
-  local OpenFunc = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Roth_Config", "Roth UI")
-  -- This is to handle the situation where a reload happens...want to make sure we restart at order 1
-  order = 1
+	Roth_UI.db = LibStub("AceDB-3.0"):New("Roth_UI_DB", defaults)
+	Roth_UI.db.RegisterCallback(Roth_UI, "OnProfileChanged", function()
+		ReloadUI()
+	end)
+	options.args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(Roth_UI.db)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("Roth_Config", options, {"roth_config"})
+	-- TODO Need to have this open up via slash command
+	local OpenFunc = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Roth_Config", "Roth UI")
+	-- This is to handle the situation where a reload happens...want to make sure we restart at order 1
+	order = 1
 end
+
+function printTable(tableToPrint)
+	for name, value in pairsByKeys(tableToPrint) do
+		if type(value) == 'table' then
+			print("table ", name)
+			printTable(value)
+			print("end")
+		else
+			print(name, value)
+		end
+	end
+end
+
+function pairsByKeys (t, f)
+      local a = {}
+      for n in pairs(t) do table.insert(a, n) end
+      table.sort(a, f)
+      local i = 0      -- iterator variable
+      local iter = function ()   -- iterator function
+        i = i + 1
+        if a[i] == nil then return nil
+        else return a[i], t[a[i]]
+        end
+      end
+      return iter
+    end

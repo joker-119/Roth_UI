@@ -1,6 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
+  local addonName, Roth_UI = ...
 
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
@@ -125,7 +126,7 @@
     --apply config to self
     self.cfg = cfg.units.focus
     self.cfg.style = "focus"
-	
+
     --init
     initUnitParameters(self)
 
@@ -180,7 +181,7 @@
 
     --add heal prediction
     func.healPrediction(self)
-    
+
     --add total absorb
     func.totalAbsorb(self)
 
@@ -192,9 +193,10 @@
   ---------------------------------------------
   -- SPAWN FOCUS UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.focus.show then
     oUF:RegisterStyle("diablo:focus", createStyle)
     oUF:SetActiveStyle("diablo:focus")
     oUF:Spawn("focus", "Roth_UIFocusFrame")
   end
+end)

@@ -1,7 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
-
+  local addonName, Roth_UI = ...
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
 
@@ -169,9 +169,10 @@
   ---------------------------------------------
   -- SPAWN TARGETTARGET UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.targettarget.show then
     oUF:RegisterStyle("diablo:targettarget", createStyle)
     oUF:SetActiveStyle("diablo:targettarget")
     oUF:Spawn("targettarget", "Roth_UITargetTargetFrame")
   end
+end)

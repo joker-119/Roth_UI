@@ -1,7 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
-
+  local addonName, Roth_UI = ...
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
   local rLib = ns.rLib or rLib
@@ -161,15 +161,15 @@
         else
 			if self.cfg.vertical then
 				self:SetHitRectInsets(-35,0, -17, 0)
-			else 
+			else
 				self:SetHitRectInsets(0,0,-100,0)
 			end
-        end      
+        end
         self.PortraitHolder:SetScript("OnEvent", function(...)
           self.PortraitHolder:UnregisterEvent("PLAYER_REGEN_ENABLED")
           self:SetHitRectInsets(0, 0, -100, 0)
         end)
-      end      
+      end
     end
 
     --auras
@@ -214,7 +214,7 @@
 
     --add heal prediction
     func.healPrediction(self)
-    
+
     --add total absorb
     func.totalAbsorb(self)
 
@@ -222,19 +222,19 @@
     self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", func.checkThreat)
 
   end
-  
+
 
   ---------------------------------------------
   -- SPAWN PARTY UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.party.show then
     oUF:RegisterStyle("diablo:party", createStyle)
     oUF:SetActiveStyle("diablo:party")
 
     local attr = cfg.units.party.attributes
-	
-	
+
+
 
     local partyDragFrame = CreateFrame("Frame", "Roth_UIPartyDragFrame", UIParent)
     partyDragFrame:SetSize(50,50)
@@ -278,3 +278,4 @@
     party:SetPoint("TOPLEFT",partyDragFrame,0,0)
   end
  end
+end)

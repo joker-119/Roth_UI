@@ -1,7 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
-
+  local addonName, Roth_UI = ...
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
 
@@ -169,9 +169,10 @@
   ---------------------------------------------
   -- SPAWN PETTARGET UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.pettarget.show then
     oUF:RegisterStyle("diablo:pettarget", createStyle)
     oUF:SetActiveStyle("diablo:pettarget")
     oUF:Spawn("pettarget", "Roth_UIPetTargetFrame")
   end
+end)

@@ -1,7 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
-
+  local addonName, Roth_UI = ...
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
 
@@ -181,7 +181,7 @@
 
     --add heal prediction
     func.healPrediction(self)
-    
+
     --add total absorb
     func.totalAbsorb(self)
 
@@ -193,9 +193,10 @@
   ---------------------------------------------
   -- SPAWN PET UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.pet.show then
     oUF:RegisterStyle("diablo:pet", createStyle)
     oUF:SetActiveStyle("diablo:pet")
     oUF:Spawn("pet", "Roth_UIPetFrame")
   end
+end)

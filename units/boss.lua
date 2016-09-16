@@ -1,6 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
+  local addonName, Roth_UI = ...
 
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
@@ -164,7 +165,7 @@
   ---------------------------------------------
   -- SPAWN BOSS UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.boss.show then
     oUF:RegisterStyle("diablo:boss", createStyle)
     oUF:SetActiveStyle("diablo:boss")
@@ -182,3 +183,4 @@
       boss[i] = unit
     end
   end
+end)

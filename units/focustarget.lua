@@ -1,6 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
+  local addonName, Roth_UI = ...
 
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
@@ -169,9 +170,10 @@
   ---------------------------------------------
   -- SPAWN FOCUSTARGET UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.focustarget.show then
     oUF:RegisterStyle("diablo:focustarget", createStyle)
     oUF:SetActiveStyle("diablo:focustarget")
     oUF:Spawn("focustarget", "Roth_UIFocusTargetFrame")
   end
+end)
