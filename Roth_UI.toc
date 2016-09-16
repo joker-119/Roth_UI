@@ -3,7 +3,7 @@
 ## Title: Roth UI
 ## Notes: Galaxy's oUF layout with Diablo flavor!
 ## RequiredDeps:
-## SavedVariables: Roth_UI_DB_GLOB, ShinyBuffsDB, PhanxFontDB
+## SavedVariables: Roth_UI_DB_GLOB, ShinyBuffsDB, PhanxFontDB, Roth_UI_DB
 ## SavedVariablesPerCharacter: Roth_UI_DB_CHAR, ShinyBuffsPCDB
 
 embeds\oUF\oUF.xml
@@ -19,6 +19,9 @@ Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\LibSharedMedia-3.0\lib.xml
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 
+init.lua
+
+embeds\Roth_Config\Roth_Config.lua
 
 embeds\rChat\rChat.xml
 embeds\rActionBarStyler\rActionBar.xml
