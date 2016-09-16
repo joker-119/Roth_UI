@@ -273,7 +273,7 @@ end
     if not self.cfg.art.demon.show then return end
     local f = CreateFrame("Frame","Roth_UIDemonFrame",self)
     f:SetSize(320,160)
-    f:SetFrameStrata("LOW")
+    f:SetFrameStrata("MEDIUM")
     f:SetFrameLevel(0)
     f:SetPoint(self.cfg.art.demon.pos.a1, self.cfg.art.demon.pos.af, self.cfg.art.demon.pos.a2, self.cfg.art.demon.pos.x, self.cfg.art.demon.pos.y)
     f:SetScale(self.cfg.art.demon.scale)

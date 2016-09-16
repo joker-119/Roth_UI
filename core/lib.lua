@@ -643,7 +643,7 @@ end
     c:SetStatusBarTexture(f.cfg.castbar.texture)
     c:SetScale(f.cfg.castbar.scale)
     c:SetPoint("CENTER", frame, 0,0)
-	c:SetFrameStrata("LOW")
+	c:SetFrameStrata("HIGH")
     c:SetStatusBarColor(f.cfg.castbar.color.bar.r,f.cfg.castbar.color.bar.g,f.cfg.castbar.color.bar.b,f.cfg.castbar.color.bar.a)
     --c:SetStatusBarColor(0,0,0,1)
 

@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
-  --  Version 1.9.14
+  --  Version 1.9.14a
   ---------------------------------------------
 
   --get the addon namespace
@@ -1014,6 +1014,7 @@ cfg.rtooltip = {
 cfg.tracker = {
 	scale = 1,
 	point = { "TOPRIGHT", -190, -200},
+	size = { 260, 450 },
 }
    --rInfostrings
  cfg.frame = {
