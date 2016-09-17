@@ -36,6 +36,7 @@ function Roth_UI:LoadConfig()
 	Roth_UI.db.RegisterCallback(Roth_UI, "OnProfileChanged", function()
 		ReloadUI()
 	end)
+	printTable(options)
 	options.args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(Roth_UI.db)
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("Roth_Config", options, {"roth_config"})
 	-- TODO Need to have this open up via slash command
@@ -44,14 +45,21 @@ function Roth_UI:LoadConfig()
 	order = 1
 end
 
-function printTable(tableToPrint)
+function printTable(tableToPrint, depth)
+	if depth == nil then
+		depth = 0
+	end
+	local spacing = ""
+	for i=1, depth do
+		spacing = spacing.." "
+	end
 	for name, value in pairsByKeys(tableToPrint) do
 		if type(value) == 'table' then
-			print("table ", name)
-			printTable(value)
-			print("end")
+			print(spacing.."table ", name)
+			printTable(value, depth + 1)
+			print(spacing.."end")
 		else
-			print(name, value)
+			print(spacing..name, value)
 		end
 	end
 end

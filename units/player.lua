@@ -24,7 +24,24 @@ local floor, abs, sin, pi = floor, math.abs, math.sin, math.pi
 local tinsert = tinsert
 
 local LSM = LibStub("LibSharedMedia-3.0")
+local orbs = {}
+for data, value in pairs(LSM:HashTable("orb_filling")) do
+    orbs[data] = data
+end
 
+local tags = {
+    topdef = "Top default",
+    botdef = "Bottom default",
+    per = "Percentage",
+    perp = "Percentage + %",
+    cur = "Current value",
+    curs = "Current value short",
+    max = "Maximum value",
+    maxs = "Maximum value short",
+    cmax = "Current/Maximum value",
+    cmaxs = "Current/Maximum value short",
+    null = "Nothing"
+}
 ---------------------------------------------
 -- UNIT SPECIFIC FUNCTIONS
 ---------------------------------------------
@@ -322,9 +339,9 @@ local updateValue = function(bar, unit, cur, max)
     elseif orb.type == "HEALTH" then
         orb.skull:Hide()
     end
-    if db.char[orb.type].value.hideOnEmpty and (UnitIsDeadOrGhost(unit) or cur < 1) then
+    if Roth_UI.db.char.player[orb.type:lower()].hideEmptyValue and (UnitIsDeadOrGhost(unit) or cur < 1) then
         orb.values:Hide()
-    elseif db.char[orb.type].value.hideOnFull and (cur == max) then
+    elseif Roth_UI.db.char.player[orb.type:lower()].hideFullValue and (cur == max) then
         orb.values:Hide()
     elseif not orb.values:IsShown() then
         orb.values:Show()
@@ -339,9 +356,10 @@ local updateValue = function(bar, unit, cur, max)
     if UnitIsDeadOrGhost(unit) then
         bar:SetValue(0)
     end
-    if ns.panel:IsShown() then
-        ns.panel.eventHelper:SetOrbsToMax()
-    end
+    --- TODO Set this to happen when the config is open.
+    --if ns.panel:IsShown() then
+        --ns.panel.eventHelper:SetOrbsToMax()
+    --end
 end
 
 --update spark func
@@ -404,7 +422,7 @@ end
 --create orb func
 local createOrb = function(self,type)
     --get the orb config
-    local orbcfg = db.char[type]
+    local orbcfg = Roth_UI.db.char.player[type:lower()]
     local name
     if type == "HEALTH" then
         name = "Roth_UIHealthOrb"
@@ -454,8 +472,9 @@ local createOrb = function(self,type)
     local fill = CreateFrame("StatusBar","$parentFill",orb)
     fill:SetAllPoints()
     fill:SetMinMaxValues(0, 100)
-    fill:SetStatusBarTexture(orbcfg.filling.texture)
-    fill:SetStatusBarColor(orbcfg.filling.color.r,orbcfg.filling.color.g,orbcfg.filling.color.b)
+    print(LSM:Fetch("orb_filling", orbcfg.texture))
+    fill:SetStatusBarTexture(LSM:Fetch("orb_filling", orbcfg.texture))
+    fill:SetStatusBarColor(orbcfg.textureColor.r,orbcfg.textureColor.g,orbcfg.textureColor.b)
     fill:SetOrientation("VERTICAL")
     fill:SetScript("OnValueChanged", updateOrb)
     orb.fill = fill
@@ -476,7 +495,7 @@ local createOrb = function(self,type)
     local model = CreateFrame("PlayerModel",nil,scrollChild)
     model:SetSize(orb:GetSize())
     model:SetPoint("TOP")
-    model:SetAlpha(orbcfg.model.alpha or 1)
+    model:SetAlpha(orbcfg.modelAlpha or 1)
 	orb.scrollFrame = scrollFrame
 
     --update model func
@@ -503,7 +522,7 @@ local createOrb = function(self,type)
     tinsert(orb.galaxies, createGalaxy(scrollChild,orb.type,0,-2,orb.size-20,90,"galaxy",-7,360))
     tinsert(orb.galaxies, createGalaxy(scrollChild,orb.type,0,-4,orb.size-5,60,"galaxy4",-6,360))
     for i, galaxy in pairs(orb.galaxies) do
-        galaxy:SetVertexColor(orbcfg.filling.color.r,orbcfg.filling.color.g,orbcfg.filling.color.b)
+        galaxy:SetVertexColor(orbcfg.textureColor.r,orbcfg.textureColor.g,orbcfg.textureColor.b, orbcfg.galaxyAlpha)
     end
 
 	--bubbles
@@ -513,7 +532,7 @@ local createOrb = function(self,type)
 	tinsert(orb.bubbles, createGalaxy(scrollChild,orb.type,0,0,orb.size-12,15,"orb_rotation_bubbles1",-6,360))
 	tinsert(orb.bubbles, createGalaxy(scrollChild,orb.type,0,0,orb.size-0,20,"orb_rotation_bubbles2",-7,-360))
 	for i, bubble in pairs(orb.bubbles) do
-        bubble:SetVertexColor(orbcfg.filling.color.r,orbcfg.filling.color.g,orbcfg.filling.color.b)
+        bubble:SetVertexColor(orbcfg.textureColor.r,orbcfg.textureColor.g,orbcfg.textureColor.b, orbcfg.bubblesAlpha)
 	end
 
 
@@ -527,12 +546,12 @@ local createOrb = function(self,type)
     local spark = overlay:CreateTexture(nil,"BACKGROUND",nil,-3)
     spark:SetTexture("Interface\\AddOns\\Roth_UI\\media\\orb_spark")
     --the spark should fit the filling color otherwise it will stand out too much
-    spark:SetVertexColor(orbcfg.filling.color.r,orbcfg.filling.color.g,orbcfg.filling.color.b)
+    spark:SetVertexColor(orbcfg.textureColor.r,orbcfg.textureColor.g,orbcfg.textureColor.b)
     spark:SetWidth(256*orb.size/256)
     spark:SetHeight(32*orb.size/256)
     spark:SetPoint("TOP", scrollFrame, 0, -16*orb.size/256)
     --texture will be blended by blendmode, http://wowprogramming.com/docs/widgets/Texture/SetBlendMode
-    spark:SetAlpha(orbcfg.spark.alpha or 1)
+    spark:SetAlpha(orbcfg.sparkAlpha or 1)
     spark:SetBlendMode("ADD")
     spark:Hide()
     orb.spark = spark
@@ -563,7 +582,8 @@ local createOrb = function(self,type)
     local highlight = overlay:CreateTexture("$parentHighlight","BACKGROUND",nil,3)
     highlight:SetAllPoints()
     highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\orb_gloss")
-    highlight:SetAlpha(orbcfg.highlight.alpha or 1)
+    print("highlight", orbcfg.highlightAlpha)
+    highlight:SetAlpha(orbcfg.highlightAlpha or 1)
     orb.highlight = highlight
 
     --orb values
@@ -573,11 +593,11 @@ local createOrb = function(self,type)
 
     values.top = func.createFontString(values, LSM:Fetch("font", Roth_UI.db.profile.headerFont), 28 * Roth_UI.db.profile.headerScale, "THINOUTLINE")
     values.top:SetPoint("CENTER", 0, 10)
-    values.top:SetTextColor(orbcfg.value.top.color.r,orbcfg.value.top.color.g,orbcfg.value.top.color.b)
+    values.top:SetTextColor(orbcfg.topTagColor.r,orbcfg.topTagColor.g,orbcfg.topTagColor.b)
     --bottom value
     values.bottom = func.createFontString(values, LSM:Fetch("font", Roth_UI.db.profile.textFont), 16 * Roth_UI.db.profile.textScale, "THINOUTLINE")
     values.bottom:SetPoint("CENTER", 0, -10)
-    values.bottom:SetTextColor(orbcfg.value.top.color.r, orbcfg.value.top.color.g, orbcfg.value.top.color.b)
+    values.bottom:SetTextColor(orbcfg.bottomTagColor.r, orbcfg.bottomTagColor.g, orbcfg.bottomTagColor.b)
     orb.values = values
 
     --register the tags
@@ -637,7 +657,7 @@ local createOrb = function(self,type)
         hooksecurefunc(self.Power, "SetStatusBarColor", updateStatusBarColor)
         self.Power.frequentUpdates = self.cfg.power.frequentUpdates or false
         self.Power.Smooth = self.cfg.power.smooth or false
-        self.Power.colorPower = orbcfg.filling.colorAuto or false
+        self.Power.colorPower = orbcfg.autoColor or false
         self.Power.PostUpdate = updateValue
     else
         self.Health = orb.fill
@@ -645,8 +665,8 @@ local createOrb = function(self,type)
         hooksecurefunc(self.Health, "SetStatusBarColor", updateStatusBarColor)
         self.Health.frequentUpdates = self.cfg.health.frequentUpdates or false
         self.Health.Smooth = self.cfg.health.smooth or false
-        self.Health.colorClass = orbcfg.filling.colorAuto or false
-        self.Health.colorHealth = orbcfg.filling.colorAuto or false --when player switches into a vehicle it will recolor the orb
+        self.Health.colorClass = orbcfg.autoColor or false
+        self.Health.colorHealth = orbcfg.autoColor or false --when player switches into a vehicle it will recolor the orb
         --we need to display the lowhp on a certain threshold without smoothing, so we use the postUpdate for that
         self.Health.PostUpdate = updateValue
     end
@@ -822,6 +842,7 @@ end
 -- Create player config
 local playerConfig = {
 	type = "group",
+    name = "Player Orbs",
 	args = {
 		enable = {
 			name = "Enable",
@@ -853,6 +874,464 @@ local playerConfig = {
 				return Roth_UI.db.char.player.scale
 			end
 		},
+        health = {
+            type = 'group',
+            name = 'Health',
+            order = 3,
+            args = {
+                texture = {
+                    name = "Texture",
+                    desc = "The base texture to use",
+                    order = 1,
+                    type = "select",
+                    values = orbs,
+                    get = function()
+                        return Roth_UI.db.char.player.health.texture
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.texture = value
+                    end,
+                },
+                textureColor = {
+                    name = "Texture Color",
+                    desc = "The tint to the texture",
+                    order = 2,
+                    type = "color",
+                    get = function()
+                        local tex = Roth_UI.db.char.player.health.textureColor
+                        return tex.r, tex.g, tex.b, tex.a
+                    end,
+                    set = function(self, r, g, b, a)
+                        Roth_UI.db.char.player.health.textureColor = {r, g, b, a}
+                    end
+                },
+                autoColor = {
+                    name = "Auto Color Orb",
+                    desc = "Whether to color the orb based on class.  Overrides texture color.",
+                    type = "toggle",
+                    order = 3,
+                    get = function()
+                        return Roth_UI.db.char.player.health.autoColor
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.autoColor = value
+                    end,
+                },
+                modelAnim = {
+                    name = "Model Animations",
+                    desc = "Experimental Feature, use at your risk",
+                    type = "toggle",
+                    order = 4,
+                    get = function()
+                        return Roth_UI.db.char.player.health.modelAnim
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.modelAnim = value
+                    end,
+                },
+                highlightAlpha = {
+                    name = "Highlight Alpha",
+                    desc = "Alpha value for the highlight texture",
+                    type = "range",
+                    order = 5,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.health.highlightAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.highlightAlpha = value
+                    end,
+                },
+                galaxyAlpha = {
+                    name = "Galaxy Alpha",
+                    desc = "Alpha value for the spinning galaxy",
+                    type = "range",
+                    order = 6,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.health.galaxyAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.galaxyAlpha = value
+                    end,
+                },
+                bubblesAlpha = {
+                    name = "Bubbles Alpha",
+                    desc = "Alpha value for the spinning bubbles",
+                    type = "range",
+                    order = 7,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.health.bubblesAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.bubblesAlpha = value
+                    end,
+                },
+                modelAlpha = {
+                    name = "Model Alpha",
+                    desc = "Alpha value for the model texture",
+                    type = "range",
+                    order = 8,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.health.modelAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.modelAlpha = value
+                    end,
+                },
+                sparkAlpha = {
+                    name = "Spark Alpha",
+                    desc = "Alpha value for the progress spark",
+                    type = "range",
+                    order = 9,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.health.sparkAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.sparkAlpha = value
+                    end,
+                },
+                hideEmptyValue = {
+                    name = "Hide Empty",
+                    desc = "Hide values when empty",
+                    type = "toggle",
+                    order = 10,
+                    get = function()
+                        return Roth_UI.db.char.player.health.hideEmptyValue
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.hideEmptyValue = value
+                    end,
+                },
+                hideFullValue = {
+                    name = "Hide Full",
+                    desc = "Hide values when full",
+                    type = "toggle",
+                    order = 11,
+                    get = function()
+                        return Roth_UI.db.char.player.health.hideFullValue
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.hideFullValue = value
+                    end,
+                },
+                valueAlpha = {
+                    name = "Values Alpha",
+                    desc = "Alpha value for the orb values",
+                    type = "range",
+                    order = 12,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.health.valueAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.valueAlpha = value
+                    end,
+                },
+                topTagValue = {
+                    name = "Top Tag Value",
+                    desc = "The value to show in the top tag area",
+                    type = "select",
+                    values = tags,
+                    order = 13,
+                    get = function()
+                        return Roth_UI.db.char.player.health.topTagValue
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.topTagValue = value
+                    end,
+                },
+                topTagColor = {
+                    name = "Top Tag Color",
+                    desc = "The color to display for the top value",
+                    order = 14,
+                    type = "color",
+                    get = function()
+                        local tex = Roth_UI.db.char.player.health.topTagColor
+                        return tex.r, tex.g, tex.b, tex.a
+                    end,
+                    set = function(self, r, g, b, a)
+                        Roth_UI.db.char.player.health.topTagColor = {r, g, b, a}
+                    end
+                },
+                bottomTagValue = {
+                    name = "Bottom Tag Value",
+                    desc = "The value to show in the bottom tag area",
+                    type = "select",
+                    values = tags,
+                    order = 15,
+                    get = function()
+                        return Roth_UI.db.char.player.health.bottomTagValue
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.health.bottomTagValue = value
+                    end,
+                },
+                bottomTagColor = {
+                    name = "Bottom Tag Color",
+                    desc = "The color to display for the bottom value",
+                    order = 16,
+                    type = "color",
+                    get = function()
+                        local tex = Roth_UI.db.char.player.health.bottomTagColor
+                        return tex.r, tex.g, tex.b, tex.a
+                    end,
+                    set = function(self, r, g, b, a)
+                        Roth_UI.db.char.player.health.bottomTagColor = {r, g, b, a}
+                    end
+                },
+            },
+        },
+        power = {
+            type = 'group',
+            name = 'Power',
+            order = 3,
+            args = {
+                texture = {
+                    name = "Texture",
+                    desc = "The base texture to use",
+                    order = 1,
+                    type = "select",
+                    values = orbs,
+                    get = function()
+                        return Roth_UI.db.char.player.power.texture
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.texture = value
+                    end,
+                },
+                textureColor = {
+                    name = "Texture Color",
+                    desc = "The tint to the texture",
+                    order = 2,
+                    type = "color",
+                    get = function()
+                        local tex = Roth_UI.db.char.player.power.textureColor
+                        return tex.r, tex.g, tex.b, tex.a
+                    end,
+                    set = function(self, r, g, b, a)
+                        Roth_UI.db.char.player.power.textureColor = {r, g, b, a}
+                    end
+                },
+                autoColor = {
+                    name = "Auto Color Orb",
+                    desc = "Whether to color the orb based on class.  Overrides texture color.",
+                    type = "toggle",
+                    order = 3,
+                    get = function()
+                        return Roth_UI.db.char.player.power.autoColor
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.autoColor = value
+                    end,
+                },
+                modelAnim = {
+                    name = "Model Animations",
+                    desc = "Experimental Feature, use at your risk",
+                    type = "toggle",
+                    order = 4,
+                    get = function()
+                        return Roth_UI.db.char.player.power.modelAnim
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.modelAnim = value
+                    end,
+                },
+                highlightAlpha = {
+                    name = "Highlight Alpha",
+                    desc = "Alpha value for the highlight texture",
+                    type = "range",
+                    order = 5,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.power.highlightAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.highlightAlpha = value
+                    end,
+                },
+                galaxyAlpha = {
+                    name = "Galaxy Alpha",
+                    desc = "Alpha value for the spinning galaxy",
+                    type = "range",
+                    order = 6,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.power.galaxyAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.galaxyAlpha = value
+                    end,
+                },
+                bubblesAlpha = {
+                    name = "Bubbles Alpha",
+                    desc = "Alpha value for the spinning bubbles",
+                    type = "range",
+                    order = 7,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.power.bubblesAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.bubblesAlpha = value
+                    end,
+                },
+                modelAlpha = {
+                    name = "Model Alpha",
+                    desc = "Alpha value for the model texture",
+                    type = "range",
+                    order = 8,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.power.modelAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.modelAlpha = value
+                    end,
+                },
+                sparkAlpha = {
+                    name = "Spark Alpha",
+                    desc = "Alpha value for the progress spark",
+                    type = "range",
+                    order = 9,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.power.sparkAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.sparkAlpha = value
+                    end,
+                },
+                hideEmptyValue = {
+                    name = "Hide Empty",
+                    desc = "Hide values when empty",
+                    type = "toggle",
+                    order = 10,
+                    get = function()
+                        return Roth_UI.db.char.player.power.hideEmptyValue
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.hideEmptyValue = value
+                    end,
+                },
+                hideFullValue = {
+                    name = "Hide Full",
+                    desc = "Hide values when full",
+                    type = "toggle",
+                    order = 11,
+                    get = function()
+                        return Roth_UI.db.char.player.power.hideFullValue
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.hideFullValue = value
+                    end,
+                },
+                valueAlpha = {
+                    name = "Values Alpha",
+                    desc = "Alpha value for the orb values",
+                    type = "range",
+                    order = 12,
+                    min = 0,
+                    max = 1,
+                    step = 0.001,
+                    bigStep = 0.005,
+                    get = function()
+                        return Roth_UI.db.char.player.power.valueAlpha
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.valueAlpha = value
+                    end,
+                },
+                topTagValue = {
+                    name = "Top Tag Value",
+                    desc = "The value to show in the top tag area",
+                    type = "select",
+                    values = tags,
+                    order = 13,
+                    get = function()
+                        return Roth_UI.db.char.player.power.topTagValue
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.topTagValue = value
+                    end,
+                },
+                topTagColor = {
+                    name = "Top Tag Color",
+                    desc = "The color to display for the top value",
+                    order = 14,
+                    type = "color",
+                    get = function()
+                        local tex = Roth_UI.db.char.player.power.topTagColor
+                        return tex.r, tex.g, tex.b, tex.a
+                    end,
+                    set = function(self, r, g, b, a)
+                        Roth_UI.db.char.player.power.topTagColor = {r, g, b, a}
+                    end
+                },
+                bottomTagValue = {
+                    name = "Bottom Tag Value",
+                    desc = "The value to show in the bottom tag area",
+                    type = "select",
+                    values = tags,
+                    order = 15,
+                    get = function()
+                        return Roth_UI.db.char.player.power.bottomTagValue
+                    end,
+                    set = function(self, value)
+                        Roth_UI.db.char.player.power.bottomTagValue = value
+                    end,
+                },
+                bottomTagColor = {
+                    name = "Bottom Tag Color",
+                    desc = "The color to display for the bottom value",
+                    order = 16,
+                    type = "color",
+                    get = function()
+                        local tex = Roth_UI.db.char.player.power.bottomTagColor
+                        return tex.r, tex.g, tex.b, tex.a
+                    end,
+                    set = function(self, r, g, b, a)
+                        Roth_UI.db.char.player.power.bottomTagColor = {r, g, b, a}
+                    end
+                },
+            },
+        },
 	},
 }
 
@@ -860,6 +1339,42 @@ local playerDefaults = {
     player = {
         enabled = true,
         scale = 1,
+        health = {
+            texture = 'fubble',
+            textureColor = { r = .3, g = 0, b = 0, a = 1},
+            autoColor = false,
+            modelAnim = false,
+            modelAlpha = 0.277,
+            highlightAlpha = 0.664,
+            galaxyAlpha = 0,
+            bubblesAlpha = 0.213,
+            sparkAlpha = 1,
+            hideEmptyValue = true,
+            hideFullValue = false,
+            valueAlpha = 1,
+            topTagValue = "topdef",
+            topTagColor = {r = 1, g = 1, b = 1, a = 1},
+            bottomTagValue = "botdef",
+            bottomTagColor = { r = 0.8, g = 0.8, b = 0.8, a = 1}
+        },
+        power = {
+            texture = 'fubble',
+            textureColor = { r = .3, g = 0, b = 0, a = 1},
+            autoColor = true,
+            modelAnim = false,
+            modelAlpha = 0.277,
+            highlightAlpha = 0.664,
+            galaxyAlpha = 0,
+            bubblesAlpha = 0.213,
+            sparkAlpha = 1,
+            hideEmptyValue = true,
+            hideFullValue = false,
+            valueAlpha = 1,
+            topTagValue = "topdef",
+            topTagColor = {r = 1, g = 1, b = 1, a = 1},
+            bottomTagValue = "botdef",
+            bottomTagColor = { r = 0.8, g = 0.8, b = 0.8, a = 1}
+        }
     }
 }
 

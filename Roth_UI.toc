@@ -19,6 +19,8 @@ Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\LibSharedMedia-3.0\lib.xml
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 
+core\media.lua
+
 init.lua
 
 embeds\Roth_Config\Roth_Config.lua
@@ -55,7 +57,6 @@ modules\oUF_TotalAbsorb.lua
 modules\oUF_ArtifactPower.lua
 
 core\db.lua
-core\panel.lua
 core\slashcmd.lua
 core\lib.lua
 core\tags.lua
