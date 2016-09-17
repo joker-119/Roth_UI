@@ -591,11 +591,11 @@ local createOrb = function(self,type)
     values:SetAllPoints(orb)
     --top value
 
-    values.top = func.createFontString(values, LSM:Fetch("font", Roth_UI.db.profile.headerFont), 28 * Roth_UI.db.profile.headerScale, "THINOUTLINE")
+    values.top = func.createFontString(values, "header", 28, "THINOUTLINE")
     values.top:SetPoint("CENTER", 0, 10)
     values.top:SetTextColor(orbcfg.topTagColor.r,orbcfg.topTagColor.g,orbcfg.topTagColor.b)
     --bottom value
-    values.bottom = func.createFontString(values, LSM:Fetch("font", Roth_UI.db.profile.textFont), 16 * Roth_UI.db.profile.textScale, "THINOUTLINE")
+    values.bottom = func.createFontString(values, "text", 16, "THINOUTLINE")
     values.bottom:SetPoint("CENTER", 0, -10)
     values.bottom:SetTextColor(orbcfg.bottomTagColor.r, orbcfg.bottomTagColor.g, orbcfg.bottomTagColor.b)
     orb.values = values
