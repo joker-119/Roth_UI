@@ -252,7 +252,7 @@ local tinsert, tremove, floor, mod, format = tinsert, tremove, floor, mod, forma
     t:SetBlendMode("BLEND")
     t:SetTexture(mediapath.."combo_highlight2")
 
-    f = func.createFontString(g, cfg.font, 24, "THINOUTLINE")
+    f = func.createFontString(g, "text", 24, "THINOUTLINE")
     f:SetPoint("CENTER", 0, 0)
     f:SetTextColor(0.8,0.8,0.8)
     self:Tag(f, "[diablo:altpower]")
@@ -661,11 +661,11 @@ end
     c.bg:SetAllPoints(c)
     c.bg:SetVertexColor(f.cfg.castbar.color.bg.r,f.cfg.castbar.color.bg.g,f.cfg.castbar.color.bg.b,f.cfg.castbar.color.bg.a)
 
-    c.Text =  func.createFontString(c, cfg.font, f.cfg.castbar.TextSize, "THINOUTLINE")
+    c.Text =  func.createFontString(c, "header", f.cfg.castbar.TextSize, "THINOUTLINE")
     c.Text:SetPoint("LEFT", 5, 0)
     c.Text:SetJustifyH("LEFT")
 
-    c.Time =  func.createFontString(c, cfg.font, f.cfg.castbar.TextSize, "THINOUTLINE")
+    c.Time =  func.createFontString(c, "text", f.cfg.castbar.TextSize, "THINOUTLINE")
     c.Time:SetPoint("RIGHT", -2, 0)
 
     c.Text:SetPoint("RIGHT", -50, 0)
@@ -747,7 +747,7 @@ end
 
   --allows frames to become movable but frames can be locked or set to default positions
   func.applyDragFunctionality = function(f,special)
-    --[[--save the default position
+    --save the default position
     local getPoint = function(self)
       local pos = {}
       pos.a1, pos.af, pos.a2, pos.x, pos.y = self:GetPoint()
@@ -792,12 +792,10 @@ end
     end
     --print(f:GetName())
     --print(f:IsUserPlaced())
-    ]]--
   end
 
   --simple frame movement
   func.simpleDragFunc = function(f)
---[[
     f:SetHitRectInsets(-15,-15,-15,-15)
     f:SetClampedToScreen(true)
     f:SetMovable(true)
@@ -810,7 +808,6 @@ end
     --f:SetScript("OnDragStart", function(s) if IsAltKeyDown() and IsShiftKeyDown() then s:StartMoving() end end)
     f:SetScript("OnDragStart", function(s) s:StartMoving() end)
     f:SetScript("OnDragStop", function(s) s:StopMovingOrSizing() end)
-]]--
   end
 
   --create icon func

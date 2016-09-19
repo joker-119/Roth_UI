@@ -108,13 +108,13 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self.Health, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
+    local name = func.createFontString(self.Health, "header", self.cfg.misc.NameFontSize, "THINOUTLINE")
 	name:SetPoint("BOTTOM", self, "TOP", 0, -7)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
 	self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, self.cfg.health.fontSize, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, "text", self.cfg.health.fontSize, "THINOUTLINE")
     hpval:SetPoint(self.cfg.health.point, self.cfg.health.x,self.cfg.health.y)
 
     self:Tag(name, "[diablo:name]")
