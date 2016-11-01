@@ -127,8 +127,8 @@ end
 
 function Roth_UI:SkinChats()
     --hide the friend micro button
-    FriendsMicroButton:HookScript("OnShow", FriendsMicroButton.Hide)
-    FriendsMicroButton:Hide()
+    QuickJoinToastButton:HookScript("OnShow", QuickJoinToastButton.Hide)
+    QuickJoinToastButton:Hide()
 
     --don't cut the toastframe
     BNToastFrame:SetClampedToScreen(true)

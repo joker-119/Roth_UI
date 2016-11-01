@@ -351,14 +351,14 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, "header", 12, "THINOUTLINE")
+    local name = func.createFontString(self, "header", 12, "THINOUTLINE", "TOOLTIP")
     name:SetPoint("BOTTOM", self, "TOP", 0, -14)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     --name:SetJustifyH("LEFT")
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, "text", 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, "text", 11, "THINOUTLINE", "TOOLTIP")
     hpval:SetPoint("RIGHT", -2,0)
 
     self:Tag(name, "[diablo:name]")
@@ -451,19 +451,19 @@ Roth_UI:ListenForLoaded(function()
     raidDragFrame:SetSize(50,50)
     raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,cfg.units.raid.pos.y)
 	if i == 2 then
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-250)
-	elseif i == 3 then
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-250*2)
-	elseif i == 4 then
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-250*3)
-	elseif i == 5 then
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,cfg.units.raid.pos.y)
-	elseif i == 6 then
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-250)
-	elseif i == 7 then
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-250*2)
-	elseif i == 8 then
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-250*3)
+	elseif i == 3 then 
+	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310)
+	elseif i == 4 then 
+	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310)
+	elseif i == 5 then 
+	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310*2)	
+	elseif i == 6 then 
+	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310*2)
+	elseif i == 7 then 
+	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310*3)
+	elseif i == 8 then 
+	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310*3)
 
 	end
     func.applyDragFunctionality(raidDragFrame)
