@@ -43,8 +43,8 @@ if not cfg.embeds.rChat then return end
 
 
   --hide the friend micro button
-  FriendsMicroButton:HookScript("OnShow", FriendsMicroButton.Hide)
-  FriendsMicroButton:Hide()
+  QuickJoinToastButton:HookScript("OnShow", QuickJoinToastButton.Hide)
+  QuickJoinToastButton:Hide()
 
   --don't cut the toastframe
   BNToastFrame:SetClampedToScreen(true)
