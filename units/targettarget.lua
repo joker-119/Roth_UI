@@ -1,25 +1,25 @@
 
-  --get the addon namespace
-  local addon, ns = ...
+--get the addon namespace
+local addon, ns = ...
+local addonName, Roth_UI = ...
+--get oUF namespace (just in case needed)
+local oUF = ns.oUF or oUF
 
-  --get oUF namespace (just in case needed)
-  local oUF = ns.oUF or oUF
+--get the config
+local cfg = ns.cfg
 
-  --get the config
-  local cfg = ns.cfg
+--get the functions
+local func = ns.func
 
-  --get the functions
-  local func = ns.func
+--get the unit container
+local unit = ns.unit
 
-  --get the unit container
-  local unit = ns.unit
+---------------------------------------------
+-- UNIT SPECIFIC FUNCTIONS
+---------------------------------------------
 
-  ---------------------------------------------
-  -- UNIT SPECIFIC FUNCTIONS
-  ---------------------------------------------
-
-  --init parameters
-  local initUnitParameters = function(self)
+--init parameters
+local initUnitParameters = function(self)
     self:SetFrameStrata("MEDIUM")
     self:SetFrameLevel(1)
     self:SetSize(self.cfg.width, self.cfg.height)
@@ -30,17 +30,17 @@
     self:SetScript("OnLeave", UnitFrame_OnLeave)
     func.applyDragFunctionality(self)
     self:SetHitRectInsets(10,10,10,10)
-  end
+end
 
-  --actionbar background
-  local createArtwork = function(self)
+--actionbar background
+local createArtwork = function(self)
     local t = self:CreateTexture(nil,"HIGH",nil,-8)
     t:SetAllPoints(self)
     t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget")
-  end
+end
 
-  --create health frames
-  local createHealthFrame = function(self)
+--create health frames
+local createHealthFrame = function(self)
 
     local cfg = self.cfg.health
 
@@ -50,7 +50,7 @@
     h:SetPoint("LEFT",30.5,0)
     h:SetPoint("RIGHT",-30.5,0)
     h:SetPoint("BOTTOM",0,25.7)
-	h:SetFrameStrata("LOW")
+    h:SetFrameStrata("LOW")
 
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
@@ -71,10 +71,10 @@
 
     self.Health = h
     self.Health.Smooth = true
-  end
+end
 
-  --create power frames
-  local createPowerFrame = function(self)
+--create power frames
+local createPowerFrame = function(self)
     local cfg = self.cfg.power
 
     --power
@@ -98,31 +98,31 @@
     self.Power = h
     self.Power.Smooth = true
 
-  end
+end
 
-  --create health power strings
-  local createHealthPowerStrings = function(self)
+--create health power strings
+local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, 14, "THINOUTLINE")
+    local name = func.createFontString(self, "header", 14, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -13)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, "text", 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
     self:Tag(name, "[diablo:name]")
     self:Tag(hpval, self.cfg.health.tag or "")
 
-  end
+end
 
 
-  ---------------------------------------------
-  -- TARGETTARGET STYLE FUNC
-  ---------------------------------------------
+---------------------------------------------
+-- TARGETTARGET STYLE FUNC
+---------------------------------------------
 
-  local function createStyle(self)
+local function createStyle(self)
 
     --apply config to self
     self.cfg = cfg.units.targettarget
@@ -156,7 +156,7 @@
 
     --icons
     self.RaidIcon = func.createIcon(self,"BACKGROUND",20,self.Name,"BOTTOM","TOP",0,0,-1)
-	self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
+    self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
 
     --add heal prediction
     func.healPrediction(self)
@@ -164,14 +164,15 @@
     --add self to unit container (maybe access to that unit is needed in another style)
     unit.targettarget = self
 
-  end
+end
 
-  ---------------------------------------------
-  -- SPAWN TARGETTARGET UNIT
-  ---------------------------------------------
-
+---------------------------------------------
+-- SPAWN TARGETTARGET UNIT
+---------------------------------------------
+Roth_UI:ListenForLoaded(function()
   if cfg.units.targettarget.show then
     oUF:RegisterStyle("diablo:targettarget", createStyle)
     oUF:SetActiveStyle("diablo:targettarget")
     oUF:Spawn("targettarget", "Roth_UITargetTargetFrame")
   end
+end)

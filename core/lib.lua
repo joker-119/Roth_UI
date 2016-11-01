@@ -1,28 +1,30 @@
 
-  --get the addon namespace
-  local addon, ns = ...
+--get the addon namespace
+local addon, ns = ...
+local addonName, Roth_UI = ...
 
-  --get oUF namespace (just in case needed)
-  local oUF = ns.oUF or oUF
-  local LSM = LibStub("LibSharedMedia-3.0")
+--get oUF namespace (just in case needed)
+local oUF = ns.oUF or oUF
+local LSM = LibStub("LibSharedMedia-3.0")
 
-  --get the config
-  local cfg = ns.cfg
-  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
+--get the config
+local cfg = ns.cfg
+local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
+local LSM = LibStub("LibSharedMedia-3.0")
 
-  --object container
-  local func = CreateFrame("Frame")
-  ns.func = func
+--object container
+local func = CreateFrame("Frame")
+ns.func = func
 
-  ---------------------------------------------
-  -- VARIABLES
-  ---------------------------------------------
+---------------------------------------------
+-- VARIABLES
+---------------------------------------------
 
-  local tinsert, tremove, floor, mod, format = tinsert, tremove, floor, mod, format
+local tinsert, tremove, floor, mod, format = tinsert, tremove, floor, mod, format
 
-  ---------------------------------------------
-  -- FUNCTIONS
-  ---------------------------------------------
+---------------------------------------------
+-- FUNCTIONS
+---------------------------------------------
 
   --number format func
   func.numFormat = function(v)
@@ -250,7 +252,7 @@
     t:SetBlendMode("BLEND")
     t:SetTexture(mediapath.."combo_highlight2")
 
-    f = func.createFontString(g, cfg.font, 24, "THINOUTLINE")
+    f = func.createFontString(g, "text", 24, "THINOUTLINE")
     f:SetPoint("CENTER", 0, 0)
     f:SetTextColor(0.8,0.8,0.8)
     self:Tag(f, "[diablo:altpower]")
@@ -263,7 +265,7 @@
 
     --create aura watch func
 func.createAuraWatch = function(self)
- 
+
     local auras = {}
     local spellIDs
     if cfg.playerclass == "PRIEST" then --Priest
@@ -277,8 +279,8 @@ func.createAuraWatch = function(self)
             109964, -- Spirit Shell
             152118, -- Clairity of Will
         }
- 
-    elseif cfg.playerclass == "PALADIN" then --Paladin    
+
+    elseif cfg.playerclass == "PALADIN" then --Paladin
         spellIDs = {
             86273, -- Illuminated Healing
             53563, -- Beacon of Light
@@ -306,7 +308,7 @@ func.createAuraWatch = function(self)
            740, -- Tranquility
            102351, -- Cenarion Ward
          }
-           
+
     elseif cfg.playerclass == "SHAMAN" then --Shaman
         spellIDs = {
 		61295, -- Riptide
@@ -314,11 +316,11 @@ func.createAuraWatch = function(self)
     else -- Non-Healer
 	spellIDs = { }
     end
- 
+
     auras.onlyShowPresent = false
     auras.presentAlpha = 1
     auras.PostCreateIcon = func.createAuraIcon
- 
+
     -- Set any other AuraWatch settings
     auras.icons = {}
    if cfg.units.party.vertical == false then
@@ -353,7 +355,7 @@ end
 
   --update health func
   func.updateHealth = function(bar, unit, min, max)
-  
+
     local d = floor(min/max*100)
     local color
     local dead
@@ -458,18 +460,18 @@ end
 
   --create portrait func
   func.createPortrait = function(self)
-  
+
 
     local back = CreateFrame("Frame",nil,self)
     back:SetSize(self.cfg.width,self.cfg.width)
-	
+
 	if self.cfg.style == "party" then
 		if cfg.units.party.vertical == false then
 			back:SetPoint("BOTTOM", self, "TOP", 0, -35)
 		else
 			back:SetPoint("BOTTOM", self, "LEFT", 10, -38)
 		end
-	else 
+	else
 		back:SetPoint("BOTTOM", self, "TOP", 0, -35)
 	end
     self.PortraitHolder = back
@@ -559,9 +561,9 @@ end
 				gloss:SetTexture(mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
-		end	
+		end
 	end
-		
+
 	if self.cfg.vertical == true then
     self.Name:SetPoint("CENTER", 0, 0)
 	else
@@ -659,11 +661,11 @@ end
     c.bg:SetAllPoints(c)
     c.bg:SetVertexColor(f.cfg.castbar.color.bg.r,f.cfg.castbar.color.bg.g,f.cfg.castbar.color.bg.b,f.cfg.castbar.color.bg.a)
 
-    c.Text =  func.createFontString(c, cfg.font, f.cfg.castbar.TextSize, "THINOUTLINE")
+    c.Text =  func.createFontString(c, "header", f.cfg.castbar.TextSize, "THINOUTLINE")
     c.Text:SetPoint("LEFT", 5, 0)
     c.Text:SetJustifyH("LEFT")
 
-    c.Time =  func.createFontString(c, cfg.font, f.cfg.castbar.TextSize, "THINOUTLINE")
+    c.Time =  func.createFontString(c, "text", f.cfg.castbar.TextSize, "THINOUTLINE")
     c.Time:SetPoint("RIGHT", -2, 0)
 
     c.Text:SetPoint("RIGHT", -50, 0)
@@ -688,7 +690,7 @@ end
     c.highlight:SetPoint("LEFT",-35,0)
     c.highlight:SetPoint("RIGHT",35,0)
     c.highlight:SetPoint("BOTTOM",0,-24.2)
-	
+
 
     if f.cfg.style == "target" then
       c.Shield = c:CreateTexture(nil,"BACKGROUND",nil,-8)
@@ -711,12 +713,37 @@ end
   end
 
   --fontstring func
-  func.createFontString = function(f, font, size, outline,layer)
+func.createFontString = function(f, font, size, outline,layer)
+    local fontPath
+    local fontKey
+    local fontSize
+    if font == "header" then
+        fontPath = LSM:Fetch("font", Roth_UI.db.profile.headerFont)
+        fontKey = Roth_UI.db.profile.headerFont
+        fontSize = floor(size * Roth_UI.db.profile.headerScale)
+    elseif font == "text" then
+        fontPath = LSM:Fetch("font", Roth_UI.db.profile.textFont)
+        fontKey = Roth_UI.db.profile.textFont
+        fontSize = floor(size * Roth_UI.db.profile.textScale)
+    elseif font == "chat" then
+        fontPath = LSM:Fetch("font", Roth_UI.db.profile.chatFont)
+        fontKey = Roth_UI.db.profile.chatFont
+        fontSize = floor(size * Roth_UI.db.profile.chatScale)
+    else
+        fontPath = font
+        fontKey = "custom"
+        fontSize = size
+    end
     local fs = f:CreateFontString(nil, layer or "OVERLAY")
-    fs:SetFont(font, size, outline)
+    fs:SetFont(fontPath, fontSize, outline)
     fs:SetShadowColor(0,0,0,1)
+    Roth_UI:ListenForMediaChange(function(name, mediaType, key)
+        if mediaType == "font" and key == fontKey then
+            fs:SetFont(LSM:Fetch("font", fontKey), fontSize)
+        end
+    end)
     return fs
-  end
+end
 
   --allows frames to become movable but frames can be locked or set to default positions
   func.applyDragFunctionality = function(f,special)
@@ -769,7 +796,6 @@ end
 
   --simple frame movement
   func.simpleDragFunc = function(f)
-
     f:SetHitRectInsets(-15,-15,-15,-15)
     f:SetClampedToScreen(true)
     f:SetMovable(true)
@@ -778,19 +804,10 @@ end
     f:EnableMouse(true)
 
     f:RegisterForDrag("LeftButton")
-    --[[
-    f:SetScript("OnEnter", function(s)
-      GameTooltip:SetOwner(s, "ANCHOR_CURSOR")
-      GameTooltip:AddLine(s:GetName(), 0, 1, 0.5, 1, 1, 1)
-      GameTooltip:AddLine("Hold down ALT+SHIFT to drag!", 1, 1, 1, 1, 1, 1)
-      GameTooltip:Show()
-    end)
-    f:SetScript("OnLeave", function(s) GameTooltip:Hide() end)
-    ]]--
+
     --f:SetScript("OnDragStart", function(s) if IsAltKeyDown() and IsShiftKeyDown() then s:StartMoving() end end)
     f:SetScript("OnDragStart", function(s) s:StartMoving() end)
     f:SetScript("OnDragStop", function(s) s:StopMovingOrSizing() end)
-
   end
 
   --create icon func
@@ -835,9 +852,9 @@ end
   --total absorb
   func.totalAbsorb = function(self)
     if not self.cfg.totalabsorb or (self.cfg.totalabsorb and not self.cfg.totalabsorb.show) then return end
-	
+
     local w = self.Health:GetWidth()
-	
+
 	if self.cfg.style == "party" then
 		if cfg.units.party.verical == false then
 			if w == 0 then
@@ -860,12 +877,12 @@ end
     absorbBar:SetPoint("BOTTOMRIGHT", self.Health, 0, 0)
     absorbBar:SetWidth(w)
     absorbBar:SetStatusBarTexture(self.cfg.totalabsorb.texture)
-    absorbBar:SetStatusBarColor(self.cfg.totalabsorb.color.bar.r,self.cfg.totalabsorb.color.bar.g,self.cfg.totalabsorb.color.bar.b,self.cfg.totalabsorb.color.bar.a)    
+    absorbBar:SetStatusBarColor(self.cfg.totalabsorb.color.bar.r,self.cfg.totalabsorb.color.bar.g,self.cfg.totalabsorb.color.bar.b,self.cfg.totalabsorb.color.bar.a)
     absorbBar:SetReverseFill(true)
     -- Register with oUF
-    self.TotalAbsorb = absorbBar    
+    self.TotalAbsorb = absorbBar
   end
-  
+
 --Register LSM media
 LSM:Register("border", "RB border", "Interface\\AddOns\\Roth_UI\\media\\5.tga")
 LSM:Register("statusbar", "Solid", "Interface\\AddOns\\Roth_UI\\media\\RothBuffs\\Solid.tga")

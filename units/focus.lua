@@ -1,6 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
+  local addonName, Roth_UI = ...
 
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
@@ -102,13 +103,13 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, 14, "THINOUTLINE")
+    local name = func.createFontString(self, "header", 14, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -13)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, "text", 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
     self:Tag(name, "[diablo:name]")
@@ -125,7 +126,7 @@
     --apply config to self
     self.cfg = cfg.units.focus
     self.cfg.style = "focus"
-	
+
     --init
     initUnitParameters(self)
 
@@ -180,7 +181,7 @@
 
     --add heal prediction
     func.healPrediction(self)
-    
+
     --add total absorb
     func.totalAbsorb(self)
 
@@ -192,9 +193,10 @@
   ---------------------------------------------
   -- SPAWN FOCUS UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.focus.show then
     oUF:RegisterStyle("diablo:focus", createStyle)
     oUF:SetActiveStyle("diablo:focus")
     oUF:Spawn("focus", "Roth_UIFocusFrame")
   end
+end)

@@ -8,10 +8,17 @@
 
   ---------------------------------------------
 local addon, ns = ...
+local addonName, Roth_UI = ...
 local cfg = ns.cfg
+local LSM = LibStub("LibSharedMedia-3.0")
 if not cfg.embeds.rTooltip then return end
 cfg.rtooltip.backdrop = { bgFile = (mediapath.."Tooltip_Background"), edgeFile = (mediapath.."Tooltip_Border"),  tiled = false, edgeSize = 10, insets = {left=8, right=8, top=8, bottom=8} }
-  
+
+local headerFont = LSM:Fetch("font", "")
+local headerScale = 1
+local textFont = LSM:Fetch("font", "")
+local textScale = 1
+
   ---------------------------------------------
   --  VARIABLES
   ---------------------------------------------
@@ -26,11 +33,6 @@ cfg.rtooltip.backdrop = { bgFile = (mediapath.."Tooltip_Background"), edgeFile =
   ---------------------------------------------
   --  FUNCTIONS
   ---------------------------------------------
-
-  --change some text sizes
-  GameTooltipHeaderText:SetFont(cfg.font, 14, "THINOUTLINE")
-  GameTooltipText:SetFont(cfg.font, 12, "THINOUTLINE")
-  Tooltip_Small:SetFont(cfg.font, 11, "THINOUTLINE")
 
   --gametooltip statusbar
   GameTooltipStatusBar:ClearAllPoints()
@@ -71,7 +73,7 @@ cfg.rtooltip.backdrop = { bgFile = (mediapath.."Tooltip_Background"), edgeFile =
 
   -- ArtifactPowerIDs
 hooksecurefunc(GameTooltip, "SetArtifactPowerByID", function(self, id)
-    if id then 
+    if id then
     	local spellid = C_ArtifactUI.GetPowerInfo(id)
         if spellid then AddSpellIdRow(self,spellid) end
     end
@@ -233,7 +235,7 @@ end)
       end
     end
   end
-  
+
   --func TooltipOnShow
   local function TooltipOnHide(self,...)
     self:SetBackdropColor(1,1,1,1)
@@ -257,3 +259,24 @@ end)
   for idx, menu in ipairs(menues) do
     menu:SetScale(cfg.rtooltip.scale)
   end
+
+local function InitializeTooltips()
+    --change some text sizes
+    GameTooltipHeaderText:SetFont(headerFont, floor(14 * headerScale), "THINOUTLINE")
+    GameTooltipText:SetFont(textFont, floor(12 * textScale), "THINOUTLINE")
+    Tooltip_Small:SetFont(textFont, floor(11 * textScale), "THINOUTLINE")
+end
+
+Roth_UI:ListenForLoaded(function()
+    headerFont = LSM:Fetch("font", Roth_UI.db.profile.headerFont)
+    textFont = LSM:Fetch("font", Roth_UI.db.profile.textFont)
+    headerScale = Roth_UI.db.profile.headerScale
+    textScale = Roth_UI.db.profile.textScale
+    InitializeTooltips()
+end)
+
+Roth_UI:ListenForMediaChange(function(name, mediaType, key)
+    headerFont = LSM:Fetch("font", Roth_UI.db.profile.headerFont)
+    textFont = LSM:Fetch("font", Roth_UI.db.profile.textFont)
+    InitializeTooltips()
+end)

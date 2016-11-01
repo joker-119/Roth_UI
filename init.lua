@@ -11,6 +11,7 @@ LoadedHandler:SetScript("OnEvent", function(self, event, name)
   if name == "Roth_UI" then
     Roth_UI:LoadConfig()
     configLoaded = true
+	print("Roth UI Configuration loaded")
     for index, callback in pairs(loadedCallbacks) do
       callback()
     end

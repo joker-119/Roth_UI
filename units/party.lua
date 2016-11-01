@@ -1,7 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
-
+  local addonName, Roth_UI = ...
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
   local rLib = ns.rLib or rLib
@@ -108,13 +108,13 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self.Health, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
+    local name = func.createFontString(self.Health, "header", self.cfg.misc.NameFontSize, "THINOUTLINE")
 	name:SetPoint("BOTTOM", self, "TOP", 0, -7)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
 	self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, self.cfg.health.fontSize, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, "text", self.cfg.health.fontSize, "THINOUTLINE")
     hpval:SetPoint(self.cfg.health.point, self.cfg.health.x,self.cfg.health.y)
 
     self:Tag(name, "[diablo:name]")
@@ -161,15 +161,15 @@
         else
 			if self.cfg.vertical then
 				self:SetHitRectInsets(-35,0, -17, 0)
-			else 
+			else
 				self:SetHitRectInsets(0,0,-100,0)
 			end
-        end      
+        end
         self.PortraitHolder:SetScript("OnEvent", function(...)
           self.PortraitHolder:UnregisterEvent("PLAYER_REGEN_ENABLED")
           self:SetHitRectInsets(0, 0, -100, 0)
         end)
-      end      
+      end
     end
 
     --auras
@@ -214,7 +214,7 @@
 
     --add heal prediction
     func.healPrediction(self)
-    
+
     --add total absorb
     func.totalAbsorb(self)
 
@@ -222,19 +222,19 @@
     self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", func.checkThreat)
 
   end
-  
+
 
   ---------------------------------------------
   -- SPAWN PARTY UNIT
   ---------------------------------------------
-
+Roth_UI:ListenForLoaded(function()
   if cfg.units.party.show then
     oUF:RegisterStyle("diablo:party", createStyle)
     oUF:SetActiveStyle("diablo:party")
 
     local attr = cfg.units.party.attributes
-	
-	
+
+
 
     local partyDragFrame = CreateFrame("Frame", "Roth_UIPartyDragFrame", UIParent)
     partyDragFrame:SetSize(50,50)
@@ -278,3 +278,4 @@
     party:SetPoint("TOPLEFT",partyDragFrame,0,0)
   end
  end
+end)
