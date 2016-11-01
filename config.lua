@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
-  --  Version 1.9.15
+  --  Version 1.9.14a
   ---------------------------------------------
 
   --get the addon namespace
@@ -615,7 +615,7 @@
       alpha = {
         notinrange = 0.4,
       },
-      scale = 1.2,
+      scale = 1,
       pos = { a1 = "TOPLEFT", a2 = "TOPLEFT", af = "UIParent", x = 5, y = -5 },
       health = {
         texture = (mediapath.."statusbar3"),

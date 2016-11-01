@@ -712,7 +712,7 @@ end
 
   --fontstring func
   func.createFontString = function(f, font, size, outline,layer)
-    local fs = f:CreateFontString(nil, layer or "TOOLTIP")
+    local fs = f:CreateFontString(nil, layer or "OVERLAY")
     fs:SetFont(font, size, outline)
     fs:SetShadowColor(0,0,0,1)
     return fs
