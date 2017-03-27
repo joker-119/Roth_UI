@@ -1,7 +1,7 @@
 
   --get the addon namespace
   local addon, ns = ...
-  local addonName, Roth_UI = ...
+
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
 
@@ -99,13 +99,13 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, "header", 14, "THINOUTLINE")
+    local name = func.createFontString(self, cfg.font, 14, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -13)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, "text", 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
     self:Tag(name, "[diablo:name]")
@@ -169,10 +169,9 @@
   ---------------------------------------------
   -- SPAWN PETTARGET UNIT
   ---------------------------------------------
-Roth_UI:ListenForLoaded(function()
+
   if cfg.units.pettarget.show then
     oUF:RegisterStyle("diablo:pettarget", createStyle)
     oUF:SetActiveStyle("diablo:pettarget")
     oUF:Spawn("pettarget", "Roth_UIPetTargetFrame")
   end
-end)

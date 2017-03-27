@@ -1,4 +1,4 @@
-## Interface: 710000
+## Interface: 715000
 ## Author: Galaxy
 ## Title: Roth UI
 ## Notes: Galaxy's oUF layout with Diablo flavor!
@@ -8,6 +8,7 @@
 
 embeds\oUF\oUF.xml
 embeds\rLib\rLib.xml
+modules\oUF_DebuffHighlight.lua
 
 config.lua
 charspecific.lua
@@ -18,8 +19,6 @@ Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\LibSharedMedia-3.0\lib.xml
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
-
-core\media.lua
 
 init.lua
 
@@ -43,7 +42,6 @@ modules\oUF_acharges.lua
 modules\oUF_AuraWatch.lua
 modules\oUF_BurningEmbers.lua
 modules\oUF_ComboPoints.lua
-modules\oUF_DebuffHighlight.lua
 modules\oUF_DemonicFury.lua
 modules\oUF_Experience.lua
 modules\oUF_Harmony.lua
@@ -57,6 +55,7 @@ modules\oUF_TotalAbsorb.lua
 modules\oUF_ArtifactPower.lua
 
 core\db.lua
+core\panel.lua
 core\slashcmd.lua
 core\lib.lua
 core\tags.lua

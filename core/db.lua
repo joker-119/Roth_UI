@@ -32,7 +32,7 @@
       ["HEALTH"] = {
         --filling
         filling = {
-          --texture     = "Interface\\AddOns\\Roth_UI\\media\\orb_filling16",
+          texture     = "Interface\\AddOns\\Roth_UI\\media\\orb_filling16",
           color       = { r = .3, g = 0, b = 0, },
           colorAuto   = false, --automatic coloring based on class/powertype
         },
@@ -254,13 +254,13 @@
 
   --load character data
   db.loadCharacterData = function()
-    --db.char = Roth_UI_DB_CHAR
-    --if db.char.reload then
-     -- ns.panel:Show()
-      --db.char.reload = false
-    --end
+    db.char = Roth_UI_DB_CHAR
+    if db.char.reload then
+      ns.panel:Show()
+      db.char.reload = false
+    end
     --update the orb view
-    --ns.panel.updateOrbView()
+    ns.panel.updateOrbView()
   end
 
   ---------------------------------------------
