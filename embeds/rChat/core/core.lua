@@ -4,96 +4,87 @@
   -----------------------------
 
   --get the addon namespace
-  local addon, ns = ...
-  local cfg = ns.cfg
+local addon, ns = ...
+local cfg = ns.cfg
+local addonName, Roth_UI = ...
+local LSM = LibStub("LibSharedMedia-3.0")
+local chatFont = LSM:Fetch("font", "")
+local chatScale = 1
+
 if not cfg.embeds.rChat then return end
-  --new fadein func
-  FCF_FadeInChatFrame = function(self)
+
+--new fadein func
+FCF_FadeInChatFrame = function(self)
     self.hasBeenFaded = true
-  end
+end
 
-  --new fadeout func
-  FCF_FadeOutChatFrame = function(self)
+--new fadeout func
+FCF_FadeOutChatFrame = function(self)
     self.hasBeenFaded = false
-  end
+end
 
-  FCFTab_UpdateColors = function(self, selected)
+FCFTab_UpdateColors = function(self, selected)
     if (selected) then
-      self:SetAlpha(cfg.selectedTabAlpha)
-      self:GetFontString():SetTextColor(unpack(cfg.selectedTabColor))
-      self.leftSelectedTexture:Show()
-      self.middleSelectedTexture:Show()
-      self.rightSelectedTexture:Show()
+        self:SetAlpha(cfg.selectedTabAlpha)
+        self:GetFontString():SetTextColor(unpack(cfg.selectedTabColor))
+        self.leftSelectedTexture:Show()
+        self.middleSelectedTexture:Show()
+        self.rightSelectedTexture:Show()
     else
-      self:GetFontString():SetTextColor(unpack(cfg.notSelectedTabColor))
-      self:SetAlpha(cfg.notSelectedTabAlpha)
-      self.leftSelectedTexture:Hide()
-      self.middleSelectedTexture:Hide()
-      self.rightSelectedTexture:Hide()
+        self:GetFontString():SetTextColor(unpack(cfg.notSelectedTabColor))
+        self:SetAlpha(cfg.notSelectedTabAlpha)
+        self.leftSelectedTexture:Hide()
+        self.middleSelectedTexture:Hide()
+        self.rightSelectedTexture:Hide()
     end
-  end
+end
 
 
-  --add more chat font sizes
-  for i = 1, 23 do
+--add more chat font sizes
+for i = 1, 23 do
     CHAT_FONT_HEIGHTS[i] = i+7
-  end
+end
 
-  --hide the menu button
-
-
-  --hide the friend micro button
-  QuickJoinToastButton:HookScript("OnShow", QuickJoinToastButton.Hide)
-  QuickJoinToastButton:Hide()
-
-  --don't cut the toastframe
-  BNToastFrame:SetClampedToScreen(true)
-  BNToastFrame:SetClampRectInsets(-15,15,15,-15)
-
-  ChatFontNormal:SetFont(cfg.chat.font, 12, "THINOUTLINE")
-  ChatFontNormal:SetShadowOffset(1,-1)
-  ChatFontNormal:SetShadowColor(0,0,0,0.6)
+--hide the menu button
 
   -----------------------------
   -- FUNCTIONS
   -----------------------------
 
-  local function skinChat(self)
-    if not self or (self and self.skinApplied) then return end
-
+local function skinChat(self)
     local name = self:GetName()
 
     --chat frame resizing
     self:SetClampRectInsets(0, 0, 0, 0)
     self:SetMaxResize(UIParent:GetWidth(), UIParent:GetHeight())
     self:SetMinResize(100, 50)
-	self:SetFrameStrata("HIGH")
+    self:SetFrameStrata("HIGH")
 
     --chat fading
     --self:SetFading(false)
 
     --set font, outline and shadow for chat text
-    self:SetFont(cfg.chat.font, 15, "THINOUTLINE")
+    self:SetFont(chatFont, floor(15 * chatScale), "THINOUTLINE")
     self:SetShadowOffset(1,-1)
     self:SetShadowColor(0,0,0,.5)
 
-	--Skin Buttons
-	ChatFrameMenuButton:SetNormalTexture(mediapath.."ChatButtons_36x36_ChatMenu")
-	ChatFrameMenuButton:SetDisabledTexture(mediapath.."ChatButtons_36x36_ChatMenuDisabled", "BLEND")
-	ChatFrameMenuButton:SetPushedTexture(mediapath.."ChatButtons_36x36_ChatMenuDisabled","BLEND")
-	ChatFrameMenuButton:SetHighlightTexture(mediapath.."ChatButtons_36x36_ChatMenuHighlight", "BLEND")
-	_G[name.."ButtonFrameUpButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Up")
-	_G[name.."ButtonFrameUpButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_UpDisabled", "BLEND")
-	_G[name.."ButtonFrameUpButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_UpDisabled", "BLEND")
-	_G[name.."ButtonFrameUpButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_UpHighlight", "BLEND")
-	_G[name.."ButtonFrameDownButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Down")
-	_G[name.."ButtonFrameDownButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_DownDisabled", "BLEND")
-	_G[name.."ButtonFrameDownButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_DownDisabled", "BLEND")
-	_G[name.."ButtonFrameDownButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_DownHighlight", "BLEND")
-	_G[name.."ButtonFrameBottomButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Bottom")
-	_G[name.."ButtonFrameBottomButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
-	_G[name.."ButtonFrameBottomButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
-	_G[name.."ButtonFrameBottomButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_BottomHighlight", "BLEND")
+    --Skin Buttons
+    ChatFrameMenuButton:SetNormalTexture(mediapath.."ChatButtons_36x36_ChatMenu")
+    ChatFrameMenuButton:SetDisabledTexture(mediapath.."ChatButtons_36x36_ChatMenuDisabled", "BLEND")
+    ChatFrameMenuButton:SetPushedTexture(mediapath.."ChatButtons_36x36_ChatMenuDisabled","BLEND")
+    ChatFrameMenuButton:SetHighlightTexture(mediapath.."ChatButtons_36x36_ChatMenuHighlight", "BLEND")
+    _G[name.."ButtonFrameUpButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Up")
+    _G[name.."ButtonFrameUpButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_UpDisabled", "BLEND")
+    _G[name.."ButtonFrameUpButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_UpDisabled", "BLEND")
+    _G[name.."ButtonFrameUpButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_UpHighlight", "BLEND")
+    _G[name.."ButtonFrameDownButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Down")
+    _G[name.."ButtonFrameDownButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_DownDisabled", "BLEND")
+    _G[name.."ButtonFrameDownButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_DownDisabled", "BLEND")
+    _G[name.."ButtonFrameDownButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_DownHighlight", "BLEND")
+    _G[name.."ButtonFrameBottomButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Bottom")
+    _G[name.."ButtonFrameBottomButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
+    _G[name.."ButtonFrameBottomButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
+    _G[name.."ButtonFrameBottomButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_BottomHighlight", "BLEND")
 
     --editbox skinning
     _G[name.."EditBoxLeft"]:Hide()
@@ -112,58 +103,86 @@ if not cfg.embeds.rChat then return end
     --chat tab skinning
     local tab = _G[name.."Tab"]
     local tabFs = tab:GetFontString()
-    tabFs:SetFont(cfg.chat.font, 11, "THINOUTLINE")
+    tabFs:SetFont(chatFont, floor(11 * chatScale), "THINOUTLINE")
     tabFs:SetShadowOffset(1,-1)
     tabFs:SetShadowColor(0,0,0,0.6)
     tabFs:SetTextColor(unpack(cfg.selectedTabColor))
     if cfg.hideChatTabBackgrounds then
-      _G[name.."TabLeft"]:SetTexture(nil)
-      _G[name.."TabMiddle"]:SetTexture(nil)
-      _G[name.."TabRight"]:SetTexture(nil)
-      _G[name.."TabSelectedLeft"]:SetTexture(nil)
-      _G[name.."TabSelectedMiddle"]:SetTexture(nil)
-      _G[name.."TabSelectedRight"]:SetTexture(nil)
-      --_G[name.."TabGlow"]:SetTexture(nil) --do not hide this texture, it will glow when a whisper hits a hidden chat
-      --_G[name.."TabHighlightLeft"]:SetTexture(nil)
-      --_G[name.."TabHighlightMiddle"]:SetTexture(nil)
-      --_G[name.."TabHighlightRight"]:SetTexture(nil)
+        _G[name.."TabLeft"]:SetTexture(nil)
+        _G[name.."TabMiddle"]:SetTexture(nil)
+        _G[name.."TabRight"]:SetTexture(nil)
+        _G[name.."TabSelectedLeft"]:SetTexture(nil)
+        _G[name.."TabSelectedMiddle"]:SetTexture(nil)
+        _G[name.."TabSelectedRight"]:SetTexture(nil)
+        --_G[name.."TabGlow"]:SetTexture(nil) --do not hide this texture, it will glow when a whisper hits a hidden chat
+        --_G[name.."TabHighlightLeft"]:SetTexture(nil)
+        --_G[name.."TabHighlightMiddle"]:SetTexture(nil)
+        --_G[name.."TabHighlightRight"]:SetTexture(nil)
     end
     tab:SetAlpha(cfg.selectedTabAlpha)
 
     self.skinApplied = true
-  end
+end
 
-  -----------------------------
-  -- CALL
-  -----------------------------
 
-  --chat skinning
-  for i = 1, NUM_CHAT_WINDOWS do
-    skinChat(_G["ChatFrame"..i])
-  end
+function Roth_UI:SkinChats()
+    --hide the friend micro button
+    QuickJoinToastButton:HookScript("OnShow", QuickJoinToastButton.Hide)
+    QuickJoinToastButton:Hide()
 
-  --skin temporary chats
-  hooksecurefunc("FCF_OpenTemporaryWindow", function()
-    for _, chatFrameName in pairs(CHAT_FRAMES) do
-      local frame = _G[chatFrameName]
-      if (frame.isTemporary) then
-        skinChat(frame)
-      end
-    end
-  end)
+    --don't cut the toastframe
+    BNToastFrame:SetClampedToScreen(true)
+    BNToastFrame:SetClampRectInsets(-15,15,15,-15)
 
-  --combat log custom hider
-  local function fixStuffOnLogin()
+    ChatFontNormal:SetFont(chatFont, floor(12 * chatScale), "THINOUTLINE")
+    ChatFontNormal:SetShadowOffset(1,-1)
+    ChatFontNormal:SetShadowColor(0,0,0,0.6)
+
     for i = 1, NUM_CHAT_WINDOWS do
-      local name = "ChatFrame"..i
-      local tab = _G[name.."Tab"]
-      tab:SetAlpha(cfg.selectedTabAlpha)
+        skinChat(_G["ChatFrame"..i])
+    end
+end
+-----------------------------
+-- CALL
+-----------------------------
+
+--skin temporary chats
+hooksecurefunc("FCF_OpenTemporaryWindow", function()
+    for _, chatFrameName in pairs(CHAT_FRAMES) do
+        local frame = _G[chatFrameName]
+        if (frame.isTemporary) then
+            skinChat(frame)
+        end
+    end
+end)
+
+--combat log custom hider
+local function fixStuffOnLogin()
+    for i = 1, NUM_CHAT_WINDOWS do
+        local name = "ChatFrame"..i
+        local tab = _G[name.."Tab"]
+        tab:SetAlpha(cfg.selectedTabAlpha)
     end
     CombatLogQuickButtonFrame_Custom:HookScript("OnShow", CombatLogQuickButtonFrame_Custom.Hide)
     CombatLogQuickButtonFrame_Custom:Hide()
     CombatLogQuickButtonFrame_Custom:SetHeight(0)
-  end
+end
 
-  local a = CreateFrame("Frame")
-  a:RegisterEvent("PLAYER_LOGIN")
-  a:SetScript("OnEvent", fixStuffOnLogin)
+local a = CreateFrame("Frame")
+a:RegisterEvent("PLAYER_LOGIN")
+a:SetScript("OnEvent", fixStuffOnLogin)
+
+
+Roth_UI:ListenForLoaded(function()
+    chatFont = LSM:Fetch("font", Roth_UI.db.profile.chatFont)
+    chatScale = Roth_UI.db.profile.chatScale
+    Roth_UI:SkinChats()
+end)
+
+Roth_UI:ListenForMediaChange(function(name, mediaType, key)
+    if mediaType == "font" and key == Roth_UI.db.profile.chatFont then
+        chatFont = LSM:Fetch("font", Roth_UI.db.profile.chatFont)
+        --chat skinning
+        Roth_UI:SkinChats()
+    end
+end)

@@ -5,10 +5,12 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy - 2016
+  --  Version 1.9.15a
   ---------------------------------------------
 
   --get the addon namespace
   local addon, ns = ...
+  local addonName, Roth_UI = ...
   local oUF = ns.oUF
   mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
@@ -25,7 +27,7 @@
   ---------------------------------------------
   cfg.embeds = {
 	rChat = true, -- Simple chat frame
-	rActionBarStyler = true, -- Simple actionbar styler for Roth UI 
+	rActionBarStyler = true, -- Simple actionbar styler for Roth UI
 	rButtonTemplate = true, -- Simple button skinning mod
 	rMinimap = true, -- Simplistic square minimap
 	rNamePlates = true, -- Diablo style Nameplates
@@ -100,7 +102,7 @@
       },
       castbar = {
         show = true,
-		TextSize = 11,
+		    TextSize = 11,
         hideDefault = true, --if you hide the Roth_UI castbar, should the Blizzard castbar be shown?
         latency = true,
         texture = (mediapath.."statusbar3"),
@@ -165,7 +167,7 @@
           fadeOut         = {time = 0.3, alpha = 0.2},
         },
       },
-	  arcbar = {
+	    arcbar = {
         show = true,
         scale = 0.40,
         color = {r = 0.14, g = 0.56, b = .9, },
@@ -199,12 +201,12 @@
           texture = (mediapath.."statusbar2"),
           scale = 1,
       },
-	  ArtifactPower = {
-		show = true,
-			pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 15 },
-			texture = (mediapath.."statusbar2"),
-			scale = 1,
-	  },
+	    ArtifactPower = {
+		    show = true,
+			  pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 15 },
+			  texture = (mediapath.."statusbar2"),
+			  scale = 1,
+	    },
       art = {
         actionbarbackground = {
           show = true,
@@ -424,7 +426,7 @@
     focus = {
       show = true,
 	  width = 128,
-      height = 64,	  
+      height = 64,
       scale = 0.85,
       pos = { a1 = "RIGHT", a2 = "RIGHT", af = "UIParent", x = -30, y = 40 },
       aurawatch = {
@@ -644,12 +646,11 @@
           --chimaeron
           89084 , --skull icon chimaeron <10k life
         },
-        show            = true,
+        show            = false,
         disableCooldown = true,
-        showBuffType    = true,
-        showDebuffType  = true,
-		doNotUseCustomFilter = false,
-        size            = 18,
+        showBuffType    = false,
+        showDebuffType  = false,
+        size            = 12,
         num             = 5,
         spacing         = 3,
         pos = { a1 = "CENTER", x = 0, y = -9},
@@ -980,29 +981,29 @@
     },
   }
 
-  ----------------------------------------
-  -- frame movement
-  ----------------------------------------
+----------------------------------------
+-- frame movement
+----------------------------------------
 
-  --setting this to false will use the default frame positions, true allows moving
-  cfg.framesUserplaced = true
+--setting this to false will use the default frame positions, true allows moving
+cfg.framesUserplaced = true
 
-  --setting this to true will lock the frames in place, false unlocks them
-  cfg.framesLocked = true
+--setting this to true will lock the frames in place, false unlocks them
+cfg.framesLocked = true
 
-  ----------------------------------------
-  -- player specific data
-  ----------------------------------------
+----------------------------------------
+-- player specific data
+----------------------------------------
 
-  --player stuff
-  cfg.playername  = UnitName("player")
-  cfg.playerclass = select(2,UnitClass("player"))
-  cfg.playercolor = RAID_CLASS_COLORS[cfg.playerclass]
-  cfg.playerspec = GetSpecialization()
+--player stuff
+cfg.playername  = UnitName("player")
+cfg.playerclass = select(2,UnitClass("player"))
+cfg.playercolor = RAID_CLASS_COLORS[cfg.playerclass]
+cfg.playerspec = GetSpecialization()
 
-  ----------------------------------------
-  -- Embeds
-  ----------------------------------------
+----------------------------------------
+-- Embeds
+----------------------------------------
 --rTooltip
 cfg.rtooltip = {
 	scale = 1.15,
@@ -1017,56 +1018,57 @@ cfg.tracker = {
 	size = { 260, 450 },
 }
    --rInfostrings
- cfg.frame = {
-    scale           = 0.95,
-    pos             = { a1 = "TOP", af = Minimap, a2 = "BOTTOM", x = 0, y = -25 },
-    userplaced      = true, --want to place the bar somewhere else?
-  }
-  cfg.showXpRep     = true --show xp or reputation as string
-  cfg.showMail      = false --show mail as text
-  
-  --rChat
-  cfg.hideChatTabBackgrounds  = true
-  cfg.selectedTabColor        = {1,0.75,0}
-  cfg.selectedTabAlpha        = 1
-  cfg.notSelectedTabColor     = {0.5,0.5,0.5}
-  cfg.notSelectedTabAlpha     = 0.3
-  
-  --rMinimap
-  cfg.minimap = {
+cfg.frame = {
+	scale           = 0.95,
+	pos             = { a1 = "TOP", af = Minimap, a2 = "BOTTOM", x = 0, y = -25 },
+	userplaced      = true, --want to place the bar somewhere else?
+}
+
+cfg.showXpRep     = true --show xp or reputation as string
+cfg.showMail      = false --show mail as text
+
+--rChat
+cfg.hideChatTabBackgrounds  = true
+cfg.selectedTabColor        = {1,0.75,0}
+cfg.selectedTabAlpha        = 1
+cfg.notSelectedTabColor     = {0.5,0.5,0.5}
+cfg.notSelectedTabAlpha     = 0.3
+
+--rMinimap
+cfg.minimap = {
 	scale = 1,
 	point = {"TOPRIGHT", 0, -18},
-  }
+}
 
-  
+
   ----------------------------------------
   -- other
   ----------------------------------------
-  
-  cfg.powercolors = PowerBarColor
-  cfg.powercolors["MANA"] = { r = 0, g = 0.4, b = 1 }
-  --fix the oUF mana color
-  oUF.colors.power["MANA"] = {0, 0.4, 1}
 
-  --font
-	if locale == "enUS" or locale == "enGB" then
-		cfg.font = (mediapath.."Cracked-Narrow.ttf")
-		cfg.chat = {
+cfg.powercolors = PowerBarColor
+cfg.powercolors["MANA"] = { r = 0, g = 0.4, b = 1 }
+--fix the oUF mana color
+oUF.colors.power["MANA"] = {0, 0.4, 1}
+
+--font
+if locale == "enUS" or locale == "enGB" then
+	cfg.font = (mediapath.."Cracked-Narrow.ttf")
+	cfg.chat = {
 		font = (mediapath.."Cracked-Narrow.ttf"),
-		}
-	else
-		cfg.font = STANDARD_TEXT_FONT
-		cfg.chat = {
+	}
+else
+	cfg.font = STANDARD_TEXT_FONT
+	cfg.chat = {
 		font = STANDARD_TEXT_FONT,
-		}
-	end
+	}
+end
 
-  --backdrop
-  cfg.backdrop = {
-    bgFile = (mediapath.."Tooltip_Background"),
-    edgeFile = (mediapath.."Tooltip_Border"),
-    tile = true,
-    tileSize = 16,
-    edgeSize = 16,
-    insets = { left = 4, right = 4, top = 4, bottom = 4 },
-  }
+--backdrop
+cfg.backdrop = {
+	bgFile = (mediapath.."Tooltip_Background"),
+	edgeFile = (mediapath.."Tooltip_Border"),
+	tile = true,
+	tileSize = 16,
+	edgeSize = 16,
+	insets = { left = 4, right = 4, top = 4, bottom = 4 },
+}
