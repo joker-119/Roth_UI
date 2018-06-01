@@ -1,13 +1,15 @@
-
 local parent, ns = ...
 local oUF = ns.oUF or oUF
 
-local GetComboPoints = GetComboPoints
-if (select(2, GetTalentTierInfo(3,1))) == 1 then 
-	MAX_COMBO_POINTS = 6
-else
-	MAX_COMBO_POINTS = 5
-end
+
+	if (select(2, GetTalentTierInfo(3,1))) == 2 then 
+		MAX_COMBO_POINTS = 6
+	else
+		MAX_COMBO_POINTS = 5
+	end
+
+
+
 local class = select(2, UnitClass("player"))
 
 local Update = function(self, event, unit, powerType)
@@ -27,6 +29,7 @@ local Update = function(self, event, unit, powerType)
   else
     bar:Show()
   end
+
 
   for i=1, MAX_COMBO_POINTS do
     local orb = self.ComboPoints[i]
@@ -63,8 +66,13 @@ local Enable = function(self)
   if(element) then
     element.__owner = self
     element.ForceUpdate = ForceUpdate
-    self:RegisterEvent("UNIT_COMBO_POINTS", Path, true) --make this unitless, some vehicles have combo points
     self:RegisterEvent("UNIT_POWER_FREQUENT", Path)
+    self:RegisterEvent("UNIT_DISPLAYPOWER", Path)
+    self:RegisterEvent("PLAYER_TALENT_UPDATE", Visibility, true)
+    self:RegisterEvent("SPELLS_CHANGED", Visibility, true)
+    self:RegisterEvent("UPDATE_OVERRIDE_ACTIONBAR", Visibility, true)
+    self:RegisterEvent("UNIT_ENTERED_VEHICLE", Visibility)
+    self:RegisterEvent("UNIT_EXITED_VEHICLE", Visibility)
     return true
   end
 end
@@ -72,8 +80,13 @@ end
 local Disable = function(self)
   local element = self.ComboPoints
   if(element) then
-    self:UnregisterEvent("UNIT_COMBO_POINTS", Path)
     self:UnregisterEvent("UNIT_POWER_FREQUENT", Path)
+    self:UnregisterEvent("UNIT_DISPLAYPOWER", Path)
+    self:UnregisterEvent("PLAYER_TALENT_UPDATE", Visibility)
+    self:UnregisterEvent("SPELLS_CHANGED", Visibility)
+    self:UnregisterEvent("UPDATE_OVERRIDE_ACTIONBAR", Visibility)
+    self:UnregisterEvent("UNIT_ENTERED_VEHICLE", Visibility)
+    self:UnregisterEvent("UNIT_EXITED_VEHICLE", Visibility)
   end
 end
 

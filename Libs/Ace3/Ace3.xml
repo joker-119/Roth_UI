@@ -1,0 +1,48 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+	<Script file="LibStub/LibStub.lua"/>
+	<Script file="CallbackHandler-1.0\CallbackHandler-1.0.lua"/>
+	<Script file="AceAddon-3.0\AceAddon-3.0.lua"/>
+	<Script file="AceEvent-3.0\AceEvent-3.0.lua"/>
+	<Script file="AceTimer-3.0\AceTimer-3.0.lua"/>
+	<Script file="AceBucket-3.0\AceBucket-3.0.lua"/>
+	<Script file="AceHook-3.0\AceHook-3.0.lua"/>
+	<Script file="AceDB-3.0\AceDB-3.0.lua"/>
+	<Script file="AceDBOptions-3.0\AceDBOptions-3.0.lua"/>
+	<Script file="AceLocale-3.0\AceLocale-3.0.lua"/>
+	<Script file="AceConsole-3.0\AceConsole-3.0.lua"/>
+	<Script file="AceGUI-3.0\AceGUI-3.0.lua"/>
+	<!-- Container -->
+	<Script file="AceGUI-3.0\widgets\AceGUIContainer-BlizOptionsGroup.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIContainer-DropDownGroup.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIContainer-Frame.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIContainer-InlineGroup.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIContainer-ScrollFrame.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIContainer-SimpleGroup.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIContainer-TabGroup.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIContainer-TreeGroup.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIContainer-Window.lua"/>
+	<!-- Widgets -->
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-Button.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-CheckBox.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-ColorPicker.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-DropDown.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-DropDown-Items.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-EditBox.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-Heading.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-Icon.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-InteractiveLabel.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-Keybinding.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-Label.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-MultiLineEditBox.lua"/>
+	<Script file="AceGUI-3.0\widgets\AceGUIWidget-Slider.lua"/>
+	<Script file="AceConfig-3.0\AceConfigRegistry-3.0\AceConfigRegistry-3.0.lua"/>
+	<Script file="AceConfig-3.0\AceConfigCmd-3.0\AceConfigCmd-3.0.lua"/>
+	<Script file="AceConfig-3.0\AceConfigDialog-3.0\AceConfigDialog-3.0.lua"/>
+	<Script file="AceConfig-3.0\AceConfig-3.0.lua"/>
+	<Script file="AceComm-3.0\ChatThrottleLib.lua"/>
+	<Script file="AceComm-3.0\AceComm-3.0.lua"/>
+	<Script file="AceTab-3.0\AceTab-3.0.lua"/>
+	<Script file="AceSerializer-3.0\AceSerializer-3.0.lua"/>
+	<Script file="Ace3.lua"/>
+</Ui>

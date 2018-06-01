@@ -17,17 +17,16 @@ if not gcfg.embeds.rActionBarStyler then return end
   ns.pastebin = pastebin
   --hide main menu bar frames
   if gcfg.bars.bar1.enable then
-    MainMenuBar:SetParent(pastebin)
-    MainMenuBarPageNumber:SetParent(pastebin)
-    ActionBarDownButton:SetParent(pastebin)
-    ActionBarUpButton:SetParent(pastebin)
+    MainMenuBar:SetAlpha(0)
+    ActionBarDownButton:SetAlpha(0)
+    ActionBarUpButton:SetAlpha(0)
   end
   --hide override actionbar frames
   if gcfg.bars.overridebar.enable then
-    OverrideActionBarExpBar:SetParent(pastebin)
-    OverrideActionBarHealthBar:SetParent(pastebin)
-    OverrideActionBarPowerBar:SetParent(pastebin)
-    OverrideActionBarPitchFrame:SetParent(pastebin) --maybe we can use that frame later for pitchig and such
+    OverrideActionBarExpBar:SetAlpha(0)
+    OverrideActionBarHealthBar:SetAlpha(0)
+    OverrideActionBarPowerBar:SetAlpha(0)
+    OverrideActionBarPitchFrame:SetAlpha(0) --maybe we can use that frame later for pitchig and such
   end
 
   -----------------------------
@@ -35,21 +34,19 @@ if not gcfg.embeds.rActionBarStyler then return end
   -----------------------------
 
   --remove some the default background textures
-  StanceBarLeft:SetTexture(nil)
-  StanceBarMiddle:SetTexture(nil)
-  StanceBarRight:SetTexture(nil)
-  SlidingActionBarTexture0:SetTexture(nil)
-  SlidingActionBarTexture1:SetTexture(nil)
-  PossessBackground1:SetTexture(nil)
-  PossessBackground2:SetTexture(nil)
+  StanceBarLeft:SetAlpha(0)
+  StanceBarMiddle:SetAlpha(0)
+  StanceBarRight:SetAlpha(0)
+  SlidingActionBarTexture0:SetAlpha(0)
+  SlidingActionBarTexture1:SetAlpha(0)
+  PossessBackground1:SetAlpha(0)
+  PossessBackground2:SetAlpha(0)
 
   if gcfg.bars.bar1.enable then
-    MainMenuBarTexture0:SetTexture(nil)
-    MainMenuBarTexture1:SetTexture(nil)
-    MainMenuBarTexture2:SetTexture(nil)
-    MainMenuBarTexture3:SetTexture(nil)
-    MainMenuBarLeftEndCap:SetTexture(nil)
-    MainMenuBarRightEndCap:SetTexture(nil)
+    MainMenuBarArtFrame.LeftEndCap:SetAlpha(0)
+	MainMenuBarArtFrame.RightEndCap:SetAlpha(0)
+	MainMenuBarArtFrameBackground.BackgroundSmall:SetAlpha(0)
+	MainMenuBarArtFrameBackground.BackgroundLarge:SetAlpha(0)
   end
 
   --remove OverrideBar textures

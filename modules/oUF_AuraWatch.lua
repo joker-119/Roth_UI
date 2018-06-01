@@ -212,7 +212,7 @@ do
 		end
 		
 		while true do
-			name, _, texture, count, _, duration, expire, caster, _, _, spellid = UnitAura(unit, index, filter)
+			name, texture, count, _, duration, expire, caster, _, _, spellid = UnitAura(unit, index, filter)
 			if not name then 
 				if filter == "HELPFUL" then
 					filter = "HARMFUL"
@@ -252,7 +252,7 @@ local function SetupIcons(self)
 	
 	for _,icon in pairs(icons) do
 	
-		local name, _, image = GetSpellInfo(icon.spellID)
+		local name, image = GetSpellInfo(icon.spellID)
 		if not name then error("oUF_AuraWatch error: no spell with "..tostring(icon.spellID).." spell ID exists") end
 		icon.name = name
 	

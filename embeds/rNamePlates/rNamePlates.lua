@@ -21,32 +21,32 @@ SetCVar("namePlateMaxScale", 1)
 -----------------------------
 -- Options
 -----------------------------
-
 local groups = {
-  "Friendly",
-  "Enemy",
-}
+	"Enemy",
+	"Friendly",
+	}
 
-local options = {
-  useClassColors = true,
-  displayNameWhenSelected = true,
-  displayNameByPlayerNameRules = true,
-  playLoseAggroHighlight = false,
-  displayAggroHighlight = true,
-  displaySelectionHighlight = true,
-  considerSelectionInCombatAsHostile = true,
-  colorNameWithExtendedColors = true,
-  colorHealthWithExtendedColors = true,
-  selectedBorderColor = CreateColor(0, 0, 0, 1),
-  tankBorderColor = false,
-  defaultBorderColor = CreateColor(0, 0, 0, 1),
-  showClassificationIndicator = true,
-}
-
-for i, group  in next, groups do
-  for key, value in next, options do
-    _G["DefaultCompactNamePlate"..group.."FrameOptions"][key] = value
-  end
+if not IsInInstance() then
+	local options = {
+		useClassColors = true,
+		displayNameWhenSelected = true,
+		displayNameByPlayerNameRules = true,
+		playLoseAggroHighlight = false,
+		displayAggroHighlight = true,
+		displaySelectionHighlight = true,
+		considerSelectionInCombatAsHostile = true,
+		colorNameWithExtendedColors = true,
+		colorHealthWithExtendedColors = true,
+		selectedBorderColor = CreateColor(0, 0, 0, 1),
+		tankBorderColor = false,
+		defaultBorderColor = CreateColor(0, 0, 0, 1),
+		showClassificationIndicator = true,
+		}
+	for i, group  in next, groups do
+	for key, value in next, options do
+		_G["DefaultCompactNamePlate"..group.."FrameOptions"][key] = value
+	end
+end
 end
 
 
@@ -66,6 +66,7 @@ h:SetScript("OnEvent", function(h, event, ...)
         hooksecurefunc("DefaultCompactNamePlateFrameSetupInternal", function(frame, setupOptions, frameOptions, ...)
 		local unit = ...
             --Health Bar
+			if frame:IsForbidden() then return end
             frame.healthBar:SetStatusBarTexture(mediapath.."statusbar_fill")
             frame.healthBar:SetSize(256,32)
             frame.healthBar:SetScale(0.35)
@@ -126,6 +127,7 @@ h:SetScript("OnEvent", function(h, event, ...)
             --Cast Bar
             frame.castBar:SetStatusBarTexture(mediapath.."statusbar_fill")
             if GetCVar("NamePlateVerticalScale") == "1" then
+				if frame:IsForbidden() then return end
                 frame.castBar:SetHeight(11)
                 frame.castBar.Icon:SetTexCoord(0.1,0.9,0.1,0.9)
                 frame.castBar.Icon:SetSize(17,17)
@@ -136,8 +138,10 @@ h:SetScript("OnEvent", function(h, event, ...)
     end
 end)
 
+
 --Name
 hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
+	if frame:IsForbidden() then return end
    --Set the tag based on UnitClassification, can return "worldboss", "rare", "rareelite", "elite", "normal", "minus"
 	local tag 
 	local level = UnitLevel(frame.unit)
@@ -170,6 +174,17 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 	--Set the nameplate name to include tag(if any), name and level
 	frame.name:SetText("|cff"..hexColor.."("..level..")|r "..name)
 	frame.name:SetFont(cfg.font, 12)
+	
+	--explosiove orbs
+	if (name == "Fel Explosives") then
+		frame.healthBar:SetSize(384,48)
+		frame.healthBar:SetScale(0.35)
+		frame.healthBar.re:SetSize(128,128)
+		frame.healthBar.le:SetSize(128,128)
+	else
+		frame.healthBar.re:SetSize(64,64)
+		frame.healthBar.le:SetSize(64,64)
+	end
 end)
 
 
@@ -185,11 +200,12 @@ end
 
 --UpdateHealthBorder
 local function UpdateHealthBorder(frame)
-  if frame.displayedUnit:match("(nameplate)%d?$") ~= "nameplate" then return end
-  if not IsTank() then return end
-  local status = UnitThreatSituation("player", frame.displayedUnit)
-  if status and status >= 3 then
-    frame.healthBar.border:SetVertexColor(0, 1, 0, 0.8)
-  end
+	if frame:IsForbidden() then return end
+	if frame.displayedUnit:match("(nameplate)%d?$") ~= "nameplate" then return end
+	if not IsTank() then return end
+	local status = UnitThreatSituation("player", frame.displayedUnit)
+	if status and status >= 3 then
+		frame.healthBar.border:SetVertexColor(0, 1, 0, 0.8)
+	end
 end
 hooksecurefunc("CompactUnitFrame_UpdateHealthBorder", UpdateHealthBorder)

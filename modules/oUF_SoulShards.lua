@@ -10,16 +10,11 @@ local SPELL_POWER_SOUL_SHARDS     = SPELL_POWER_SOUL_SHARDS
 
 local Update = function(self, event, unit, powerType)
   local bar = self.SoulShardPowerBar
-  local cur = UnitPower(unit, SPELL_POWER_SOUL_SHARDS)
-  local max = UnitPowerMax(unit, SPELL_POWER_SOUL_SHARDS)
-  --[[ --do not hide the bar when the value is empty, keep it visible
-  if cur < 1 then
-    if bar:IsShown() then bar:Hide() end
-    return
-  else
-    if not bar:IsShown() then bar:Show() end
-  end
-  ]]
+  local mod = UnitPowerDisplayMod(7)
+  local cur_unmod = UnitPower("player", 7, true)
+  local max_unmod = UnitPowerMax("player", 7, true)
+  local cur = UnitPower("player", 7)
+  local max = UnitPowerMax("player", 7)
   --adjust the width of the soulshard power frame
   local w = 64*(max+1)
   bar:SetWidth(w)
@@ -31,27 +26,36 @@ local Update = function(self, event, unit, powerType)
       if not orb:IsShown() then orb:Show() end
     end
   end
-  for i = 1, bar.maxOrbs do
-    local orb = self.SoulShards[i]
-    local full = cur/max
-    if(i <= cur) then
-      if full == 1 then
-        orb.fill:SetVertexColor(1,0,0)
-        orb.glow:SetVertexColor(1,0,0)
-      else
-        orb.fill:SetVertexColor(bar.color.r,bar.color.g,bar.color.b)
-        orb.glow:SetVertexColor(bar.color.r,bar.color.g,bar.color.b)
-      end
-      orb.fill:Show()
-      orb.glow:Show()
-      orb.highlight:Show()
-    else
-      orb.fill:Hide()
-      orb.glow:Hide()
-      orb.highlight:Hide()
-    end
-  end
-
+	for i = 1, bar.maxOrbs do
+		local orb = self.SoulShards[i]
+		local orb2 = self.SoulShards[i+1]
+		local full = cur/max
+		if(i <= cur) then
+			if full == 1 then
+				orb.fill:SetVertexColor(1,0,0)
+				orb.glow:SetVertexColor(1,0,0)
+			else
+				orb.fill:SetVertexColor(bar.color.r,bar.color.g,bar.color.b)
+				orb.glow:SetVertexColor(bar.color.r,bar.color.g,bar.color.b)
+			end
+			orb.fill:Show()
+			orb.glow:Show()
+			orb.highlight:Show()
+		else
+			orb.fill:Hide()
+			orb.glow:Hide()
+			orb.highlight:Hide()
+		end
+		if(i > cur) then
+			if cur_unmod/mod > cur then
+				orb.fill:SetVertexColor(0,1,0)
+				orb.glow:SetVertexColor(0,1,0)
+				orb.fill:Show()
+				orb.glow:Show()
+				orb.highlight:Show()
+			end
+		end
+	end
 end
 
 local Visibility = function(self, event, unit)

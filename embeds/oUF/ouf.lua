@@ -261,7 +261,12 @@ local initObject = function(unit, style, styleFunc, header, ...)
 
 			-- No need to enable this for *target frames.
 			if(not (unit:match'target' or suffix == 'target')) then
-				object:SetAttribute('toggleForVehicle', true)
+				if(unit:match('raid') or unit:match('party')) then
+					-- See issue #404
+					object:SetAttribute('toggleForVehicle', false)
+				else
+					object:SetAttribute('toggleForVehicle', true)
+				end
 			end
 
 			-- Other boss and target units are handled by :HandleUnit().
@@ -468,7 +473,7 @@ do
 	end
 
 	-- There has to be an easier way to do this.
-	local initialConfigFunction = [[
+	local initialConfigFunctionTemp = [[
 		local header = self:GetParent()
 		local frames = table.new()
 		table.insert(frames, self)
@@ -510,7 +515,7 @@ do
 
 				frame:SetAttribute('*type1', 'target')
 				frame:SetAttribute('*type2', 'togglemenu')
-				frame:SetAttribute('toggleForVehicle', true)
+				frame:SetAttribute('toggleForVehicle', %d == 1)
 				frame:SetAttribute('oUF-guessUnit', unit)
 			end
 
@@ -529,6 +534,9 @@ do
 		end
 	]]
 
+	-- Necessary for a vehicle support hack (see issue #404)
+	local initialConfigFunction = initialConfigFunctionTemp:format(1)
+	
 	function oUF:SpawnHeader(overrideName, template, visibility, ...)
 		if(not style) then return error("Unable to create frame. No styles have been registered.") end
 
@@ -575,6 +583,65 @@ do
 
 		return header
 	end
+	
+	-- The remainder of this scope is a temporary fix for issue #404,
+	-- regarding vehicle support on headers for the Antorus raid instance.
+	local isHacked = false
+	local shouldHack
+
+	local function toggleHeaders(flag)
+		for _, header in next, headers do
+			header:SetAttribute('initialConfigFunction', initialConfigFunction)
+
+			for _, child in next, {header:GetChildren()} do
+				child:SetAttribute('toggleForVehicle', flag)
+			end
+		end
+
+		isHacked = not flag
+		shouldHack = nil
+	end
+
+	local eventHandler = CreateFrame('Frame')
+	eventHandler:RegisterEvent('PLAYER_LOGIN')
+	eventHandler:RegisterEvent('ZONE_CHANGED_NEW_AREA')
+	eventHandler:RegisterEvent('PLAYER_REGEN_ENABLED')
+	eventHandler:SetScript('OnEvent', function(_, event)
+		if(event == 'PLAYER_LOGIN') then
+			local _, _, _, _, _, _, _, id = GetInstanceInfo()
+			if(id == 1712) then
+				initialConfigFunction = initialConfigFunctionTemp:format(0)
+
+				-- This is here for layouts that don't use oUF:Factory
+				toggleHeaders(false)
+			end
+		elseif(event == 'ZONE_CHANGED_NEW_AREA') then
+			local _, _, _, _, _, _, _, id = GetInstanceInfo()
+			if(id == 1712 and not isHacked) then
+				initialConfigFunction = initialConfigFunctionTemp:format(0)
+
+				if(not InCombatLockdown()) then
+					toggleHeaders(false)
+				else
+					shouldHack = true
+				end
+			elseif(isHacked) then
+				initialConfigFunction = initialConfigFunctionTemp:format(1)
+
+				if(not InCombatLockdown()) then
+					toggleHeaders(true)
+				else
+					shouldHack = false
+				end
+			end
+		elseif(event == 'PLAYER_REGEN_ENABLED') then
+			if(isHacked and shouldHack == false) then
+				toggleHeaders(true)
+			elseif(not isHacked and shouldHack) then
+				toggleHeaders(false)
+			end
+		end
+	end)
 end
 
 function oUF:Spawn(unit, overrideName)

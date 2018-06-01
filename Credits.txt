@@ -1,0 +1,6 @@
+Roth UI uses small amounts of elements from various other addons to achieve it's style and abilities.
+
+Diabolic UI: Created by Goldpaw. Roth UI uses the target frame artwork.   Literally. Just that.   --This addon is the reason this file is now necessary, btw.
+oUF: Haste - Framework for unit frames.
+oUF_Diablo: Originally authored by zork, the project was unofficially handed to me near the launch of MoP, and with the launch of Legion the project was officially abandoned by zork and given to me. Alot of old code is still used, but many elements have been completely recoded.
+ShinyBuffs: Created by Seerah and specifically edited to fit into Roth UI better.

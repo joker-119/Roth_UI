@@ -1,7 +1,6 @@
 
   --get the addon namespace
   local addon, ns = ...
-  local addonName, Roth_UI = ...
 
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
@@ -102,16 +101,16 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, "header", 14, "THINOUTLINE")
+    local name = func.createFontString(self, cfg.font, 14, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -14)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, "text", 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
-    local ppval = func.createFontString(self.Health, "text", 10, "THINOUTLINE")
+    local ppval = func.createFontString(self.Health, cfg.font, 10, "THINOUTLINE")
     ppval:SetPoint("TOP",self.Health,"BOTTOM", 0,0)
     ppval:SetVertexColor(0.6,0.6,0.6,1)
 
@@ -165,7 +164,7 @@
   ---------------------------------------------
   -- SPAWN BOSS UNIT
   ---------------------------------------------
-Roth_UI:ListenForLoaded(function()
+
   if cfg.units.boss.show then
     oUF:RegisterStyle("diablo:boss", createStyle)
     oUF:SetActiveStyle("diablo:boss")
@@ -183,4 +182,3 @@ Roth_UI:ListenForLoaded(function()
       boss[i] = unit
     end
   end
-end)

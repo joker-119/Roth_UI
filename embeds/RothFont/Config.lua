@@ -110,11 +110,11 @@ local fonts = {
 
 -- Users likely wouldn't want to have different fonts for different characters.
 local profileDefaults = {
-  headerFont = "Cracked",
+  headerFont = "Expressway",
   headerScale = 1.0,
-  textFont = "Cracked",
+  textFont = "Expressway",
   textScale = 1.0,
-  chatFont = "Cracked",
+  chatFont = "Expressway",
   chatScale = 1.0,
 }
 

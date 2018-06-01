@@ -11,6 +11,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local chatFont = LSM:Fetch("font", "")
 local chatScale = 1
 
+
 if not cfg.embeds.rChat then return end
 
 --new fadein func
@@ -73,7 +74,7 @@ local function skinChat(self)
     ChatFrameMenuButton:SetDisabledTexture(mediapath.."ChatButtons_36x36_ChatMenuDisabled", "BLEND")
     ChatFrameMenuButton:SetPushedTexture(mediapath.."ChatButtons_36x36_ChatMenuDisabled","BLEND")
     ChatFrameMenuButton:SetHighlightTexture(mediapath.."ChatButtons_36x36_ChatMenuHighlight", "BLEND")
-    _G[name.."ButtonFrameUpButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Up")
+    --[[_G[name.."ButtonFrameUpButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Up")
     _G[name.."ButtonFrameUpButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_UpDisabled", "BLEND")
     _G[name.."ButtonFrameUpButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_UpDisabled", "BLEND")
     _G[name.."ButtonFrameUpButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_UpHighlight", "BLEND")
@@ -81,10 +82,10 @@ local function skinChat(self)
     _G[name.."ButtonFrameDownButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_DownDisabled", "BLEND")
     _G[name.."ButtonFrameDownButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_DownDisabled", "BLEND")
     _G[name.."ButtonFrameDownButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_DownHighlight", "BLEND")
-    _G[name.."ButtonFrameBottomButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Bottom")
-    _G[name.."ButtonFrameBottomButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
-    _G[name.."ButtonFrameBottomButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
-    _G[name.."ButtonFrameBottomButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_BottomHighlight", "BLEND")
+    _G[name.."ChatFrame.ScrollToBottomButton"]:SetNormalTexture(mediapath.."ChatButtons_36x36_Bottom")
+    _G[name.."ChatFrameScrollToBottomButton"]:SetDisabledTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
+    _G[name.."ChatFrameScrollToBottomButton"]:SetPushedTexture(mediapath.."ChatButtons_36x36_BottomDisabled", "BLEND")
+    _G[name.."ChatFrameScrollToBottomButton"]:SetHighlightTexture(mediapath.."ChatButtons_36x36_BottomHighlight", "BLEND")]]
 
     --editbox skinning
     _G[name.."EditBoxLeft"]:Hide()
@@ -124,6 +125,15 @@ local function skinChat(self)
     self.skinApplied = true
 end
 
+--add emotes to scrolling text 
+local function scrollingEmotes(self, event, message, sender, language, channelstring, target, ...)
+	if not cfg.ScrollingEmotes then return end
+	if event == "CHAT_MSG_EMOTE" or event == "CHAT_MSG_TEXT_EMOTE" then
+			message = "|cffff4500"..(message).."|r"
+			UIErrorsFrame:AddMessage(message)
+	end
+end
+
 
 function Roth_UI:SkinChats()
     --hide the friend micro button
@@ -158,6 +168,7 @@ end)
 
 --combat log custom hider
 local function fixStuffOnLogin()
+	if cfg.HideCustomCombatLog then
     for i = 1, NUM_CHAT_WINDOWS do
         local name = "ChatFrame"..i
         local tab = _G[name.."Tab"]
@@ -166,11 +177,17 @@ local function fixStuffOnLogin()
     CombatLogQuickButtonFrame_Custom:HookScript("OnShow", CombatLogQuickButtonFrame_Custom.Hide)
     CombatLogQuickButtonFrame_Custom:Hide()
     CombatLogQuickButtonFrame_Custom:SetHeight(0)
+	else end
 end
 
 local a = CreateFrame("Frame")
 a:RegisterEvent("PLAYER_LOGIN")
 a:SetScript("OnEvent", fixStuffOnLogin)
+
+local b = CreateFrame("Frame")
+b:RegisterEvent("CHAT_MSG_TEXT_EMOTE")
+b:RegisterEvent("CHAT_MSG_EMOTE")
+b:SetScript("OnEvent", scrollingEmotes)
 
 
 Roth_UI:ListenForLoaded(function()

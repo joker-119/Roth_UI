@@ -2,6 +2,7 @@
   --get the addon namespace
   local addon, ns = ...
 
+
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
 
@@ -68,11 +69,12 @@
   ---------------------------------------------
 
   --name tag
-  oUF.Tags.Methods["diablo:name"] = function(unit, rolf)
-    local color = oUF.Tags.Methods["diablo:color"](unit)
-    local name = UnitName(rolf or unit)
-    return "|cff"..color..(name or "").."|r"
-  end
+oUF.Tags.Methods["diablo:name"] = function(unit)
+    local cc = ("|cff%s%%s|r"):format(oUF.Tags.Methods["diablo:color"](unit))
+    local unitID = IsAddOnLoaded("Totalrp3") and TRP3_API.utils.str.getUnitID(unit)
+    local fullName = unitID and TRP3_API.chat.getFullnameForUnitUsingChatMethod(unitID)
+    return cc:format(fullName or UnitName(unit) or "")
+end
   oUF.Tags.Events["diablo:name"] = "UNIT_NAME_UPDATE UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION"
 
   ---------------------------------------------
@@ -114,7 +116,7 @@
     local ppval = func.numFormat(UnitPower(unit) or 0).." / "..oUF.Tags.Methods["maxspp"](unit)
     return ppval or ""
   end
-  oUF.Tags.Events["diablo:ppval"] = "UNIT_POWER UNIT_MAXPOWER"
+  oUF.Tags.Events["diablo:ppval"] = "UNIT_POWER_UPDATE UNIT_MAXPOWER"
 
   ---------------------------------------------
 
@@ -172,7 +174,7 @@
       --return "|cff"..color.."97%".."|cff666666 / |r"
     end
   end
-  oUF.Tags.Events["diablo:altbosspower"] = "UNIT_POWER"
+  oUF.Tags.Events["diablo:altbosspower"] = "UNIT_POWER_UPDATE"
 
   ---------------------------------------------
 
@@ -184,7 +186,7 @@
       return floor(cur).." / "..floor(max)
     end
   end
-  oUF.Tags.Events["diablo:altpower"] = "UNIT_POWER"
+  oUF.Tags.Events["diablo:altpower"] = "UNIT_POWER_UPDATE"
 
   ---------------------------------------------
 
@@ -220,7 +222,7 @@
     --return "93% (|cff"..color..("%s%%"):format(30).."|r)" --debug
     return str or ""
   end
-  oUF.Tags.Events["diablo:bosspp"] = "UNIT_POWER UNIT_MAXPOWER UNIT_TARGETABLE_CHANGED"
+  oUF.Tags.Events["diablo:bosspp"] = "UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_TARGETABLE_CHANGED"
 
   ---------------------------------------------
 
@@ -263,7 +265,7 @@
     end
     return val or ""
   end
-  oUF.Tags.Events["topdefpp"] = "UNIT_DISPLAYPOWER UNIT_POWER UNIT_MAXPOWER UNIT_CONNECTION"
+  oUF.Tags.Events["topdefpp"] = "UNIT_DISPLAYPOWER UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_CONNECTION"
 
   ---------------------------------------------
 
@@ -281,7 +283,7 @@
     end
     return val or ""
   end
-  oUF.Tags.Events["botdefpp"] = "UNIT_DISPLAYPOWER UNIT_POWER UNIT_MAXPOWER UNIT_CONNECTION"
+  oUF.Tags.Events["botdefpp"] = "UNIT_DISPLAYPOWER UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_CONNECTION"
 
   ---------------------------------------------
 
@@ -333,7 +335,7 @@
     val = func.numFormat(val)
     return val or ""
   end
-  oUF.Tags.Events["curspp"] = "UNIT_DISPLAYPOWER UNIT_POWER UNIT_MAXPOWER UNIT_CONNECTION"
+  oUF.Tags.Events["curspp"] = "UNIT_DISPLAYPOWER UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_CONNECTION"
 
   ---------------------------------------------
 
@@ -343,7 +345,7 @@
     val = func.numFormat(val)
     return val or ""
   end
-  oUF.Tags.Events["maxspp"] = "UNIT_DISPLAYPOWER UNIT_POWER UNIT_MAXPOWER UNIT_CONNECTION"
+  oUF.Tags.Events["maxspp"] = "UNIT_DISPLAYPOWER UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_CONNECTION"
 
   ---------------------------------------------
 
@@ -354,7 +356,7 @@
     local val = cur.."/"..max
     return val or ""
   end
-  oUF.Tags.Events["cmaxpp"] = "UNIT_DISPLAYPOWER UNIT_POWER UNIT_MAXPOWER UNIT_CONNECTION"
+  oUF.Tags.Events["cmaxpp"] = "UNIT_DISPLAYPOWER UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_CONNECTION"
 
   ---------------------------------------------
 
@@ -365,7 +367,7 @@
     local val = func.numFormat(cur).."/"..func.numFormat(max)
     return val or ""
   end
-  oUF.Tags.Events["cmaxspp"] = "UNIT_DISPLAYPOWER UNIT_POWER UNIT_MAXPOWER UNIT_CONNECTION"
+  oUF.Tags.Events["cmaxspp"] = "UNIT_DISPLAYPOWER UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_CONNECTION"
 
   ---------------------------------------------
 
@@ -390,7 +392,7 @@ end
     local val = oUF.Tags.Methods["perpp"](unit).."%"
     return val or ""
   end
-  oUF.Tags.Events["perppp"] = "UNIT_DISPLAYPOWER UNIT_POWER UNIT_MAXPOWER UNIT_CONNECTION"
+  oUF.Tags.Events["perppp"] = "UNIT_DISPLAYPOWER UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_CONNECTION"
 
   ---------------------------------------------
 
@@ -420,7 +422,7 @@ end
     local methodName = db.char["POWER"].value.top.tag.."pp"
     return oUF.Tags.Methods[methodName](unit) or ""
   end
-  --oUF.Tags.Events["diablo:PowerOrbTop"] = "UNIT_DISPLAYPOWER UNIT_POWER UNIT_MAXPOWER UNIT_CONNECTION"
+  --oUF.Tags.Events["diablo:PowerOrbTop"] = "UNIT_DISPLAYPOWER UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_CONNECTION"
 
 
   ---------------------------------------------
@@ -431,6 +433,6 @@ end
     local methodName = db.char["POWER"].value.bottom.tag.."pp"
     return oUF.Tags.Methods[methodName](unit) or ""
   end
-  --oUF.Tags.Events["diablo:PowerOrbBottom"] = "UNIT_DISPLAYPOWER UNIT_POWER UNIT_MAXPOWER UNIT_CONNECTION"
+  --oUF.Tags.Events["diablo:PowerOrbBottom"] = "UNIT_DISPLAYPOWER UNIT_POWER_UPDATE UNIT_MAXPOWER UNIT_CONNECTION"
 
   ---------------------------------------------

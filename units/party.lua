@@ -1,10 +1,11 @@
 
   --get the addon namespace
   local addon, ns = ...
-  local addonName, Roth_UI = ...
+
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
   local rLib = ns.rLib or rLib
+  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
   --get the config
   local cfg = ns.cfg
@@ -14,6 +15,7 @@
 
   --get the unit container
   local unit = ns.unit
+
 
   ---------------------------------------------
   -- UNIT SPECIFIC FUNCTIONS
@@ -29,7 +31,11 @@
   --actionbar background
   local createArtwork = function(self)
     local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
-	t:SetPoint("TOP",0,40)
+	if self.cfg.vertical == true then
+		t:SetPoint("TOP",0,40)
+	else
+		t:SetPoint("TOP",0,20)
+	end
 	t:SetPoint("LEFT",-0,0)
 	t:SetPoint("RIGHT",0,0)
 	t:SetPoint("BOTTOM",0,-20)
@@ -45,15 +51,15 @@
     local h = CreateFrame("StatusBar", nil, self)
 	if self.cfg.vertical == true then
 	 h:SetPoint("TOP",0,-30)
-	 h:SetPoint("LEFT",35,0)
-	 h:SetPoint("RIGHT",-35,0)
+	 h:SetPoint("LEFT",47,0)
+	 h:SetPoint("RIGHT",-47,0)
 	 h:SetPoint("BOTTOM",0,52)
 	 h:SetFrameStrata("LOW")
 	else
-     h:SetPoint("TOP",0,-29)
-     h:SetPoint("LEFT",21,0)
-     h:SetPoint("RIGHT",-21,0)
-     h:SetPoint("BOTTOM",0,26)
+     h:SetPoint("TOP",0,-25)
+     h:SetPoint("LEFT",20,0)
+     h:SetPoint("RIGHT",-20,0)
+     h:SetPoint("BOTTOM",0,20)
 	 h:SetFrameStrata("LOW")
 	end
     h:SetStatusBarTexture(cfg.texture)
@@ -62,13 +68,12 @@
     h.bg:SetAllPoints(h)
 
     h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
-    h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_hpglow")
+    h.glow:SetTexture(mediapath.."targettarget_hpglow")
 	h.glow:SetAllPoints(self)
-    h.glow:SetVertexColor(1,0,0,1)
-
+		
     h.highlight = h:CreateTexture(nil,"OVERLAY",nil,-4)
     h.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_highlight")
-    h.highlight:SetAllPoints(self)
+    h.highlight:SetAllPoints(h.glow)
 
     self.Health = h
     self.Health.Smooth = true
@@ -83,15 +88,16 @@
     local h = CreateFrame("StatusBar", nil, self.Health)
 	if self.cfg.vertical == true then
      h:SetPoint("TOP",0,-25.5)
-     h:SetPoint("LEFT",18,0)
-     h:SetPoint("RIGHT",-18,0)
+     h:SetPoint("LEFT",6,0)
+     h:SetPoint("RIGHT",-6,0)
      h:SetPoint("BOTTOM",0,-20)
 	 h:SetFrameStrata("LOW")
 	else
-     h:SetPoint("TOP",0,-12.5)
+     h:SetPoint("TOP",0,-18.5)
      h:SetPoint("LEFT",7,0)
      h:SetPoint("RIGHT",-7,0)
      h:SetPoint("BOTTOM",0,-8)
+	 h:SetFrameStrata("LOW")
 	end
     h:SetStatusBarTexture(cfg.texture)
 
@@ -108,14 +114,18 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self.Health, "header", self.cfg.misc.NameFontSize, "THINOUTLINE")
+    local name = func.createFontString(self.Health, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
 	name:SetPoint("BOTTOM", self, "TOP", 0, -7)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
 	self.Name = name
 
-    local hpval = func.createFontString(self.Health, "text", self.cfg.health.fontSize, "THINOUTLINE")
-    hpval:SetPoint(self.cfg.health.point, self.cfg.health.x,self.cfg.health.y)
+    local hpval = func.createFontString(self.Health, cfg.font, self.cfg.health.fontSize, "THINOUTLINE")
+    if self.cfg.vertical == true then
+		hpval:SetPoint(self.cfg.health.point, self.cfg.health.x,self.cfg.health.y)
+	else
+		hpval:SetPoint(self.cfg.health.point, self.cfg.health.x+18,self.cfg.health.y)
+	end
 
     self:Tag(name, "[diablo:name]")
     self:Tag(hpval, self.cfg.health.tag or "")
@@ -160,24 +170,26 @@
           self.PortraitHolder:RegisterEvent("PLAYER_REGEN_ENABLED")
         else
 			if self.cfg.vertical then
-				self:SetHitRectInsets(-35,0, -17, 0)
-			else
+				self:SetHitRectInsets(0,0,0,0)
+			else 
 				self:SetHitRectInsets(0,0,-100,0)
 			end
-        end
+        end      
         self.PortraitHolder:SetScript("OnEvent", function(...)
           self.PortraitHolder:UnregisterEvent("PLAYER_REGEN_ENABLED")
-          self:SetHitRectInsets(0, 0, -100, 0)
+          self:SetHitRectInsets(0, 0, 0, 0)
         end)
-      end
+      end      
     end
 
     --auras
     if self.cfg.auras.show then
       func.createDebuffs(self)
 	  self.Debuffs.PostCreateIcon = func.createAuraIcon
-	  func.createBuffs(self)
-	  self.Buffs.PostCreateIcon = func.createAuraIcon
+	  if self.cfg.auras.showBuffs then
+		func.createBuffs(self)
+		self.Buffs.PostCreateIcon = func.createAuraIcon
+	  end
     end
 
     --aurawatch
@@ -203,18 +215,18 @@
       if self.cfg.portrait.use3D then
         self.LFDRole = func.createIcon(self.BorderHolder,"OVERLAY",12,self.Health,"CENTER","CENTER",0,0,5)
       else
-        self.LFDRole = func.createIcon(self.PortraitHolder,"OVERLAY",12,self.Health,"CENTER","CENTER",0,0,5)
+        self.LFDRole = func.createIcon(self.PortraitHolder,"OVERLAY",12,self.Name,"CENTER","CENTER",0,0,5)
       end
     else
-      self.Leader = func.createIcon(self,"OVERLAY",13,self,"RIGHT","LEFT",16,-18,-1)
-      self.LFDRole = func.createIcon(self,"OVERLAY",12,self,"RIGHT","LEFT",16,18,-1)
+      self.Leader = func.createIcon(self,"OVERLAY",13,self,"RIGHT","LEFT",70,30,-1)
+      self.LFDRole = func.createIcon(self,"OVERLAY",12,self,"CENTER","CENTER",0,10,-1)
     end
     self.LFDRole:SetTexture("Interface\\AddOns\\Roth_UI\\media\\lfd_role")
     --self.LFDRole:SetDesaturated(1)
 
     --add heal prediction
     func.healPrediction(self)
-
+    
     --add total absorb
     func.totalAbsorb(self)
 
@@ -222,19 +234,19 @@
     self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", func.checkThreat)
 
   end
-
+  
 
   ---------------------------------------------
   -- SPAWN PARTY UNIT
   ---------------------------------------------
-Roth_UI:ListenForLoaded(function()
+
   if cfg.units.party.show then
     oUF:RegisterStyle("diablo:party", createStyle)
     oUF:SetActiveStyle("diablo:party")
 
     local attr = cfg.units.party.attributes
-
-
+	
+	
 
     local partyDragFrame = CreateFrame("Frame", "Roth_UIPartyDragFrame", UIParent)
     partyDragFrame:SetSize(50,50)
@@ -252,6 +264,7 @@ Roth_UI:ListenForLoaded(function()
       "showParty",          attr.showParty,
       "showRaid",           attr.showRaid,
       "point",              attr.VerticalPoint,
+      "yoffset",            attr.yoffset,
       "oUF-initialConfigFunction", ([[
         self:SetWidth(%d)
         self:SetHeight(%d)
@@ -278,4 +291,3 @@ Roth_UI:ListenForLoaded(function()
     party:SetPoint("TOPLEFT",partyDragFrame,0,0)
   end
  end
-end)

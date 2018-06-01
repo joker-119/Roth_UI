@@ -17,7 +17,6 @@
 	<Script file='elements\leader.lua' />
 	<Script file='elements\combat.lua' />
 	<Script file='elements\resting.lua' />
-	<Script file='elements\pvp.lua' />
 	<Script file='elements\portraits.lua' />
 	<Script file='elements\range.lua' />
 	<Script file='elements\castbar.lua' />

@@ -74,9 +74,9 @@ if not gcfg.embeds.rActionBarStyler then return end
   RegisterStateDriver(frame, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 
   --create drag frame and drag functionality
---  if cfg.userplaced.enable then
---    rLib:CreateDragFrame(frame, dragFrameList, -2 , true) --frame, dragFrameList, inset, clamp
---  end
+  if cfg.userplaced.enable then
+    rLib:CreateDragFrame(frame, dragFrameList, -2 , true) --frame, dragFrameList, inset, clamp
+  end
 
   --create the mouseover functionality
   if cfg.mouseover.enable then

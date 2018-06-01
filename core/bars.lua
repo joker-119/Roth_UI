@@ -376,6 +376,7 @@ end
 
       local orb = CreateFrame("Frame",nil,bar)
       self.SoulShards[i] = orb
+	  self.SoulShards[i+1] = orb2
 
       orb:SetSize(64,64)
       orb:SetPoint("LEFT",i*64,0)
@@ -531,7 +532,7 @@ end
 
   end
   
-  --create combo
+ --create combo
   bars.createComboBar = function(self)
 
     self.ComboPoints = {}
@@ -572,9 +573,6 @@ end
       orb:SetPoint("LEFT",i*64,0)
 
       local orbSizeMultiplier = 0.85
-      if i == MAX_COMBO_POINTS then
-        --orbSizeMultiplier = 0.9
-      end
 
       --bar background
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
@@ -618,6 +616,8 @@ end
 
     end
 
+	
+	
     func.applyDragFunctionality(bar)
     --combat fading
     if self.cfg.combobar.combat.enable then
@@ -626,6 +626,7 @@ end
     self.ComboBar = bar
 
   end
+			
 
   --Arcane Charges
   bars.createArcBar = function(self)

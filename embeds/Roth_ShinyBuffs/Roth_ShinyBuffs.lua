@@ -6,13 +6,15 @@ local fonts = AceGUIWidgetLSMlists.font
 local sbars = AceGUIWidgetLSMlists.statusbar
 local bgs = AceGUIWidgetLSMlists.background
 local borders = AceGUIWidgetLSMlists.border
-local fontFlags = {"None", "Outline", "Monochrome Outline"}	--, "Monochrome"}
+local fontFlags = {"None", "Outline", "Monochrome Outline", "Monochrome"}
 local _, class = UnitClass("player")
 local classColor, SBmover, moverShown, db
 local BuffFrame = BuffFrame
 local addon, ns = ...
 local cfg = ns.cfg
+
 if not cfg.embeds.Roth_ShinyBuffs then return end
+
 local defaults = {
 	font = "Cracked",
 	fstyle = "Outline",
@@ -28,18 +30,22 @@ local defaults = {
 		cfsize = 14,
 		size = 45,
 	},
-	borAlpha = .4,	--not added in options (yet)
 	bg = "Solid",
 	bgColor = {r = .32, g = .32, b = .32},
 	classbg = false,
 	border = "RB border",
 	borColor = {r = .5, g = .5, b = .5},
 	classbor = false,
+	debuffTypeBor = false,
+	borderWidth = 16,
+	debuffOverlayAlpha = .4,
 	sbar = "Roth_Statusbar3",
 	sbarColor = {r = 0, g = 1, b = 0},
 	classbar = false,
 	posX = -205,
 	posY = -13,
+	anchor1 = "TOPRIGHT",
+	anchor2 = "TOPRIGHT",
 	bprow = 8,
 }
 
@@ -61,13 +67,7 @@ local function SkinningMachine(svtable, btn, dur, c, icon, bor, firstTime)
 		icon:SetTexCoord(.07, .93, .07, .93)
 		if bor then
 			bor:SetParent(btn.bg)
-			bor:SetDrawLayer("BACKGROUND", -7)
-			bor:ClearAllPoints()
-			bor:SetPoint("TOP",0,0)
-			bor:SetPoint("LEFT",0,0)
-			bor:SetPoint("RIGHT",0,0)
-			bor:SetPoint("BOTTOM",0,0)
-			bor:SetColorTexture(1,1,1,1)
+			bor:SetDrawLayer("OVERLAY", 1)
 		end
 		--
 		btn.bar = CreateFrame("StatusBar", nil, btn.bg)
@@ -84,14 +84,24 @@ local function SkinningMachine(svtable, btn, dur, c, icon, bor, firstTime)
 		c:SetDrawLayer("OVERLAY", 3)
 	end
 	if bor then
-		bor:SetAlpha(1)
+		bor:SetAlpha(db.debuffOverlayAlpha)
+		bor:ClearAllPoints()
+		if db.debuffTypeBor then
+			bor:SetAllPoints(btn.bg)
+			bor:SetTexture("Interface\\Buttons\\UI-Debuff-Overlays")
+			bor:SetTexCoord(0.296875, 0.5703125, 0, 0.515625)
+			bor:SetAlpha(1)
+		else
+			bor:SetAllPoints(icon)
+			bor:SetColorTexture(1,1,1,1)
+		end	
 	end
 	dur:SetFont(LSM:Fetch("font", db.font), db[svtable].dfsize, db.fstyle)
 	c:SetFont(LSM:Fetch("font", db.font), db[svtable].cfsize, db.fstyle)
 	btn.bg:SetPoint("BOTTOMRIGHT", btn, "BOTTOMRIGHT", 2, -max(db[svtable].size*.2, 5))
 	btn.bg:SetBackdrop({	bgFile = LSM:Fetch("background", db.bg),
 						edgeFile = LSM:Fetch("border", db.border),
-						edgeSize = 16,
+						edgeSize = db.borderWidth,
 						insets = {left=3,right=3,top=3,bottom=3}
 					})
 	btn.bar:SetStatusBarTexture(LSM:Fetch("statusbar", db.sbar))
@@ -127,7 +137,7 @@ local function SkinBuffs(i, firstTime)
 		b.bar:SetScript("OnUpdate", function(self, elapsed)
 				timer = timer + elapsed
 				if timer >= .1 then
-					_,_,_,_,_,dur,exps = UnitBuff("player",i)
+					_,_,_,_,dur,exps = UnitBuff("player",i)
 					if dur == 0 then
 						self:SetValue(1)
 					else
@@ -150,7 +160,6 @@ local function SkinDebuffs(i, firstTime)
 	local c = d.count
 	local icon = _G["DebuffButton"..i.."Icon"]
 	local bor = _G["DebuffButton"..i.."Border"]
-	local _, _, _, _, debuffType = UnitAura("player", i)
 	
 	SkinningMachine("debuffs", d, dur, c, icon, bor, firstTime)
 	
@@ -161,7 +170,7 @@ local function SkinDebuffs(i, firstTime)
 		d.bar:SetScript("OnUpdate", function(self, elapsed)
 				timer = timer + elapsed
 				if timer >= .1 then
-					_,_,_,_,_,dur,exps = UnitDebuff("player",i)
+					_,_,_,_,dur,exps = UnitDebuff("player",i)
 					if dur == 0 then
 						self:SetValue(1)
 					else
@@ -173,7 +182,7 @@ local function SkinDebuffs(i, firstTime)
 					timer = 0
 				end
 			end)
-			
+		
 		numDebuffsSkinned = i
 	end
 end
@@ -203,29 +212,6 @@ local function SkinTench(firstTime)
 	end
 end
 
---[[local function SkinConsolidated(firstTime)
-	local cb = ConsolidatedBuffs
-	local dur = cb.duration
-	local c = cb.count
-	local icon = ConsolidatedBuffsIcon
-	
-	SkinningMachine("buffs", cb, dur, c, icon, nil, firstTime)
-
-	CONSOLIDATED_BUFF_ROW_HEIGHT = db.buffs.size*.8
-	
-	if firstTime then
-		icon:SetTexture("Interface\\ICONS\\ACHIEVEMENT_GUILDPERK_QUICK AND DEAD")
-		c:ClearAllPoints()
-		c:SetPoint("CENTER")
-		cb.bar:SetValue(1)
-		--fix the tooltip width
-		local CBTipWidth = ConsolidatedBuffsTooltip.SetWidth
-		hooksecurefunc(ConsolidatedBuffsTooltip, "SetWidth", function(self)
-			CBTipWidth(self, max(BuffFrame.numConsolidated*db.buffs.size, 100))
-		end)
-	end
-end]]
-
 local OLD_SetUnitAura, NEW_SetUnitAura, caster, casterName = GameTooltip.SetUnitAura
 local function WhoCast()
 	if db.whoCast then
@@ -233,7 +219,7 @@ local function WhoCast()
 			NEW_SetUnitAura = function(self, unit, id, filter)
 				OLD_SetUnitAura(self, unit, id, filter)
 				if filter == "HELPFUL" then
-					caster = select(8,UnitAura("player", id))
+					_,_,_,_,_,_,caster = UnitAura("player", id)	--7th return
 					casterName = caster==nil and "unknown" or caster=="player" and "you" or caster=="pet" and "your pet" or UnitName(caster)
 					GameTooltip:AddLine("Provided by "..casterName, .5, .9, 1)
 					GameTooltip:Show()
@@ -248,30 +234,29 @@ end
 
 local function Position()
 	BuffFrame:ClearAllPoints()
-	BuffFrame:NewSetPoint("TOPRIGHT", db.posX, db.posY)
+	BuffFrame:NewSetPoint(db.anchor1, UIParent, db.anchor2, db.posX, db.posY)
 end
---keep other stuff (like ticket frame) from moving buffs
---BuffFrame.NewSetPoint = BuffFrame.SetPoint
---BuffFrame.SetPoint = Position
 
 local function ShowMover()
 	if not SBmover then
 		SBmover = CreateFrame("Frame", nil, UIParent)
-		SBmover:SetBackdrop({bgFile = "Interface\\BUTTONS\\WHITE8X8.blp"})
-		SBmover:SetBackdropColor(.2,.2,.9,.5)
+		SBmover:SetBackdrop({bgFile = "Interface\\AddOns\\Roth_UI\\media\\mover.blp"})
+		SBmover:SetBackdropColor(1,1,1,.5)
 		SBmover:SetPoint("TOPRIGHT", BuffFrame, "TOPRIGHT", 5, 5)
 		SBmover:SetSize(200, 150)
 		SBmover:SetFrameStrata("TOOLTIP")
-		SBmover:EnableMouse(1)
-		SBmover:SetMovable(1)
-		SBmover:SetScript("OnMouseDown", function(self) self:StartMoving() end)
+		SBmover:EnableMouse(true)
+		BuffFrame:SetMovable(true)
+		BuffFrame:SetClampedToScreen(true)
+		SBmover:SetScript("OnMouseDown", function(self) 
+				BuffFrame:StartMoving()
+			end)
 		SBmover:SetScript("OnMouseUp", function(self)
-				self:StopMovingOrSizing()
-				_, _, _, db.posX, db.posY = self:GetPoint()
-				Position()
-				--manually refresh the options display (x,y weren't updating...)
+				BuffFrame:StopMovingOrSizing()
+				db.anchor1, _, db.anchor2, db.posX, db.posY = BuffFrame:GetPoint()
+				--Position()
 				if SB.optionsFrame:IsShown() then
-					InterfaceOptionsFrame_OpenToCategory("Roth_ShinyBuffs")
+					InterfaceOptionsFrame_OpenToCategory("ShinyBuffs")
 				end
 			end)
 	end
@@ -279,8 +264,21 @@ local function ShowMover()
 	SBmover:EnableMouse(moverShown)
 end
 
+local function SkinAuras()
+	if BUFF_ACTUAL_DISPLAY > numBuffsSkinned then
+		for i = numBuffsSkinned+1, BUFF_ACTUAL_DISPLAY do
+			SkinBuffs(i, true)
+		end
+	end
+	if DEBUFF_ACTUAL_DISPLAY > numDebuffsSkinned then
+		for i = numDebuffsSkinned+1, DEBUFF_ACTUAL_DISPLAY do
+			SkinDebuffs(i, true)
+		end
+	end
+end
+
 local options = {
-	name = "Roth_ShinyBuffs Options",
+	name = "ShinyBuffs Options",
 	type = "group",
 	args = {
 		header1 = {
@@ -304,7 +302,6 @@ local options = {
 							SkinDebuffs(i,false)
 						end
 						SkinTench(false)
-						--SkinConsolidated(false)
 					end,
 			order = 2,
 		},
@@ -329,7 +326,6 @@ local options = {
 							SkinDebuffs(i,false)
 						end
 						SkinTench(false)
-						--SkinConsolidated(false)
 					end,
 			order = 3,
 		},
@@ -346,13 +342,13 @@ local options = {
 						BUFF_DURATION_WARNING_TIME = 60
 					end
 				end,
-			order = 3.5,
+			order = 4,
 		},
 		buffFonts = {
 			name = "Buff Font Sizes",
 			type = "group",
 			inline = true,
-			order = 4,
+			order = 5,
 			args = {
 				durSize = {
 					name = "Duration",
@@ -367,7 +363,6 @@ local options = {
 								SkinBuffs(i,false)
 							end
 							SkinTench(false)
-							--SkinConsolidated(false)
 						end,
 					order = 1,
 				},
@@ -384,13 +379,12 @@ local options = {
 								SkinBuffs(i,false)
 							end
 							SkinTench(false)
-							--SkinConsolidated(false)
 						end,
 					order = 2,
 				},
 				whoCast = {
 					name = "Who Cast?",
-					desc = "Shows who your buff is from in its tooltip.\n\nNOTE: A reload of your UI is required for changes of this setting to take effect. This may be done with /reload",
+					desc = "Shows who your buff is from in its tooltip.",
 					type = "toggle",
 					get = function() return db.whoCast end,
 					set = function() db.whoCast = not db.whoCast WhoCast() end,
@@ -402,7 +396,7 @@ local options = {
 			name = "Debuff Font Sizes",
 			type = "group",
 			inline = true,
-			order = 5,
+			order = 6,
 			args = {
 				durSize = {
 					name = "Duration",
@@ -469,9 +463,28 @@ local options = {
 									SkinDebuffs(i,false)
 								end
 								SkinTench(false)
-								--SkinConsolidated(false)
 							end,
 					order = 1,
+				},
+				borderWidth = {
+					name = "Border Width",
+					desc = "Width of the border.",
+					type = "range",
+					min = 1,
+					max = 24,
+					step = .5,
+					get = function() return db.borderWidth end,
+					set = function(_,size)
+							db.borderWidth = size
+							for i=1,numBuffsSkinned do
+								SkinBuffs(i,false)
+							end
+							for i=1,numDebuffsSkinned do
+								SkinDebuffs(i,false)
+							end
+							SkinTench(false)
+						end,
+					order = 2,
 				},
 				borColor = {
 					name = "Color",
@@ -489,9 +502,8 @@ local options = {
 									SkinDebuffs(i,false)
 								end
 								SkinTench(false)
-								--SkinConsolidated(false)
 							end,
-					order = 2,
+					order = 3,
 				},
 				classbor = {
 					name = "By Class",
@@ -507,9 +519,38 @@ local options = {
 									SkinDebuffs(i,false)
 								end
 								SkinTench(false)
-								--SkinConsolidated(false)
 							end,
-					order = 3,
+					order = 4,
+				},
+				debuffTypeBor = {
+					name = "By Debuff Type",
+					desc = "Display debuff dispel type as border instead of icon overlay.",
+					type = "toggle",
+					get = function() return db.debuffTypeBor end,
+					set = function()
+								db.debuffTypeBor = not db.debuffTypeBor
+								for i=1,numDebuffsSkinned do
+									SkinDebuffs(i,false)
+								end
+							end,
+					order = 5,
+				},
+				debuffOverlayAlpha = {
+					name = "Debuff Overlay Alpha",
+					desc = "Transparency of the debuffs' dispel type overlay.",
+					type = "range",
+					disabled = function() return db.debuffTypeBor end,
+					min = .25,
+					max = 1,
+					step = .05,
+					get = function() return db.debuffOverlayAlpha end,
+					set = function(_,alpha)
+							db.debuffOverlayAlpha = alpha
+							for i=1,numDebuffsSkinned do
+								SkinDebuffs(i,false)
+							end
+						end,
+					order = 6,
 				},
 			},
 		},
@@ -535,7 +576,6 @@ local options = {
 									SkinDebuffs(i,false)
 								end
 								SkinTench(false)
-								--SkinConsolidated(false)
 							end,
 					order = 1,
 				},
@@ -555,7 +595,6 @@ local options = {
 									SkinDebuffs(i,false)
 								end
 								SkinTench(false)
-								--SkinConsolidated(false)
 							end,
 					order = 2,
 				},
@@ -573,7 +612,6 @@ local options = {
 									SkinDebuffs(i,false)
 								end
 								SkinTench(false)
-								--SkinConsolidated(false)
 							end,
 					order = 3,
 				},
@@ -601,7 +639,6 @@ local options = {
 									SkinDebuffs(i,false)
 								end
 								SkinTench(false)
-								--SkinConsolidated(false)
 							end,
 					order = 1,
 				},
@@ -621,7 +658,6 @@ local options = {
 									SkinDebuffs(i,false)
 								end
 								SkinTench(false)
-								--SkinConsolidated(false)
 							end,
 					order = 2,
 				},
@@ -639,7 +675,6 @@ local options = {
 									SkinDebuffs(i,false)
 								end
 								SkinTench(false)
-								--SkinConsolidated(false)
 							end,
 					order = 3,
 				},
@@ -724,7 +759,6 @@ local options = {
 								SkinBuffs(i,false)
 							end
 							SkinTench(false)
-							SkinConsolidated(false)
 						end,
 					order = 1,
 				},
@@ -841,16 +875,18 @@ local function PEW()
 						SkinDebuffs(i,false)
 					end
 					SkinTench(false)
-					--SkinConsolidated(false)
 				end
 			end)
 	end
 	
-	LibStub("AceConfig-3.0"):RegisterOptionsTable("Roth_ShinyBuffs", options)
-	SB.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Roth_ShinyBuffs", "Roth_ShinyBuffs")
-	SlashCmdList["SHINYBUFFS"] = function() InterfaceOptionsFrame_OpenToCategory("Roth_ShinyBuffs") end
-	SLASH_SHINYBUFFS1 = "/rothbuffs"
-	SLASH_SHINYBUFFS2 = "/rb"
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("ShinyBuffs", options)
+	SB.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("ShinyBuffs", "ShinyBuffs")
+	SlashCmdList["SHINYBUFFS"] = function()
+			InterfaceOptionsFrame_OpenToCategory("ShinyBuffs")
+			InterfaceOptionsFrame_OpenToCategory("ShinyBuffs")
+		end
+	SLASH_SHINYBUFFS1 = "/shinybuffs"
+	SLASH_SHINYBUFFS2 = "/sb"
 
 	if db.allWhiteText then
 		BUFF_DURATION_WARNING_TIME = 7200
@@ -858,14 +894,8 @@ local function PEW()
 	BUFF_ROW_SPACING = 15
 	BUFFS_PER_ROW = db.bprow
 	
-	for i = 1, BUFF_ACTUAL_DISPLAY do
-		SkinBuffs(i, true)
-	end
-	for i = 1, DEBUFF_ACTUAL_DISPLAY do
-		SkinDebuffs(i, true)
-	end
+	C_Timer.After(.25, SkinAuras)
 	SkinTench(true)
-	--SkinConsolidated(true)
 
 	--keep other stuff (like ticket frame) from moving buffs
 	BuffFrame.NewSetPoint = BuffFrame.SetPoint
@@ -875,28 +905,21 @@ local function PEW()
 	WhoCast()
 	
 	SB:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	SB:RegisterEvent("UNIT_AURA")
+	SB:RegisterUnitEvent("UNIT_AURA", "player") 
 	SB:SetScript("OnEvent", function(s,e,unit)
-			if unit == "player" then
-				if BUFF_ACTUAL_DISPLAY > numBuffsSkinned then
-					for i = numBuffsSkinned+1, BUFF_ACTUAL_DISPLAY do
-						SkinBuffs(i, true)
-					end
-				end
-				if DEBUFF_ACTUAL_DISPLAY > numDebuffsSkinned then
-					for i = numDebuffsSkinned+1, DEBUFF_ACTUAL_DISPLAY do
-						SkinDebuffs(i, true)
-					end
-				end
-				--don't bother checking if they're all skinned
-				if numBuffsSkinned == BUFF_MAX_DISPLAY and numDebuffsSkinned == DEBUFF_MAX_DISPLAY then
-					SB:UnregisterEvent("UNIT_AURA")
-					SB:SetScript("OnEvent", nil)
-				end
+			SkinAuras()
+			--don't bother checking if they're all skinned
+			if numBuffsSkinned == BUFF_MAX_DISPLAY and numDebuffsSkinned == DEBUFF_MAX_DISPLAY then
+				SB:UnregisterEvent("UNIT_AURA")
+				SB:SetScript("OnEvent", nil)
 			end
 		end)
 	PEW = nil
 end
+
+LSM:Register("border", "SB border", "Interface\\AddOns\\Roth_UI\\media\\5.tga")
+LSM:Register("statusbar", "Solid", "Interface\\AddOns\\Roth_UI\\media\\Solid.tga")
+LSM:Register("background", "Solid", "Interface\\AddOns\\Roth_UI\\media\\Solid.tga")
 
 SB:SetScript("OnEvent", PEW)
 

@@ -4,15 +4,16 @@
   ---------------------------------------------
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
-  --  Galaxy - 2016
-  --  Version 1.9.15a
+  --  Galaxy119/Joker119 - 2016-2018
+  --  Version 2.0.1a
   ---------------------------------------------
 
   --get the addon namespace
   local addon, ns = ...
-  local addonName, Roth_UI = ...
   local oUF = ns.oUF
   mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
+  local addonName, Roth_UI = ...
+  local LSM = LibStub("LibSharedMedia-3.0")
 
   --object container
   local cfg = {}
@@ -27,7 +28,7 @@
   ---------------------------------------------
   cfg.embeds = {
 	rChat = true, -- Simple chat frame
-	rActionBarStyler = true, -- Simple actionbar styler for Roth UI
+	rActionBarStyler = true, -- Simple actionbar styler for Roth UI 
 	rButtonTemplate = true, -- Simple button skinning mod
 	rMinimap = true, -- Simplistic square minimap
 	rNamePlates = true, -- Diablo style Nameplates
@@ -102,7 +103,7 @@
       },
       castbar = {
         show = true,
-		    TextSize = 11,
+		TextSize = 11,
         hideDefault = true, --if you hide the Roth_UI castbar, should the Blizzard castbar be shown?
         latency = true,
         texture = (mediapath.."statusbar3"),
@@ -167,7 +168,7 @@
           fadeOut         = {time = 0.3, alpha = 0.2},
         },
       },
-	    arcbar = {
+	  arcbar = {
         show = true,
         scale = 0.40,
         color = {r = 0.14, g = 0.56, b = .9, },
@@ -201,12 +202,12 @@
           texture = (mediapath.."statusbar2"),
           scale = 1,
       },
-	    ArtifactPower = {
-		    show = true,
-			  pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 15 },
-			  texture = (mediapath.."statusbar2"),
-			  scale = 1,
-	    },
+	  ArtifactPower = {
+		show = true,
+			pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 15 },
+			texture = (mediapath.."statusbar2"),
+			scale = 1,
+	  },
       art = {
         actionbarbackground = {
           show = true,
@@ -243,7 +244,7 @@
       scale = 1.5,
 	  width = 300,
       height = 64,
-      pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = -100 },
+      pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = -70 },
       health = {
 	frequentUpdates = true,
         texture = (mediapath.."statusbar3"),
@@ -314,7 +315,7 @@
           shieldbar = { r = 0.5, g = 0.5, b = 0.5, a = 1, }, --the castbar color while target casting a shielded spell
           shieldbg = { r = 0.1, g = 0.1, b = 0.1, a = 0.7, },  --the castbar background color while target casting a shielded spell
         },
-        pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = 0, y = -155 },
+        pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = -10, y = -125 },
       },
       portrait = {
         pos = { a1 = "CENTER", a2 = "CENTER", af = "UIParent", x = 100, y = 0 },
@@ -346,12 +347,12 @@
 	  width = 150,
       height = 64,
       scale = 1.3,
-      pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = -238, y = -115 },
+      pos = { a1 = "TOP", a2 = "TOP", af = "UIParent", x = -238, y = -80 },
       auras = {
         show = true,
         size = 22,
         onlyShowPlayerDebuffs = false,
-        showDebuffType = false,
+        showDebuffType = true,
       },
       health = {
         texture = (mediapath.."statusbar3"),
@@ -426,9 +427,9 @@
     focus = {
       show = true,
 	  width = 128,
-      height = 64,
+      height = 64,	  
       scale = 0.85,
-      pos = { a1 = "RIGHT", a2 = "RIGHT", af = "UIParent", x = -30, y = 40 },
+      pos = { a1 = "CENTER", a2 = "BOTTOM", af = "UIParent", x = 0, y = 350 },
       aurawatch = {
         show            = false,
         size            = 20,
@@ -546,7 +547,7 @@
       vertheight = 64,
 	  width = 128,
       height = 64,
-      pos = { a1 = "TOPLEFT", a2 = "TOPLEFT", af = "UIParent", x = 35, y = -40 },
+      pos = { a1 = "CENTER", a2 = "CENTER", af = "UIParent", x = -335, y = 150 },
       aurawatch = {
         show            = false,
         size            = 18,
@@ -559,7 +560,7 @@
         showBuffs = true,
         onlyShowPlayerBuffs = true,
 		showBuffType = true,
-		number = 12,
+		number = 5,
       },
       health = {
         texture = (mediapath.."statusbar3"),
@@ -576,16 +577,19 @@
 		NameFontSize = 14
 	  },
       portrait = {
-        show = true,
-        use3D = true,
-		width = 100,
+        show = false,
+        use3D = false,
+		width = 0,
       },
       attributes = {
-        visibility          = "custom [group:party,nogroup:raid] show;hide",  --show this header in party
+        visibility          = "custom [group:party,nogroup:raid] hide;hide",  --show this header in party
         showPlayer          = true,     --make this true to show player in party
-        showSolo            = false,    --make this true to show while solo (only works if solo is in visiblity aswell
-        showParty           = true,     --make this true to show headerin party
+        showSolo            = true,    --make this true to show while solo (only works if solo is in visiblity aswell
+        showParty           = false,     --make this true to show headerin party
         showRaid            = false,    --show in raid
+		VerticalPoint       = "TOP",
+		HorizontalPoint     = "LEFT",
+		
       },
       healprediction = {
         show = true,
@@ -616,7 +620,7 @@
       alpha = {
         notinrange = 0.4,
       },
-      scale = 1.2,
+      scale = 1.3,
       pos = { a1 = "TOPLEFT", a2 = "TOPLEFT", af = "UIParent", x = 5, y = -5 },
       health = {
         texture = (mediapath.."statusbar3"),
@@ -633,30 +637,34 @@
         --maximum number of icons displayed at a time = 1
         --this is for important boss mechanics only, this is not for tracking healing HOTs etc
         whitelist = {
-          --test
-          --6673,--test1, battle shout
-          --72968,--test2
-          --93805,--test3
+          1044,
           32407,
           --CATACLYSM RAIDS
           86622,
+		  24858,
           --maloriak
           92980, --ice bomb
           77786, --red phase consuming flames
           --chimaeron
           89084 , --skull icon chimaeron <10k life
         },
-        show            = false,
-        disableCooldown = true,
-        showBuffType    = false,
-        showDebuffType  = false,
-        size            = 12,
+		blacklist = {
+			--these are abilities that should definetly now be shown
+			164545,
+			164547,
+			},
+        show            = true,
+        disableCooldown = false,
+        showBuffType    = true,
+        showDebuffType  = true,
+		doNotUseCustomFilter = true,
+        size            = 13,
         num             = 5,
         spacing         = 3,
-        pos = { a1 = "CENTER", x = 0, y = -9},
+        pos = { a1 = "CENTER", x = 0, y = -23},
       },
       attributes = {
-        visibility          = "custom [group:raid] show; hide",
+        visibility          = "custom [group:raid] show; show",
         showPlayer          = true,  --make this true to show player in party
         showSolo            = true,  --make this true to show while solo (only works if solo is in visiblity aswell
         showParty           = true,  --make this true to show raid in party
@@ -859,6 +867,30 @@
         fadeOut         = {time = 0.3, alpha = 0.2},
       },
     },
+    bar6 = {
+      enable          = true, --enable module
+	  vert = false, --choosing this will make the bar stack vertically instead of horizontally
+      scale           = 1.2,
+      padding         = 10, --frame padding
+      buttons         = {
+        size            = 26,
+        margin          = 5,
+      },
+      pos             = { a1 = "RIGHT", a2 = "RIGHT", af = "UIParent", x = -36, y = 0 },
+      userplaced      = {
+        enable          = true,
+      },
+      mouseover       = {
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+      combat          = { --fade the bar in/out in combat/out of combat
+        enable          = false,
+        fadeIn          = {time = 0.4, alpha = 1},
+        fadeOut         = {time = 0.3, alpha = 0.2},
+      },
+    },
     --PETBAR
     petbar = {
       enable          = true, --enable module
@@ -981,29 +1013,29 @@
     },
   }
 
-----------------------------------------
--- frame movement
-----------------------------------------
+  ----------------------------------------
+  -- frame movement
+  ----------------------------------------
 
---setting this to false will use the default frame positions, true allows moving
-cfg.framesUserplaced = true
+  --setting this to false will use the default frame positions, true allows moving
+  cfg.framesUserplaced = true
 
---setting this to true will lock the frames in place, false unlocks them
-cfg.framesLocked = true
+  --setting this to true will lock the frames in place, false unlocks them
+  cfg.framesLocked = true
 
-----------------------------------------
--- player specific data
-----------------------------------------
+  ----------------------------------------
+  -- player specific data
+  ----------------------------------------
 
---player stuff
-cfg.playername  = UnitName("player")
-cfg.playerclass = select(2,UnitClass("player"))
-cfg.playercolor = RAID_CLASS_COLORS[cfg.playerclass]
-cfg.playerspec = GetSpecialization()
+  --player stuff
+  cfg.playername  = UnitName("player")
+  cfg.playerclass = select(2,UnitClass("player"))
+  cfg.playercolor = RAID_CLASS_COLORS[cfg.playerclass]
+  cfg.playerspec = GetSpecialization()
 
-----------------------------------------
--- Embeds
-----------------------------------------
+  ----------------------------------------
+  -- Embeds
+  ----------------------------------------
 --rTooltip
 cfg.rtooltip = {
 	scale = 1.15,
@@ -1018,57 +1050,58 @@ cfg.tracker = {
 	size = { 260, 450 },
 }
    --rInfostrings
-cfg.frame = {
-	scale           = 0.95,
-	pos             = { a1 = "TOP", af = Minimap, a2 = "BOTTOM", x = 0, y = -25 },
-	userplaced      = true, --want to place the bar somewhere else?
-}
-
-cfg.showXpRep     = true --show xp or reputation as string
-cfg.showMail      = false --show mail as text
-
---rChat
-cfg.hideChatTabBackgrounds  = true
-cfg.selectedTabColor        = {1,0.75,0}
-cfg.selectedTabAlpha        = 1
-cfg.notSelectedTabColor     = {0.5,0.5,0.5}
-cfg.notSelectedTabAlpha     = 0.3
-
---rMinimap
-cfg.minimap = {
+ cfg.frame = {
+    scale           = 0.95,
+    pos             = { a1 = "TOP", af = Minimap, a2 = "BOTTOM", x = 0, y = -25 },
+    userplaced      = true, --want to place the bar somewhere else?
+  }
+  cfg.showXpRep     = true --show xp or reputation as string
+  cfg.showMail      = false --show mail as text
+  
+  --rChat
+  cfg.hideChatTabBackgrounds  = true
+  cfg.selectedTabColor        = {1,0.75,0}
+  cfg.selectedTabAlpha        = 1
+  cfg.notSelectedTabColor     = {0.5,0.5,0.5}
+  cfg.notSelectedTabAlpha     = 0.3
+  cfg.HideCustomCombatLog     = true
+  cfg.ScrollingEmotes         = false
+  
+  --rMinimap
+  cfg.minimap = {
 	scale = 1,
 	point = {"TOPRIGHT", 0, -18},
-}
+  }
 
-
+  
   ----------------------------------------
   -- other
   ----------------------------------------
+  
+  cfg.powercolors = PowerBarColor
+  cfg.powercolors["MANA"] = { r = 0, g = 0.4, b = 1 }
+  --fix the oUF mana color
+  oUF.colors.power["MANA"] = {0, 0.4, 1}
 
-cfg.powercolors = PowerBarColor
-cfg.powercolors["MANA"] = { r = 0, g = 0.4, b = 1 }
---fix the oUF mana color
-oUF.colors.power["MANA"] = {0, 0.4, 1}
-
---font
-if locale == "enUS" or locale == "enGB" then
-	cfg.font = (mediapath.."Cracked-Narrow.ttf")
-	cfg.chat = {
-		font = (mediapath.."Cracked-Narrow.ttf"),
-	}
-else
-	cfg.font = STANDARD_TEXT_FONT
-	cfg.chat = {
+  --font
+	if locale == "enUS" or locale == "enGB" then
+		cfg.font = (mediapath.."Expressway.ttf")
+		cfg.chat = {
+		font = (mediapath.."Expressway.ttf"),
+		}
+	else
+		cfg.font = STANDARD_TEXT_FONT
+		cfg.chat = {
 		font = STANDARD_TEXT_FONT,
-	}
-end
+		}
+	end
 
---backdrop
-cfg.backdrop = {
-	bgFile = (mediapath.."Tooltip_Background"),
-	edgeFile = (mediapath.."Tooltip_Border"),
-	tile = true,
-	tileSize = 16,
-	edgeSize = 16,
-	insets = { left = 4, right = 4, top = 4, bottom = 4 },
-}
+  --backdrop
+  cfg.backdrop = {
+    bgFile = (mediapath.."Tooltip_Background"),
+    edgeFile = (mediapath.."Tooltip_Border"),
+    tile = true,
+    tileSize = 16,
+    edgeSize = 16,
+    insets = { left = 4, right = 4, top = 4, bottom = 4 },
+  }

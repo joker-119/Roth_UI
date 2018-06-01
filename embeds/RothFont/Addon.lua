@@ -203,9 +203,7 @@ Roth_UI:ListenForLoaded(function()
 
 	-- I have no idea why the channel list is getting fucked up
 	-- but re-setting the font obj seems to fix it
-	for i = 1, MAX_CHANNEL_BUTTONS do
-		_G["ChannelButton"..i.."Text"]:SetFontObject(GameFontNormalSmallLeft)
-	end
+
 
 	for _, button in pairs(PaperDollTitlesPane.buttons) do
 		button.text:SetFontObject(GameFontHighlightSmallLeft)
@@ -220,6 +218,6 @@ Roth_UI:ListenForLoaded(function()
 	FloatingBattlePetTooltip.Name:SetFontObject(GameTooltipHeaderText)
 
 	LFGListFrame.CategorySelection.CategoryButtons[1].Label:SetFontObject(GameFontNormal)
-	WorldMapFrameNavBarHomeButtonText:SetFontObject(GameFontNormal)
+	WorldMapFrameHomeButtonText:SetFontObject(GameFontNormal)
 
 end)
