@@ -33,12 +33,15 @@
     local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
 	if self.cfg.vertical == true then
 		t:SetPoint("TOP",0,40)
+		t:SetPoint("LEFT",-0,0)
+		t:SetPoint("RIGHT",0,0)
+		t:SetPoint("BOTTOM",0,-20)
 	else
 		t:SetPoint("TOP",0,20)
+		t:SetPoint("LEFT",-10,0)
+		t:SetPoint("RIGHT",10,0)
+		t:SetPoint("BOTTOM",0,-20)
 	end
-	t:SetPoint("LEFT",-0,0)
-	t:SetPoint("RIGHT",0,0)
-	t:SetPoint("BOTTOM",0,-20)
     t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget")
   end
 
@@ -115,9 +118,15 @@
   local createHealthPowerStrings = function(self)
 
     local name = func.createFontString(self.Health, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
-	name:SetPoint("BOTTOM", self, "TOP", 0, -7)
-    name:SetPoint("LEFT", self.Health, 0, 0)
-    name:SetPoint("RIGHT", self.Health, 0, 0)
+	if self.cfg.vertical == true then
+		name:SetPoint("BOTTOM", self, "TOP", 0, -3)
+		name:SetPoint("LEFT", self.Health, 0, 0)
+		name:SetPoint("RIGHT", self.Health, 0, 0)
+	else
+		name:SetPoint("TOP", self, "TOP", 0, 60)
+		name:SetPoint("LEFT", self.Health, 0, 0)
+		name:SetPoint("RIGHT", self.Health, 0, 0)
+	end
 	self.Name = name
 
     local hpval = func.createFontString(self.Health, cfg.font, self.cfg.health.fontSize, "THINOUTLINE")

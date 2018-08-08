@@ -163,7 +163,11 @@
     if self.cfg.auras.show then
       func.createDebuffs(self)
       self.Debuffs.PostCreateIcon = func.createAuraIcon
-    end
+      if self.cfg.auras.showBuffs then
+        func.createBuffs(self)
+        self.Buffs.PostCreateIcon = func.createAuraIcon
+      end
+	end
 
     --debuffglow
     func.createDebuffGlow(self)

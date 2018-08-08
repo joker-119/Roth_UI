@@ -84,7 +84,6 @@ local Enable = function(self, unit)
     end
 
     self:RegisterEvent("RUNE_POWER_UPDATE", UpdateRune, true)
-    self:RegisterEvent("RUNE_TYPE_UPDATE", UpdateType, true)
     self:RegisterEvent("UPDATE_OVERRIDE_ACTIONBAR", Visibility, true)
     self:RegisterEvent("UNIT_ENTERED_VEHICLE", Visibility)
     self:RegisterEvent("UNIT_EXITED_VEHICLE", Visibility)
@@ -106,7 +105,6 @@ local Disable = function(self)
     RuneFrame.Show = nil
     RuneFrame:Show()
     self:UnregisterEvent("RUNE_POWER_UPDATE", UpdateRune)
-    self:UnregisterEvent("RUNE_TYPE_UPDATE", UpdateType)
     self:UnregisterEvent("UPDATE_OVERRIDE_ACTIONBAR", Visibility)
     self:UnregisterEvent("UNIT_ENTERED_VEHICLE", Visibility)
     self:UnregisterEvent("UNIT_EXITED_VEHICLE", Visibility)

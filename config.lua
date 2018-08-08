@@ -578,14 +578,14 @@
 	  },
       portrait = {
         show = false,
-        use3D = false,
-		width = 0,
+        use3D = true,
+		width = 85,
       },
       attributes = {
-        visibility          = "custom [group:party,nogroup:raid] hide;hide",  --show this header in party
+        visibility          = "custom [group:party,nogroup:raid] hide; hide",  --show this header in party
         showPlayer          = true,     --make this true to show player in party
         showSolo            = true,    --make this true to show while solo (only works if solo is in visiblity aswell
-        showParty           = false,     --make this true to show headerin party
+        showParty           = true,     --make this true to show headerin party
         showRaid            = false,    --show in raid
 		VerticalPoint       = "TOP",
 		HorizontalPoint     = "LEFT",
@@ -612,8 +612,6 @@
     --RAID
     raid = {
       show = true,
-	  width = 128,
-      height = 64,
       special = {
         chains = false, --should the raidframe include the chain textures?
       },
@@ -667,7 +665,7 @@
         visibility          = "custom [group:raid] show; show",
         showPlayer          = true,  --make this true to show player in party
         showSolo            = true,  --make this true to show while solo (only works if solo is in visiblity aswell
-        showParty           = true,  --make this true to show raid in party
+        showParty           = false,  --make this true to show raid in party
         showRaid            = true,   --show in raid
         point               = "TOP",
         yOffset             = 15,

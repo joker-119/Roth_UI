@@ -5,7 +5,7 @@ local oUF = ns.oUF or oUF
 
 
 
-local SPELL_POWER_SOUL_SHARDS     = SPELL_POWER_SOUL_SHARDS
+local SPELL_POWER_SOUL_SHARDS     = Enum.PowerType.SoulShards
 
 
 local Update = function(self, event, unit, powerType)

@@ -7,7 +7,7 @@ local oUF = ns.oUF or oUF
 
 
 
-local SPELL_POWER_ARCANE_CHARGES     = SPELL_POWER_ARCANE_CHARGES
+local SPELL_POWER_ARCANE_CHARGES     = Enum.PowerType.ArcaneCharges
 
 
 local Update = function(self, event, unit, powerType)

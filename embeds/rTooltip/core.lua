@@ -223,8 +223,8 @@ end)
 
   --func TooltipOnShow
   local function TooltipOnShow(self,...)
-    self:SetBackdropColor(1,1,1,1)
-    self:SetBackdropBorderColor(1,1,1,1)
+    --self:SetBackdropColor(1,1,1,1)
+    --self:SetBackdropBorderColor(1,1,1,1)
     local itemName, itemLink = self:GetItem()
     if itemLink then
       local itemRarity = select(3,GetItemInfo(itemLink))
@@ -236,8 +236,8 @@ end)
   
   --func TooltipOnShow
   local function TooltipOnHide(self,...)
-    self:SetBackdropColor(1,1,1,1)
-    self:SetBackdropBorderColor(1,1,1,1)
+    --self:SetBackdropColor(1,1,1,1)
+    --self:SetBackdropBorderColor(1,1,1,1)
   end
 
   --loop over tooltips
