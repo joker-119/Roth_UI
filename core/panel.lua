@@ -2676,7 +2676,7 @@
     --register some stuff
     self.eventHelper:RegisterUnitEvent("UNIT_HEALTH", "player")
     self.eventHelper:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", "player")
-    self.eventHelper:RegisterUnitEvent("UNIT_POWER", "player")
+    self.eventHelper:RegisterUnitEvent("UNIT_POWER_UPDATE", "player")
     self.eventHelper:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
     self.eventHelper:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
     self.eventHelper:SetScript("OnEvent", function(self) self:SetOrbsToMax() end)
@@ -2686,7 +2686,7 @@
   function panel:Disable()
     self.eventHelper:UnregisterEvent("UNIT_HEALTH")
     self.eventHelper:UnregisterEvent("UNIT_HEALTH_FREQUENT")
-    self.eventHelper:UnregisterEvent("UNIT_POWER")
+    self.eventHelper:UnregisterEvent("UNIT_POWER_UPDATE")
     self.eventHelper:UnregisterEvent("UNIT_POWER_FREQUENT")
     self.eventHelper:UnregisterEvent("UNIT_DISPLAYPOWER")
     self.eventHelper:SetScript("OnEvent", nil)
