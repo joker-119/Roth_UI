@@ -20,7 +20,7 @@
 
   --init parameters
   local initUnitParameters = function(self)
-    self:SetFrameStrata("MEDIUM")
+    self:SetFrameStrata("BACKGROUND")
     self:SetFrameLevel(1)
     self:SetSize(self.cfg.width, self.cfg.height)
     self:SetScale(self.cfg.scale)

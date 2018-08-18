@@ -1,4 +1,4 @@
---[[ $Id: AceGUIWidget-DropDown-Items.lua 1153 2016-11-20 09:57:15Z nevcairiel $ ]]--
+--[[ $Id: AceGUIWidget-DropDown-Items.lua 1192 2018-07-30 18:03:51Z funkydude $ ]]--
 
 local AceGUI = LibStub("AceGUI-3.0")
 
@@ -169,7 +169,7 @@ function ItemBase.Create(type)
 	self.text = text
 
 	local highlight = frame:CreateTexture(nil, "OVERLAY")
-	highlight:SetTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
+	highlight:SetTexture(136810) -- Interface\\QuestFrame\\UI-QuestTitleHighlight
 	highlight:SetBlendMode("ADD")
 	highlight:SetHeight(14)
 	highlight:ClearAllPoints()
@@ -182,7 +182,7 @@ function ItemBase.Create(type)
 	check:SetWidth(16)
 	check:SetHeight(16)
 	check:SetPoint("LEFT",frame,"LEFT",3,-1)
-	check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+	check:SetTexture(130751) -- Interface\\Buttons\\UI-CheckBox-Check
 	check:Hide()
 	self.check = check
 
@@ -190,7 +190,7 @@ function ItemBase.Create(type)
 	sub:SetWidth(16)
 	sub:SetHeight(16)
 	sub:SetPoint("RIGHT",frame,"RIGHT",-3,-1)
-	sub:SetTexture("Interface\\ChatFrame\\ChatFrameExpandArrow")
+	sub:SetTexture(130940) -- Interface\\ChatFrame\\ChatFrameExpandArrow
 	sub:Hide()
 	self.sub = sub	
 	
@@ -323,7 +323,7 @@ end
 -- Does not close the pullout on click.
 do
 	local widgetType = "Dropdown-Item-Toggle"
-	local widgetVersion = 3
+	local widgetVersion = 4
 	
 	local function UpdateToggle(self)
 		if self.value then
@@ -343,9 +343,9 @@ do
 		if self.disabled then return end
 		self.value = not self.value
 		if self.value then
-			PlaySound("igMainMenuOptionCheckBoxOn")
+			PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
 		else
-			PlaySound("igMainMenuOptionCheckBoxOff")
+			PlaySound(857) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF
 		end
 		UpdateToggle(self)
 		self:Fire("OnValueChanged", self.value)

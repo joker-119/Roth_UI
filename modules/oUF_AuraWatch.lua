@@ -202,8 +202,8 @@ do
 		if frame.unit ~= unit then return end
 		local watch = frame.AuraWatch
 		local index, icons = 1, watch.watched
-		local _, name, texture, count, duration, expire, caster, key, icon, spellid 
-		local filter = "HELPFUL"
+		local name, texture, count, duration, expire, caster, key, icon, spellid 
+		--local filter = "HELPFUL"
 		local guid = UnitGUID(unit)
 		if not GUIDs[guid] then SetupGUID(guid) end
 		

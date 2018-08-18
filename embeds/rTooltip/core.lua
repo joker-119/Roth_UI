@@ -42,13 +42,13 @@ cfg.rtooltip.backdrop = { bgFile = (mediapath.."Tooltip_Background"), edgeFile =
   GameTooltipStatusBar.bg = GameTooltipStatusBar:CreateTexture(nil,"BACKGROUND",nil,-8)
   GameTooltipStatusBar.bg:SetPoint("TOPLEFT",-1,1)
   GameTooltipStatusBar.bg:SetPoint("BOTTOMRIGHT",1,-1)
-  GameTooltipStatusBar.bg:SetTexture(1,1,1)
+  GameTooltipStatusBar.bg:SetTexture(0,0,0)
   GameTooltipStatusBar.bg:SetVertexColor(0,0,0,0.7)
 
   --HookScript GameTooltip OnTooltipCleared
   GameTooltip:HookScript("OnTooltipCleared", function(self)
     GameTooltip_ClearStatusBars(self)
-    self:SetBackdropColor(1,1,1,1)
+    self:SetBackdropColor(0,0,0,1)
     self:SetBackdropBorderColor(1,1,1,1)
   end)
 

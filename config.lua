@@ -635,16 +635,7 @@
         --maximum number of icons displayed at a time = 1
         --this is for important boss mechanics only, this is not for tracking healing HOTs etc
         whitelist = {
-          1044,
-          32407,
-          --CATACLYSM RAIDS
-          86622,
-		  24858,
-          --maloriak
-          92980, --ice bomb
-          77786, --red phase consuming flames
-          --chimaeron
-          89084 , --skull icon chimaeron <10k life
+          
         },
 		blacklist = {
 			--these are abilities that should definetly now be shown

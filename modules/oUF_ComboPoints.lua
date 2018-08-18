@@ -1,6 +1,6 @@
 local parent, ns = ...
 local oUF = ns.oUF or oUF
-
+if select(2, UnitClass("player")) ~= "ROGUE" then return end
 
 	if (select(2, GetTalentTierInfo(3,1))) == 2 then 
 		MAX_COMBO_POINTS = 6

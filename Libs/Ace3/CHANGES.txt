@@ -1,43 +1,92 @@
 ------------------------------------------------------------------------
-r1157 | h.leppkes@gmail.com | 2017-03-28 12:10:54 -0500 (Tue, 28 Mar 2017) | 1 line
+r1193 | funkydude | 2018-08-02 12:24:37 +0000 (Thu, 02 Aug 2018) | 1 line
 Changed paths:
-   M /trunk/changelog.txt
+   M /trunk/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.lua
+   M /trunk/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua
+   M /trunk/AceDB-3.0/AceDB-3.0.lua
+   M /trunk/AceDBOptions-3.0/AceDBOptions-3.0.lua
+   M /trunk/AceGUI-3.0/AceGUI-3.0.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIContainer-ScrollFrame.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIContainer-TabGroup.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIContainer-TreeGroup.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-CheckBox.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-InteractiveLabel.lua
 
-Update changelog
+Remove some local references we don't use.
 ------------------------------------------------------------------------
-r1156 | h.leppkes@gmail.com | 2017-03-28 12:09:39 -0500 (Tue, 28 Mar 2017) | 1 line
-Changed paths:
-   M /trunk/Ace3.toc
-
-Update TOC to 7.2
-------------------------------------------------------------------------
-r1155 | h.leppkes@gmail.com | 2017-03-28 12:09:25 -0500 (Tue, 28 Mar 2017) | 1 line
+r1192 | funkydude | 2018-07-30 18:03:51 +0000 (Mon, 30 Jul 2018) | 1 line
 Changed paths:
    M /trunk/AceGUI-3.0/widgets/AceGUIContainer-Frame.lua
-   M /trunk/AceGUI-3.0/widgets/AceGUIContainer-Window.lua
-
-AceGUI-3.0: Fire OnShow events from Frame and Windows containers (Ticket #396)
-------------------------------------------------------------------------
-r1154 | h.leppkes@gmail.com | 2017-03-28 12:06:59 -0500 (Tue, 28 Mar 2017) | 1 line
-Changed paths:
-   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-InteractiveLabel.lua
-   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-Label.lua
-
-AceGUI-3.0: Add SetJustifyV/H API to the Label/InteractiveLabel widgets (Ticket #397)
-------------------------------------------------------------------------
-r1153 | nevcairiel | 2016-11-20 03:57:15 -0600 (Sun, 20 Nov 2016) | 1 line
-Changed paths:
-   M /trunk/AceGUI-3.0/widgets/AceGUIContainer-ScrollFrame.lua
    M /trunk/AceGUI-3.0/widgets/AceGUIContainer-TreeGroup.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIContainer-Window.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-CheckBox.lua
    M /trunk/AceGUI-3.0/widgets/AceGUIWidget-ColorPicker.lua
    M /trunk/AceGUI-3.0/widgets/AceGUIWidget-DropDown-Items.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-Heading.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-Icon.lua
+   M /trunk/tests/AceGUITest/test.lua
 
-Remove pre-legion compat
+AceGUI-3.0: Convert various texture paths to texture ids.
 ------------------------------------------------------------------------
-r1152 | (no author) | 2016-11-17 03:49:10 -0600 (Thu, 17 Nov 2016) | 1 line
+r1191 | funkydude | 2018-07-27 13:29:50 +0000 (Fri, 27 Jul 2018) | 1 line
 Changed paths:
-   M /trunk/Ace3.toc
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-Slider.lua
 
-Update TOC for 7.1
+AceGUI-3.0/widgets/AceGUIWidget-Slider: Use the value passed to the OnValueChanged script, saves a call to frame:GetValue()
+------------------------------------------------------------------------
+r1190 | nevcairiel | 2018-07-27 07:46:34 +0000 (Fri, 27 Jul 2018) | 1 line
+Changed paths:
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-Label.lua
+
+AceGUI-3.0: Label: Avoid zero-height labels more directly
+------------------------------------------------------------------------
+r1189 | nevcairiel | 2018-07-27 07:33:48 +0000 (Fri, 27 Jul 2018) | 1 line
+Changed paths:
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-Label.lua
+
+AceGUI-3.0: Label: Fix computing a label height on empty labels
+------------------------------------------------------------------------
+r1188 | nevcairiel | 2018-07-25 20:26:35 +0000 (Wed, 25 Jul 2018) | 3 lines
+Changed paths:
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-CheckBox.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-Label.lua
+
+AceGUI-3.0: Prefer GetStringHeight over GetHeight for FontStrings, as this alleviates pressure on the anchor system and avoids glitches
+
+Recommended by TheDanW to help work-around anchoring issues.
+------------------------------------------------------------------------
+r1187 | nevcairiel | 2018-07-25 00:06:26 +0000 (Wed, 25 Jul 2018) | 1 line
+Changed paths:
+   M /trunk/AceGUI-3.0/widgets/AceGUIContainer-ScrollFrame.lua
+
+AceGUI-3.0: ScrollFrame: Adjust content.width based on scroll bar visibility
+------------------------------------------------------------------------
+r1186 | nevcairiel | 2018-07-21 14:19:18 +0000 (Sat, 21 Jul 2018) | 1 line
+Changed paths:
+   M /trunk/CallbackHandler-1.0/CallbackHandler-1.0.lua
+
+Update CallbackHandler to the latest version
+------------------------------------------------------------------------
+r1185 | nevcairiel | 2018-07-21 14:15:16 +0000 (Sat, 21 Jul 2018) | 1 line
+Changed paths:
+   M /trunk/AceBucket-3.0/AceBucket-3.0.lua
+
+AceBucket-3.0: Fix bucket firing with events that use "false" as arg1
+------------------------------------------------------------------------
+r1184 | nevcairiel | 2018-07-21 14:13:14 +0000 (Sat, 21 Jul 2018) | 1 line
+Changed paths:
+   M /trunk/AceAddon-3.0/AceAddon-3.0.lua
+   M /trunk/AceBucket-3.0/AceBucket-3.0.lua
+   M /trunk/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.lua
+   M /trunk/AceGUI-3.0/AceGUI-3.0.lua
+
+Remove self-generating Dispatchers, and use xpcall, which now supports arguments
+------------------------------------------------------------------------
+r1183 | nevcairiel | 2018-07-18 23:21:04 +0000 (Wed, 18 Jul 2018) | 1 line
+Changed paths:
+   M /trunk/AceGUI-3.0/widgets/AceGUIContainer-ScrollFrame.lua
+   M /trunk/AceGUI-3.0/widgets/AceGUIWidget-CheckBox.lua
+
+AceGUI-3.0: Replace layout workaround with another one that hopefully works better
 ------------------------------------------------------------------------
 
