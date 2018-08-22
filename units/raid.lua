@@ -118,16 +118,16 @@
 
   --create aura watch func
    local createAuraWatch = function(self)
-
+   
       local auras = {}
 	  local spellIDs
-    if cfg.playerclass == "PRIEST" then
+    if cfg.playerclass == "PRIEST" then 
       spellIDs = {
         139, -- Renew
 		17, -- Power Word Shield
 		77489, -- Echo of Light
 		41635, --Prayer of mending
-
+		
       }
     elseif cfg.playerclass == "PALADIN" then
       spellIDs = {
@@ -156,7 +156,7 @@
 		}
 	else -- Non Healer Classes
 		spellIDs = {
-
+		
 		}
 	end
       local dir = {
@@ -189,25 +189,21 @@
       auras.icons = {}
       for i, sid in pairs(spellIDs) do
         local icon = CreateFrame("Frame", nil, self)
-	       icon:SetFrameStrata("HIGH")
+		icon:SetFrameStrata("HIGH")
         icon.spellID = sid
         -- set the dimensions and positions
-
         icon.size = dir[i].size
         icon:SetSize(dir[i].size,dir[i].size)
         --position icon
         icon:SetPoint(dir[i].pos, self, dir[i].pos, dir[i].x, dir[i].y)
-
-        icon:SetBackdrop(backdrop_1px)
-	   	icon:SetBackdropColor(0, 0, 0, 1)
         --make indicator
         --if dir[i].indicator then
-          local tex = icon:CreateTexture()--nil, "OVERLAY")
-          tex:SetAllPoints()--icon)
+          local tex = icon:CreateTexture()
+          tex:SetAllPoints()
           tex:SetTexture("Interface\\AddOns\\Roth_UI\\media\\indicator")
           --tex:SetVertexColor(dir[i].color.r,dir[i].color.g,dir[i].color.b)
           icon.icon = tex
-      --  end
+
 
         auras.icons[sid] = icon
         -- Set any other AuraWatch icon settings
@@ -436,7 +432,7 @@
 
     --add heal prediction
     func.healPrediction(self)
-
+    
     --add total absorb
     func.totalAbsorb(self)
 
@@ -454,7 +450,7 @@
 
     local attr = cfg.units.raid.attributes
 
-
+    
     local groups, group = {}, nil
     for i=1, NUM_RAID_GROUPS do
       local name = "Roth_UIRaidGroup"..i
@@ -463,19 +459,19 @@
     raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,cfg.units.raid.pos.y)
 	if i == 2 then
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,cfg.units.raid.pos.y)
-	elseif i == 3 then
+	elseif i == 3 then 
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310)
-	elseif i == 4 then
+	elseif i == 4 then 
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310)
-	elseif i == 5 then
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310*2)
-	elseif i == 6 then
+	elseif i == 5 then 
+	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310*2)	
+	elseif i == 6 then 
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310*2)
-	elseif i == 7 then
+	elseif i == 7 then 
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310*3)
-	elseif i == 8 then
+	elseif i == 8 then 
 	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310*3)
-
+	
 	end
     func.applyDragFunctionality(raidDragFrame)
     table.insert(Roth_UI_Units,"Roth_UIRaidDragFrame"..i) --add frames to the slash command function
@@ -500,7 +496,7 @@
           self:SetHeight(%d)
         ]]):format(128, 64)
       )
-		group:SetPoint("TOPLEFT", raidDragFrame, 0, 0)
+		group:SetPoint("TOPLEFT", raidDragFrame, 0, 0)		
 		groups[i] = group
     end
 	   local scale = cfg.units.raid.scale
