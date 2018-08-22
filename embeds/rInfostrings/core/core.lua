@@ -177,12 +177,18 @@ if not cfg.embeds.rInfoStrings then return end
     return memformat(t)
   end
 
+
   local function rsiZoneCoords()
     local zone = ""
-	--if not IsInInstance() then
-		local x, y = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player"):GetXY()
-	--end
-    local coords
+    local x, y
+	local mapID = C_Map.GetBestMapForUnit("player")
+	if mapID then
+		local mapPosObject = C_Map.GetPlayerMapPosition(mapID, "player")
+		if mapPosObject then
+			x, y = mapPosObject:GetXY()
+		end
+	end
+	local coords
     if x and y and x ~= 0 and y ~= 0 then
       coords = format("%.2d/%.2d",x*100,y*100)
     end
