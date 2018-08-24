@@ -60,3 +60,4 @@ if not cfg.enable then return end
   if cfg.mouseover.enable then
     rButtonBarFader(frame, buttonList, cfg.mouseover.fadeIn, cfg.mouseover.fadeOut) --frame, buttonList, fadeIn, fadeOut
   end
+
