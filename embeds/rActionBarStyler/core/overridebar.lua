@@ -54,6 +54,10 @@ if not gcfg.embeds.rActionBarStyler then return end
     end
   end
 
+  --show/hide the frame on a given state driver
+  RegisterStateDriver(frame, "visibility", "[petbattle] hide; [overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
+  RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
+
   --create drag frame and drag functionality
   if cfg.userplaced.enable then
     rLib:CreateDragFrame(frame, dragFrameList, -2 , true) --frame, dragFrameList, inset, clamp

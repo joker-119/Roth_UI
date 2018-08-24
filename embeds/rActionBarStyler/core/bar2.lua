@@ -5,7 +5,6 @@
 
   --get the addon namespace
   local addon, ns = ...
-  local rabs = addon
   local gcfg = ns.cfg
   --get some values from the namespace
   local cfg = gcfg.bars.bar2
@@ -60,9 +59,7 @@ if not gcfg.embeds.rActionBarStyler then return end
   end
 
   --show/hide the frame on a given state driver
-	function updatestate()
-	  RegisterStateDriver(frame, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-	end
+  RegisterStateDriver(frame, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 
   --create drag frame and drag functionality
   if cfg.userplaced.enable then
@@ -79,9 +76,3 @@ if not gcfg.embeds.rActionBarStyler then return end
   if cfg.combat.enable then
     rCombatFrameFader(frame, cfg.combat.fadeIn, cfg.combat.fadeOut) --frame, buttonList, fadeIn, fadeOut
   end
-
-local helper = CreateFrame("Frame") --this is needed...adding player_login to the visivility events does not do anything
-    helper:RegisterEvent("UNIT_EXITED_VEHICLE")
-	helper:RegisterEvent("PLAYER_LOGIN")
-    helper:SetScript("OnEvent", function() updatestate(self) end)
-
