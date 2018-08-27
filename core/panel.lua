@@ -228,7 +228,7 @@
 
   --basic checkbutton func
   local createBasicCheckButton = function(parent, name, title)
-    local button = CF("CheckButton", name, parent, "OptionsCheckButtonTemplate")
+    local button = CF("CheckButton", name, parent, "InterfaceOptionsCheckButtonTemplate")
     button.text = _G[name.."Text"]
     button.text:SetText(title)
     button.text:SetTextColor(1,1,1)
