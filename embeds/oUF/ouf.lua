@@ -589,7 +589,7 @@ do
 	local isHacked = false
 	local shouldHack
 	local _, _, _, _, _, _, _, id = GetInstanceInfo()
-	local list = {1712, 8978}
+	local list = {1712, 9327}
 
 	local function toggleHeaders(flag)
 		for _, header in next, headers do
@@ -610,14 +610,14 @@ do
 	eventHandler:RegisterEvent('PLAYER_REGEN_ENABLED')
 	eventHandler:SetScript('OnEvent', function(_, event)
 		if(event == 'PLAYER_LOGIN') then
-			if(id == 1712 or id == 8978) then
+			if(id == 1712 or id == 1771) then
 				initialConfigFunction = initialConfigFunctionTemp:format(0)
 
 				-- This is here for layouts that don't use oUF:Factory
 				toggleHeaders(false)
 			end
 		elseif(event == 'ZONE_CHANGED_NEW_AREA') then
-			if(id == 1712 or id == 8978 and not isHacked) then
+			if(id == 1712 or id ==1 771 and not isHacked) then
 				initialConfigFunction = initialConfigFunctionTemp:format(0)
 
 				if(not InCombatLockdown()) then
