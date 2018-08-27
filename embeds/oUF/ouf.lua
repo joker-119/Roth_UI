@@ -617,7 +617,7 @@ do
 				toggleHeaders(false)
 			end
 		elseif(event == 'ZONE_CHANGED_NEW_AREA') then
-			if(id == 1712 or id ==1 771 and not isHacked) then
+			if(id == 1712 or id ==1771 and not isHacked) then
 				initialConfigFunction = initialConfigFunctionTemp:format(0)
 
 				if(not InCombatLockdown()) then
