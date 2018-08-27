@@ -258,12 +258,12 @@
 	
 
     local partyDragFrame = CreateFrame("Frame", "Roth_UIPartyDragFrame", UIParent)
-    partyDragFrame:SetSize(50,50)
+    partyDragFrame:SetSize(50,50)   
     partyDragFrame:SetPoint(cfg.units.party.pos.a1,cfg.units.party.pos.af,cfg.units.party.pos.a2,cfg.units.party.pos.x,cfg.units.party.pos.y)
     func.applyDragFunctionality(partyDragFrame)
     table.insert(Roth_UI_Units,"Roth_UIPartyDragFrame") --add frames to the slash command function
 
-	if cfg.units.party.vertical == true then
+if cfg.units.party.vertical == true then
     local party = oUF:SpawnHeader(
       "Roth_UIPartyHeader",
       nil,
@@ -299,4 +299,19 @@
     )
     party:SetPoint("TOPLEFT",partyDragFrame,0,0)
   end
- end
+	if attr.hideInArena then
+		local Frame = CreateFrame("Frame")
+			Frame:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
+			Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+			Frame:SetScript("OnEvent", function(...)
+				isArena, _ = IsActiveBattlefieldArena();
+				if isArena == true then
+					RegisterStateDriver(Roth_UIPartyHeader, "visibility", "hide")
+				else
+					if cfg.units.party.show then
+						RegisterStateDriver(Roth_UIPartyHeader, "visibility", attr.visibility)
+					end
+				end
+			end)
+	end
+end

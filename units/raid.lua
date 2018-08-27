@@ -505,4 +505,19 @@
             group:SetScale(scale)
           end
         end
+	if attr.showInArena then
+		local Frame = CreateFrame("Frame")
+			Frame:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
+			Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+			Frame:SetScript("OnEvent", function(...)
+				isArena, _ = IsActiveBattlefieldArena();
+				if isArena == true then
+					RegisterStateDriver(Roth_UIRaidGroup1, "visibility", "show")
+				else
+					if cfg.units.party.show then
+						RegisterStateDriver(Roth_UIRaidGroup1, "visibility", attr.visibility)
+					end
+				end
+			end)
+	end
   end

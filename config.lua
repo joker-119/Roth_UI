@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy119/Joker119 - 2016-2018
-  --  Version 2.1.2
+  --  Version 2.1.4
   ---------------------------------------------
 
   --get the addon namespace
@@ -582,13 +582,14 @@
 		width = 85,
       },
       attributes = {
-        visibility          = "custom [group:party,nogroup:raid] hide; hide",  --show this header in party
+        visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; hide",  --show this header in party
         showPlayer          = true,     --make this true to show player in party
-        showSolo            = true,    --make this true to show while solo (only works if solo is in visiblity aswell
-        showParty           = true,     --make this true to show headerin party
+        showSolo            = false,    --make this true to show while solo (only works if solo is in visiblity aswell
+        showParty           = false,    --make this true to show headerin party
         showRaid            = false,    --show in raid
-		VerticalPoint       = "TOP",
-		HorizontalPoint     = "LEFT",
+	hideInArena         = false,     --hides the party frame while inside an arena
+	VerticalPoint       = "TOP",
+	HorizontalPoint     = "LEFT",
 		
       },
       healprediction = {
@@ -653,11 +654,12 @@
         pos = { a1 = "CENTER", x = 0, y = -23},
       },
       attributes = {
-        visibility          = "custom [group:raid] show; show",
+        visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; [group:raid] show; hide",
         showPlayer          = true,  --make this true to show player in party
         showSolo            = true,  --make this true to show while solo (only works if solo is in visiblity aswell
-        showParty           = false,  --make this true to show raid in party
-        showRaid            = true,   --show in raid
+        showParty           = true,  --make this true to show raid in party
+        showRaid            = true,  --show in raid
+	showInArena         = false, --shows this frame while in an arena 
         point               = "TOP",
         yOffset             = 15,
         xoffset             = 0,
