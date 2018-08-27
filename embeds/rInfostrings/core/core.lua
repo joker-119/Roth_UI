@@ -249,13 +249,14 @@ if not cfg.embeds.rInfoStrings then return end
 
   --init
   local a = CreateFrame("Frame")
-  a:RegisterEvent("PLAYER_LOGIN")
-  a:SetScript("OnEvent", function(self,event,...)
-    if event == "PLAYER_LOGIN" then
-      startSearch(self)
-    end
-  end)
+	a:RegisterEvent("PLAYER_LOGIN")
+	a:RegisterEvent("PLAYER_ENTERING_WORLD")
+	a:SetScript("OnEvent", function(self,event,...)
+	  	if event == "PLAYER_LOGIN" or event == "PLAYER_ENTERING_WORLD" then
+	  		startSearch(self)
+	  	end
+	end)
 
   -- Create slash commands (hopefully this works?)  IT DOES, but this frame is anchored to minimap so no need
-  rLib:CreateDragFrame(frame, L.dragFrames, -2, true)
- rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)
+rLib:CreateDragFrame(frame, L.dragFrames, -2, true)
+rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)
