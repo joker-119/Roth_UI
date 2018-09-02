@@ -50,6 +50,8 @@ if not gcfg.embeds.rActionBarStyler then return end
 
   --disable reanchoring of the micro menu by the petbattle ui
   PetBattleFrame.BottomFrame.MicroButtonFrame:SetScript("OnShow", nil) --remove the onshow script
+  MainMenuBar:SetScript("OnShow", nil)
+  
 
   if not cfg.show then --wait...you no see me? :(
     frame:SetParent(ns.pastebin)

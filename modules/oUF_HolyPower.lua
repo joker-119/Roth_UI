@@ -9,7 +9,7 @@ local SPELL_POWER_HOLY_POWER = Enum.PowerType.HolyPower
 local Update = function(self, event, unit, powerType)
   local bar = self.HolyPowerBar
   local num = UnitPower(unit, Enum.PowerType.HolyPower)
-  local max = UnitPowerMax(unit, Enum.PowerType.HolyPower)
+  local max = 5
   --[[ --do not hide the bar when the value is empty, keep it visible
   if num < 1 then
     if bar:IsShown() then bar:Hide() end

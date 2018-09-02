@@ -165,7 +165,7 @@ if not cfg.embeds.rInfoStrings then return end
   end
 
   local function rsiLatency()
-    return select(3, GetNetStats()).."ms"
+    return select(3, GetNetStats()) .. "/" .. select(4, GetNetStats()) .."ms"
   end
 
   local function rsiMemory()

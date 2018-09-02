@@ -121,8 +121,8 @@ local createActionBarBackground = function(self)
 					Roth_UIArtifactPower:SetSize(367*cfg.scale, 8*cfg.scale)
 					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 141*cfg.scale)
 					Roth_UIRepBar:SetSize(367*cfg.scale, 8*cfg.scale)
-					if rABS_BagFrame then rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (129*cfg.scale)) end
-					if rABS_MicroMenu then rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (129*cfg.scale)) end
+					if Roth_UIBagBar then Roth_UIBagBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 190, (129*cfg.scale)) end
+					if Roth_UIMicroMenuBar then Roth_UIMicroMenuBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -120, (129*cfg.scale)) end
 				--If we are displaying 3 action bars and only 2 'exp' bars, determing types and set positions accordingly. Exp/rep bars are static, Artifact will take free space
 				elseif bar == "3" and bar_count == 2 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_2")
@@ -766,8 +766,8 @@ end
     --reputation bar
     bars.createRepBar(self)
 
-	--artifact bar
-	bars.createArtifactPowerBar(self)
+    --artifact bar
+    bars.createArtifactPowerBar(self)
 	
     --bottomline
     createBottomLine(self)
