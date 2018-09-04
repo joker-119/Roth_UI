@@ -249,10 +249,9 @@ if not cfg.embeds.rInfoStrings then return end
 
   --init
   local a = CreateFrame("Frame")
-	a:RegisterEvent("PLAYER_LOGIN")
 	a:RegisterEvent("PLAYER_ENTERING_WORLD")
 	a:SetScript("OnEvent", function(self,event,...)
-	  	if event == "PLAYER_LOGIN" or event == "PLAYER_ENTERING_WORLD" then
+	  	if event == "PLAYER_ENTERING_WORLD" then
 	  		startSearch(self)
 	  	end
 	end)

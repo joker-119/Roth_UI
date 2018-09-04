@@ -66,7 +66,7 @@
     player = {
       show = true,
       size = 160,
-      scale = .985,
+      scale = 1,
       pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -264, y = 2 },
       health = {
         frequentUpdates = true,
@@ -911,7 +911,7 @@
     stancebar = {
       enable          = true, --enable module
       show            = true, --true/false
-      scale           = 0.78,
+      scale           = 0.6,
       padding         = 2, --frame padding
       buttons         = {
         size            = 26,
@@ -974,9 +974,9 @@
     micromenu = {
       enable          = true, --enable module
       show            = true, --true/false
-      scale           = 0.7,
+      scale           = 0.6,
       padding         = 10, --frame padding
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -120, y = 130 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -140, y = 130 },
       userplaced      = {
         enable          = false,
       },
@@ -990,11 +990,11 @@
     bags = {
       enable          = true, --enable module
       show            = true, --true/false
-      scale           = .7,
+      scale           = .5,
       padding         = 15, --frame padding
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 190, y = 131 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 190, y = 141 },
       userplaced      = {
-        enable          = false,
+        enable          = true,
       },
       mouseover       = {
         enable          = false,

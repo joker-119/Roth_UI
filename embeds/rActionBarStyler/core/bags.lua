@@ -31,8 +31,8 @@ if not cfg.enable then return end
 
   --create the frame to hold the buttons
   local frame = CreateFrame("Frame", "rABS_BagFrame", UIParent, "SecureHandlerStateTemplate")
-  frame:SetWidth(NUM_BAG_BUTTONS*buttonWidth + (NUM_BAG_BUTTONS-1)*gap + 2*cfg.padding)
-  frame:SetHeight(buttonHeight + 2*cfg.padding)
+  frame:SetWidth(buttonWidth)
+  frame:SetHeight(buttonHeight)
 --  frame:SetPoint(cfg.pos.a1,cfg.pos.af,cfg.pos.a2,cfg.pos.x,cfg.pos.y)
   frame:SetScale(cfg.scale)
 
