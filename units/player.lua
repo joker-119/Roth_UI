@@ -831,7 +831,7 @@ end
     end
     
     --combobar
-    if cfg.playerclass == "ROGUE" and self.cfg.combobar.show then
+    if (cfg.playerclass == "ROGUE" or cfg.playerclass == "DRUID") and self.cfg.combobar.show then
       bars.createComboBar(self)
     end
 

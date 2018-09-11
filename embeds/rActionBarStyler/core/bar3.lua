@@ -57,7 +57,3 @@ if not gcfg.embeds.rActionBarStyler then return end
     frame.mouseover = cfg.mouseover
   end
 
-  --create the combat fader
-  if cfg.combat.enable then
-    rCombatFrameFader(frame, cfg.combat.fadeIn, cfg.combat.fadeOut) --frame, buttonList, fadeIn, fadeOut
-  end

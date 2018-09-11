@@ -376,8 +376,6 @@ end
 
       local orb = CreateFrame("Frame",nil,bar)
       self.SoulShards[i] = orb
-	  self.SoulShards[i+1] = orb2
-
       orb:SetSize(64,64)
       orb:SetPoint("LEFT",i*64,0)
 

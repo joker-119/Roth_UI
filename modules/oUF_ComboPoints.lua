@@ -1,40 +1,29 @@
 local parent, ns = ...
 local oUF = ns.oUF or oUF
-if select(2, UnitClass("player")) ~= "ROGUE" then return end
-
-	if (select(2, GetTalentTierInfo(3,1))) == 2 then 
-		MAX_COMBO_POINTS = 6
-	else
-		MAX_COMBO_POINTS = 5
-	end
-
-
 
 local class = select(2, UnitClass("player"))
+local spec = GetSpecialization()
 
 local Update = function(self, event, unit, powerType)
-  if unit and (unit ~= "player" and unit ~= "vehicle") then return end
-  if powerType and powerType ~= "COMBO_POINTS" then return end
   local bar = self.ComboBar
-  local cp = 0
-  if(UnitExists("vehicle") and UnitPower("vehicle",4) >= 1) then
-    cp = UnitPower("vehicle",4)
-  else
-    cp = UnitPower("player",4)
-  end
-
-  if cp < 1 and (UnitHasVehicleUI("player") or class ~= "ROGUE") then
-    bar:Hide()
-    return
-  else
-    bar:Show()
-  end
-
-
-  for i=1, MAX_COMBO_POINTS do
+  local num = UnitPower(unit, Enum.PowerType.ComboPoints)
+  local max = UnitPowerMax(unit, Enum.PowerType.ComboPoints)
+  MAX_COMBO_POINTS = UnitPowerMax("player", Enum.PowerType.ComboPoints)
+  --adjust the width of the holy power frame
+  local w = 64*(max+2)
+  bar:SetWidth(w)
+  for i = 1, max do
     local orb = self.ComboPoints[i]
-    local full = cp/MAX_COMBO_POINTS
-    if(i <= cp) then
+    if i > max then
+       if orb:IsShown() then orb:Hide() end
+    else
+      if not orb:IsShown() then orb:Show() end
+    end
+  end
+  for i = 1, max do
+    local orb = self.ComboPoints[i]
+    local full = num/max
+    if(i <= num) then
       if full == 1 then
         orb.fill:SetVertexColor(1,0,0)
         orb.glow:SetVertexColor(1,0,0)
@@ -53,19 +42,36 @@ local Update = function(self, event, unit, powerType)
   end
 end
 
+local Visibility = function(self, event, unit)
+  local element = self.ComboPoints
+  local bar = self.ComboBar
+  if UnitHasVehicleUI("player")
+    or ((HasVehicleActionBar() and UnitVehicleSkin("player") and UnitVehicleSkin("player") ~= "")
+    or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= ""))
+  then
+    bar:Hide()
+  elseif class == "ROGUE" or (class == "DRUID" and spec == 2) then
+    bar:Show()
+    element.ForceUpdate(element)
+  else
+    bar:Hide()
+  end
+end
+
 local Path = function(self, ...)
   return (self.ComboPoints.Override or Update) (self, ...)
 end
 
 local ForceUpdate = function(element)
-  return Path(element.__owner, "ForceUpdate", element.__owner.unit, nil)
+  return Path(element.__owner, "ForceUpdate", element.__owner.unit, "COMBO_POINTS")
 end
 
-local Enable = function(self)
+local function Enable(self, unit)
   local element = self.ComboPoints
-  if(element) then
+  if(element and unit == "player") then
     element.__owner = self
     element.ForceUpdate = ForceUpdate
+    
     self:RegisterEvent("UNIT_POWER_FREQUENT", Path)
     self:RegisterEvent("UNIT_DISPLAYPOWER", Path)
     self:RegisterEvent("PLAYER_TALENT_UPDATE", Visibility, true)
@@ -73,11 +79,16 @@ local Enable = function(self)
     self:RegisterEvent("UPDATE_OVERRIDE_ACTIONBAR", Visibility, true)
     self:RegisterEvent("UNIT_ENTERED_VEHICLE", Visibility)
     self:RegisterEvent("UNIT_EXITED_VEHICLE", Visibility)
+    
+    local helper = CreateFrame("Frame") --this is needed...adding player_login to the visivility events does not do anything
+    helper:RegisterEvent("PLAYER_LOGIN")
+    helper:SetScript("OnEvent", function() Visibility(self) end)
+    
     return true
   end
 end
 
-local Disable = function(self)
+local function Disable(self)
   local element = self.ComboPoints
   if(element) then
     self:UnregisterEvent("UNIT_POWER_FREQUENT", Path)

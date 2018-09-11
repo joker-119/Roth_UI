@@ -28,7 +28,6 @@ local Update = function(self, event, unit, powerType)
   end
 	for i = 1, bar.maxOrbs do
 		local orb = self.SoulShards[i]
-		local orb2 = self.SoulShards[i+1]
 		local full = cur/max
 		if(i <= cur) then
 			if full == 1 then
@@ -46,7 +45,7 @@ local Update = function(self, event, unit, powerType)
 			orb.glow:Hide()
 			orb.highlight:Hide()
 		end
-		if(i > cur) then
+		if(i > cur) and not (i > cur + 1) then
 			if cur_unmod/mod > cur then
 				orb.fill:SetVertexColor(0,1,0)
 				orb.glow:SetVertexColor(0,1,0)

@@ -709,6 +709,11 @@
   -- Action Bars
   ----------------------------------------
     cfg.bars = {
+    --General Button Settings
+	showMacroName = true,
+	showCooldown = true,
+	showHotkey = false,
+	showStackCount = true,
     --BAR 1
     bar1 = {
       enable          = true, --enable module
@@ -728,11 +733,6 @@
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0.2},
       },
-      combat          = { --fade the bar in/out in combat/out of combat
-        enable          = false,
-        fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
-      },
     },
     --OVERRIDE BAR (vehicle ui)
     overridebar = { --the new vehicle and override bar
@@ -748,11 +748,6 @@
         enable          = false,
       },
       mouseover       = {
-        enable          = false,
-        fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
-      },
-      combat          = { --fade the bar in/out in combat/out of combat
         enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0.2},
@@ -777,11 +772,6 @@
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0.2},
       },
-      combat          = { --fade the bar in/out in combat/out of combat
-        enable          = false,
-        fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
-      },
     },
     --BAR 3
     bar3 = {
@@ -797,11 +787,6 @@
         enable          = false,
       },
       mouseover       = {
-        enable          = false,
-        fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
-      },
-      combat          = { --fade the bar in/out in combat/out of combat
         enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0.2},
@@ -827,11 +812,6 @@
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0},
       },
-      combat          = { --fade the bar in/out in combat/out of combat
-        enable          = false,
-        fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
-      },
     },
     --BAR 5
     bar5 = {
@@ -852,11 +832,6 @@
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0.2},
       },
-      combat          = { --fade the bar in/out in combat/out of combat
-        enable          = false,
-        fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
-      },
     },
     bar6 = {
       enable          = true, --enable module
@@ -872,11 +847,6 @@
         enable          = true,
       },
       mouseover       = {
-        enable          = false,
-        fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
-      },
-      combat          = { --fade the bar in/out in combat/out of combat
         enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0.2},
@@ -901,11 +871,6 @@
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0.4},
       },
-      combat          = { --fade the bar in/out in combat/out of combat
-        enable          = false,
-        fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
-      },
     },
     --STANCE- + POSSESSBAR
     stancebar = {
@@ -925,11 +890,6 @@
         enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0.4},
-      },
-      combat          = { --fade the bar in/out in combat/out of combat
-        enable          = false,
-        fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
       },
     },
     --EXTRABAR

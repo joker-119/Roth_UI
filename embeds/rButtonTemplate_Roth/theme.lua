@@ -78,43 +78,67 @@ actionButtonConfig.normalTexture = {
 }
 
 --cooldown
-actionButtonConfig.cooldown = {
-  font = { STANDARD_TEXT_FONT, 15, "OUTLINE"},
-  points = {
-    {"TOPLEFT", 0, 0 },
-    {"BOTTOMRIGHT", 0, 0 },
-  },
-  alpha = 1,
-}
+if cfg.bars.showCooldown then
+	actionButtonConfig.cooldown = {
+		font = { STANDARD_TEXT_FONT, 15, "OUTLINE"},
+		points = {
+			{"TOPLEFT", 0, 0 },
+			{"BOTTOMRIGHT", 0, 0 },
+		},
+		alpha = 1,
+	}
+else
+	actionButtonConfig.cooldown = {
+		alpha = 0,
+	}
+end
 
 --name (macro name fontstring)
-actionButtonConfig.name = {
-  font = { STANDARD_TEXT_FONT, 10, "OUTLINE"},
-  points = {
-    {"BOTTOMLEFT", 0, 0 },
-    {"BOTTOMRIGHT", 0, 0 },
-  },
-  alpha = 1,
-}
+if cfg.bars.showName then
+	actionButtonConfig.name = {
+		font = { STANDARD_TEXT_FONT, 10, "OUTLINE"},
+		points = {
+			{"BOTTOMLEFT", 0, 0 },
+			{"BOTTOMRIGHT", 0, 0 },
+		},
+		alpha = 1,
+	}
+else
+	actionButtonConfig.name = {
+		alpha = 0,
+	}
+end
 
 --hotkey
-actionButtonConfig.hotkey = {
-  font = { STANDARD_TEXT_FONT, 11, "OUTLINE"},
-  points = {
-    {"TOPRIGHT", 0, 0 },
-    {"TOPLEFT", 0, 0 },
-  },
-  alpha = 0,
-}
+if cfg.bars.showHotkey then
+	actionButtonConfig.hotkey = {
+		font = { STANDARD_TEXT_FONT, 11, "OUTLINE"},
+		points = {
+			{"TOPRIGHT", 0, 0 },
+			{"TOPLEFT", 0, 0 },
+		},
+		alpha = 1,
+	}
+else
+	actionButtonConfig.hotkey = {
+		alpha = 0,
+	}
+end
 
 --count
-actionButtonConfig.count = {
-  font = { STANDARD_TEXT_FONT, 11, "OUTLINE"},
-  points = {
-    {"BOTTOMRIGHT", 0, 0 },
-  },
-  alpha = 1,
-}
+if cfg.bars.showStackCount then
+	actionButtonConfig.count = {
+		font = { STANDARD_TEXT_FONT, 11, "OUTLINE"},
+		points = {
+			{"BOTTOMRIGHT", 0, 0 },
+		},
+		alpha = 1,
+	}
+else
+	actionButtonConfig.count = {
+		alpha = 0,
+	}
+end
 
 --rButtonTemplate:StyleAllActionButtons
 rButtonTemplate:StyleAllActionButtons(actionButtonConfig)
