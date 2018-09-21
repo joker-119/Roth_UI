@@ -539,6 +539,7 @@ end
     local bar = CreateFrame("Frame","Roth_UIComboPoints",self)
     local w = 64*(MAX_COMBO_POINTS+2)
     local h = 64
+    local max = UnitPowerMax("player", Enum.PowerType.ComboPoints)
     --bar:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
     bar:SetPoint(self.cfg.combobar.pos.a1,self.cfg.combobar.pos.af,self.cfg.combobar.pos.a2,self.cfg.combobar.pos.x,self.cfg.combobar.pos.y)
     bar:SetWidth(w)
@@ -562,7 +563,7 @@ end
     t:SetTexture(mediapath.."combo_right")
     bar.rightEdge = t
 
-    for i = 1, MAX_COMBO_POINTS do
+    for i = 1, max do
 
       local orb = CreateFrame("Frame",nil,bar)
       self.ComboPoints[i] = orb

@@ -656,7 +656,7 @@
       attributes = {
         visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; [group:raid] show; hide",
         showPlayer          = true,  --make this true to show player in party
-        showSolo            = true,  --make this true to show while solo (only works if solo is in visiblity aswell
+        showSolo            = false,  --make this true to show while solo (only works if solo is in visiblity aswell
         showParty           = true,  --make this true to show raid in party
         showRaid            = true,  --show in raid
 	showInArena         = false, --shows this frame while in an arena 

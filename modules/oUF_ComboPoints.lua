@@ -6,8 +6,8 @@ local spec = GetSpecialization()
 
 local Update = function(self, event, unit, powerType)
   local bar = self.ComboBar
-  local num = UnitPower(unit, Enum.PowerType.ComboPoints)
-  local max = UnitPowerMax(unit, Enum.PowerType.ComboPoints)
+  local num = UnitPower("player", Enum.PowerType.ComboPoints)
+  local max = UnitPowerMax("player", Enum.PowerType.ComboPoints)
   MAX_COMBO_POINTS = UnitPowerMax("player", Enum.PowerType.ComboPoints)
   --adjust the width of the holy power frame
   local w = 64*(max+2)
@@ -50,7 +50,7 @@ local Visibility = function(self, event, unit)
     or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= ""))
   then
     bar:Hide()
-  elseif class == "ROGUE" or (class == "DRUID" and spec == 2) then
+  elseif class == "ROGUE" or (class == "DRUID" and GetSpecialization() == 2) then
     bar:Show()
     element.ForceUpdate(element)
   else
@@ -83,6 +83,7 @@ local function Enable(self, unit)
     local helper = CreateFrame("Frame") --this is needed...adding player_login to the visivility events does not do anything
     helper:RegisterEvent("PLAYER_LOGIN")
     helper:SetScript("OnEvent", function() Visibility(self) end)
+    helper:SetScript("OnEvent", function() Update(self) end)
     
     return true
   end

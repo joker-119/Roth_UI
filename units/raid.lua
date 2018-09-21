@@ -153,6 +153,8 @@
 		}
 	elseif cfg.playerclass == "MONK" then
 		spellIDs = {
+		119611, --Renewing mist
+		124682, -- Enveloping Mist
 		}
 	else -- Non Healer Classes
 		spellIDs = {
