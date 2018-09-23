@@ -7,7 +7,12 @@ local spec = GetSpecialization()
 local Update = function(self, event, unit, powerType)
   local bar = self.ComboBar
   local num = UnitPower("player", Enum.PowerType.ComboPoints)
-  local max = UnitPowerMax("player", Enum.PowerType.ComboPoints)
+  local max
+  if class == "ROGUE" and select(4, GetTalentInfo(3,2,1)) then
+	max = 6
+  else
+	max = 5
+  end
   MAX_COMBO_POINTS = UnitPowerMax("player", Enum.PowerType.ComboPoints)
   --adjust the width of the holy power frame
   local w = 64*(max+2)
@@ -81,9 +86,9 @@ local function Enable(self, unit)
     self:RegisterEvent("UNIT_EXITED_VEHICLE", Visibility)
     
     local helper = CreateFrame("Frame") --this is needed...adding player_login to the visivility events does not do anything
-    helper:RegisterEvent("PLAYER_LOGIN")
+    helper:RegisterEvent("PLAYER_ENTERING_WORLD")
     helper:SetScript("OnEvent", function() Visibility(self) end)
-    helper:SetScript("OnEvent", function() Update(self) end)
+--    helper:SetScript("OnEvent", function() Update(self) end)
     
     return true
   end

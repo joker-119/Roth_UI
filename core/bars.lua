@@ -534,12 +534,17 @@ end
   bars.createComboBar = function(self)
 
     self.ComboPoints = {}
-
+    local class = select(2, UnitClass("player"))
     local t
+    local max
     local bar = CreateFrame("Frame","Roth_UIComboPoints",self)
     local w = 64*(MAX_COMBO_POINTS+2)
     local h = 64
-    local max = UnitPowerMax("player", Enum.PowerType.ComboPoints)
+    if class == "ROGUE" and select(4, GetTalentInfo(3,2,1)) then
+	max = 6
+    else
+	max = 5
+    end
     --bar:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
     bar:SetPoint(self.cfg.combobar.pos.a1,self.cfg.combobar.pos.af,self.cfg.combobar.pos.a2,self.cfg.combobar.pos.x,self.cfg.combobar.pos.y)
     bar:SetWidth(w)
