@@ -176,9 +176,11 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 	frame.name:SetFont(cfg.font, 12)
 	
 	--explosiove orbs
-	if (name == "Fel Explosives") then
+	if (name == "Raider's Training Dummy") then
 		frame.healthBar:SetSize(384,48)
 		frame.healthBar:SetScale(0.35)
+		frame.healthBar:SetFrameStrata("TOOLTIP")
+		frame.healthBar:SetFrameLevel(20)
 		frame.healthBar.re:SetSize(128,128)
 		frame.healthBar.le:SetSize(128,128)
 	else

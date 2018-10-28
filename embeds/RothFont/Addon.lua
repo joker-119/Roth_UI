@@ -129,11 +129,11 @@ function Addon:SetFonts(event, addon)
 	SetFont(ErrorFont,                "text", 16, nil, 60) -- inherits GameFontNormalLarge
 	SetFont(WorldMapTextFont,     "header", 31, "THICKOUTLINE", 40, nil, nil, 0, 0, 0, 1, -1) -- inherits SystemFont_OutlineThick_WTF
 
-	--[[ Fancy stuff!
-	SetFont(ZoneTextFont,           BOLD, 31, "THICKOUTLINE") -- inherits SystemFont_OutlineThick_WTF
-	SetFont(SubZoneTextFont,        BOLD, 27, "THICKOUTLINE") -- inherits SystemFont_OutlineThick_Huge4
-	SetFont(PVPInfoTextFont,      NORMAL, 22, "THICKOUTLINE") -- inherits SystemFont_OutlineThick_Huge2
-	]]
+	--Fancy stuff!
+	SetFont(ZoneTextFont,           "header", 31, "THICKOUTLINE") -- inherits SystemFont_OutlineThick_WTF
+	SetFont(SubZoneTextFont,        "header", 27, "THICKOUTLINE") -- inherits SystemFont_OutlineThick_Huge4
+	SetFont(PVPInfoTextFont,      "text", 22, "THICKOUTLINE") -- inherits SystemFont_OutlineThick_Huge2
+	
 
 	-- Chat frames
 	local _, size = ChatFrame1:GetFont()

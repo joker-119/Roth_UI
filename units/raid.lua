@@ -19,6 +19,9 @@
   ---------------------------------------------
   -- UNIT SPECIFIC FUNCTIONS
   ---------------------------------------------
+if not cfg.units.raid.show then
+	return
+end
 
   --init parameters
   local initUnitParameters = function(self)
