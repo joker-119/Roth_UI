@@ -150,7 +150,7 @@ local createActionBarBackground = function(self)
 					Roth_UIRepBar:SetSize(367*cfg.scale, 8*cfg.scale)
 					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
 					Roth_UIArtifactPower:SetSize(367*cfg.scale, 8*cfg.scale)
-					if rABS_BagFrame then rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 215, (155*cfg.scale)) end
+					if rABS_BagFrame then rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 365, (207*cfg.scale)) end
 					if rABS_StanceBar then rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 135, (172*cfg.scale)) end
 					if rABS_MicroMenu then rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -155, (159*cfg.scale)) end
 				end
@@ -202,7 +202,7 @@ local createActionBarBackground = function(self)
 				--If we are displaying 1 actionbar and 3 'exp' bars, set positions for all bars.
 				if bar == "3" and bar_count == 0  then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_0")
-					if rABS_BagFrame then rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 215, (155*cfg.scale)) end
+					if rABS_BagFrame then rABS_BagFrame:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 365, (207*cfg.scale)) end
 					if rABS_StanceBar then rABS_StanceBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 135, (172*cfg.scale)) end
 					if rABS_MicroMenu then rABS_MicroMenu:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", -155, (159*cfg.scale)) end
 				end
