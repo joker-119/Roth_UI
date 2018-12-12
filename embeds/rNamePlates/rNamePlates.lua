@@ -68,8 +68,9 @@ h:SetScript("OnEvent", function(h, event, ...)
             --Health Bar
 			if frame:IsForbidden() then return end
             frame.healthBar:SetStatusBarTexture(mediapath.."statusbar_fill")
-            frame.healthBar:SetSize(256,32)
-            frame.healthBar:SetScale(0.35)
+			frame.healthBar:SetPoint("TOP",0,-50)
+			frame.healthBar:SetPoint("BOTTOM",0,50)			
+			frame.healthBar:SetScale(0.35)
 			frame.RaidTargetFrame.RaidTargetIcon:SetTexture(mediapath.."raidicons")
 			frame.RaidTargetFrame:SetPoint("RIGHT", frame.healthBar,"RIGHT",35,0)
 			frame.ClassificationFrame:Hide()
@@ -95,6 +96,7 @@ h:SetScript("OnEvent", function(h, event, ...)
 				frame.healthBar.bg = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
 				frame.healthBar.bg:SetTexture(mediapath.."statusbar_bg")
 				frame.healthBar.bg:SetAllPoints()
+				frame.healthBar.bg:SetAlpha(0.5)
 			end
 			
             --Name shadow
