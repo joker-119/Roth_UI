@@ -38,6 +38,7 @@ if not gcfg.embeds.rActionBarStyler then return end
   --move the buttons into position and reparent them
   MainMenuBarArtFrame:SetParent(frame)
   MainMenuBarArtFrame:EnableMouse(false)
+  MainMenuBar:EnableMouse(false)
 
   for i=1, num do
     local button = _G["ActionButton"..i]

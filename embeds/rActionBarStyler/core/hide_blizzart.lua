@@ -47,6 +47,7 @@ if not gcfg.embeds.rActionBarStyler then return end
 	MainMenuBarArtFrame.RightEndCap:SetAlpha(0)
 	MainMenuBarArtFrameBackground.BackgroundSmall:SetAlpha(0)
 	MainMenuBarArtFrameBackground.BackgroundLarge:SetAlpha(0)
+	MainMenuBar:Hide()
   end
 
   --remove OverrideBar textures
