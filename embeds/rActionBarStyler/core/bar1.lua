@@ -39,6 +39,7 @@ if not gcfg.embeds.rActionBarStyler then return end
   MainMenuBarArtFrame:SetParent(frame)
   MainMenuBarArtFrame:EnableMouse(false)
   MainMenuBar:EnableMouse(false)
+  MainMenuBar:Hide()
 
   for i=1, num do
     local button = _G["ActionButton"..i]

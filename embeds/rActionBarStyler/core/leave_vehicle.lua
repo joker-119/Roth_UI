@@ -32,7 +32,7 @@ if not gcfg.embeds.rActionBarStyler then return end
   button:SetSize(cfg.buttons.size, cfg.buttons.size)
   button:SetPoint("BOTTOMLEFT", frame, cfg.padding, cfg.padding)
   button:RegisterForClicks("AnyUp")
-  button:SetScript("OnClick", VehicleExit)
+  button:SetScript("OnClick", function(self) if UnitOnTaxi("player") then TaxiRequestEarlyLanding() else VehicleExit() end end)
 
   button:SetNormalTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
   button:SetPushedTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
@@ -46,7 +46,7 @@ if not gcfg.embeds.rActionBarStyler then return end
   hi:SetBlendMode("ADD")
 
   --the button will spawn if a vehicle exists, but no vehicle ui is in place (the vehicle ui has its own exit button)
-  RegisterStateDriver(button, "visibility", "[petbattle] hide; [overridebar][vehicleui][possessbar][@vehicle,exists] show; hide")
+  RegisterStateDriver(button, "visibility", "[petbattle] hide; [overridebar][vehicleui][possessbar][@vehicle,exists][canexitvehicle] show; hide")
   --frame is visibile when no vehicle ui is visible
   RegisterStateDriver(frame, "visibility", "[petbattle] hide; show")
 

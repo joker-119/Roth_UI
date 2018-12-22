@@ -18,6 +18,8 @@ if not gcfg.embeds.rActionBarStyler then return end
   --hide main menu bar frames
   if gcfg.bars.bar1.enable then
     MainMenuBar:SetAlpha(0)
+	MainMenuBar:Hide()
+	MainMenuBar:EnableMouse(false)
     ActionBarDownButton:SetAlpha(0)
     ActionBarUpButton:SetAlpha(0)
   end
@@ -41,13 +43,15 @@ if not gcfg.embeds.rActionBarStyler then return end
   SlidingActionBarTexture1:SetAlpha(0)
   PossessBackground1:SetAlpha(0)
   PossessBackground2:SetAlpha(0)
+  MainMenuBar:Hide()
+  MainMenuBar:EnableMouse(false)
 
   if gcfg.bars.bar1.enable then
     MainMenuBarArtFrame.LeftEndCap:SetAlpha(0)
 	MainMenuBarArtFrame.RightEndCap:SetAlpha(0)
 	MainMenuBarArtFrameBackground.BackgroundSmall:SetAlpha(0)
 	MainMenuBarArtFrameBackground.BackgroundLarge:SetAlpha(0)
-	MainMenuBar:Hide()
+
   end
 
   --remove OverrideBar textures
