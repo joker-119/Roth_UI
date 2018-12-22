@@ -1,4 +1,4 @@
-## Interface: 801000
+## Interface: 810000
 ## Author: Galaxy
 ## Title: Roth UI
 ## Notes: Galaxy's oUF layout with Diablo flavor!
