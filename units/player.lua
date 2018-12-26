@@ -76,13 +76,7 @@ local createActionBarBackground = function(self)
 				else
 					bar = "1"
 				end
-				if rABS_MainMenuBar then rABS_MainMenuBar:SetPoint("BOTTOM", "Roth_UIActionBarBackground", "BOTTOM", 0,15) end
-				if rABS_MultiBarBottomLeft then rABS_MultiBarBottomLeft:SetPoint("BOTTOM", "rABS_MainMenuBar", "TOP", 0,0) end
-				if rABS_MultiBarBottomRight and MultiBarBottomLeft:IsShown() then 
-					rABS_MultiBarBottomRight:SetPoint("BOTTOM", "rABS_MultiBarBottomLeft", "TOP", 0,0) 
-				elseif rABS_MultiBarBottomRight and (not MultiBarBottomLeft:IsShown()) then
-					rABS_MultiBarBottomRight:SetPoint("BOTTOM", "rABS_MainMenuBar", "TOP", 0,0)
-				end
+				
 				local bar_count = 0
 				--Determine is player is max level
 				if UnitLevel("player") == 120 or (not self.cfg.expbar.show) then

@@ -726,7 +726,7 @@
       },
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 16 },
       userplaced      = {
-        enable          = false,
+        enable          = true,
       },
       mouseover       = {
         enable          = false,
@@ -745,7 +745,7 @@
       },
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 16 },
       userplaced      = {
-        enable          = false,
+        enable          = true,
       },
       mouseover       = {
         enable          = false,
@@ -765,7 +765,7 @@
       },
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 42 },
       userplaced      = {
-        enable          = false,
+        enable          = true,
       },
       mouseover       = {
         enable          = false,
@@ -784,7 +784,7 @@
       },
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -1, y = 70 },
       userplaced      = {
-        enable          = false,
+        enable          = true,
       },
       mouseover       = {
         enable          = false,
