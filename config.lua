@@ -835,7 +835,7 @@
     },
     bar6 = {
       enable          = true, --enable module
-	  vert = false, --choosing this will make the bar stack vertically instead of horizontally
+	    vert            = false, --choosing this will make the bar stack vertically instead of horizontally
       scale           = 1.2,
       padding         = 10, --frame padding
       buttons         = {
@@ -882,9 +882,9 @@
         size            = 26,
         margin          = 5,
       },
-	  pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 60, y = -4  },
+	  pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 135, y = 172  },
 	  userplaced      = {
-		enable        = true,
+		  enable          = true,
 	  },
       mouseover       = {
         enable          = false,
@@ -936,9 +936,9 @@
       show            = true, --true/false
       scale           = 0.6,
       padding         = 10, --frame padding
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -140, y = 130 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -155, y = 159 },
       userplaced      = {
-        enable          = false,
+        enable          = true,
       },
       mouseover       = {
         enable          = false,
@@ -952,7 +952,7 @@
       show            = true, --true/false
       scale           = .5,
       padding         = 15, --frame padding
-      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 190, y = 141 },
+      pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 365, y = 207 },
       userplaced      = {
         enable          = true,
       },

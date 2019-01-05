@@ -33,7 +33,7 @@ if not cfg.enable then return end
   local frame = CreateFrame("Frame", "rABS_BagFrame", UIParent, "SecureHandlerStateTemplate")
   frame:SetWidth(buttonWidth)
   frame:SetHeight(buttonHeight)
---  frame:SetPoint(cfg.pos.a1,cfg.pos.af,cfg.pos.a2,cfg.pos.x,cfg.pos.y)
+  frame:SetPoint(cfg.pos.a1,cfg.pos.af,cfg.pos.a2,cfg.pos.x,cfg.pos.y)
   frame:SetScale(cfg.scale)
 
   --move the buttons into position and reparent them

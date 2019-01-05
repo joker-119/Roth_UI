@@ -127,9 +127,9 @@ end
     if cfg.playerclass == "PRIEST" then 
       spellIDs = {
         139, -- Renew
-		17, -- Power Word Shield
-		77489, -- Echo of Light
-		41635, --Prayer of mending
+		    17, -- Power Word Shield
+		    77489, -- Echo of Light
+		    41635, --Prayer of mending
 		
       }
     elseif cfg.playerclass == "PALADIN" then
@@ -138,31 +138,31 @@ end
         53563, -- Beacon of Light
         6940, -- Blessing of Sacrifice
         156910, -- Beacon of Faith
-		200025, -- Beacon of Virtue
+		    200025, -- Beacon of Virtue
       }
 	elseif cfg.playerclass == "DRUID" then
-		spellIDs = {
-		33763, -- Lifebloom
-		774, -- Rejuvination
-		8936, -- Regrowth
-		102342, -- Ironback
-		102351, -- Cenarion Ward
-		48438, -- Wild Growth
-		155777, -- Germination
-		}
+		  spellIDs = {
+		    33763, -- Lifebloom
+		    774, -- Rejuvination
+		    8936, -- Regrowth
+		    102342, -- Ironback
+		    102351, -- Cenarion Ward
+		    48438, -- Wild Growth
+		    155777, -- Germination
+		  }
 	elseif cfg.playerclass == "SHAMAN" then
-		spellIDs = {
-		61295, -- Riptide
-		}
+		  spellIDs = {
+		    61295, -- Riptide
+		  }
 	elseif cfg.playerclass == "MONK" then
-		spellIDs = {
-		119611, --Renewing mist
-		124682, -- Enveloping Mist
-		}
+		  spellIDs = {
+		    119611, --Renewing mist
+		    124682, -- Enveloping Mist
+		  }
 	else -- Non Healer Classes
-		spellIDs = {
+		  spellIDs = {
 		
-		}
+		  }
 	end
       local dir = {
         [1] = {size = 15, pos = "CENTER",       x = 0, y = 12.5 },
@@ -192,27 +192,27 @@ end
 
       -- Set any other AuraWatch settings
       auras.icons = {}
-      for i, sid in pairs(spellIDs) do
-        local icon = CreateFrame("Frame", nil, self)
-		icon:SetFrameStrata("HIGH")
-        icon.spellID = sid
-        -- set the dimensions and positions
-        icon.size = dir[i].size
-        icon:SetSize(dir[i].size,dir[i].size)
-        --position icon
-        icon:SetPoint(dir[i].pos, self, dir[i].pos, dir[i].x, dir[i].y)
-        --make indicator
-        --if dir[i].indicator then
-          local tex = icon:CreateTexture()
-          tex:SetAllPoints()
-          tex:SetTexture("Interface\\AddOns\\Roth_UI\\media\\indicator")
-          --tex:SetVertexColor(dir[i].color.r,dir[i].color.g,dir[i].color.b)
-          icon.icon = tex
+        for i, sid in pairs(spellIDs) do
+          local icon = CreateFrame("Frame", nil, self)
+		        icon:SetFrameStrata("HIGH")
+            icon.spellID = sid
+            -- set the dimensions and positions
+            icon.size = dir[i].size
+            icon:SetSize(dir[i].size,dir[i].size)
+            --position icon
+            icon:SetPoint(dir[i].pos, self, dir[i].pos, dir[i].x, dir[i].y)
+            --make indicator
+            --if dir[i].indicator then
+            local tex = icon:CreateTexture()
+              tex:SetAllPoints()
+              tex:SetTexture("Interface\\AddOns\\Roth_UI\\media\\indicator")
+              --tex:SetVertexColor(dir[i].color.r,dir[i].color.g,dir[i].color.b)
+              icon.icon = tex
 
 
-        auras.icons[sid] = icon
+              auras.icons[sid] = icon
         -- Set any other AuraWatch icon settings
-      end
+        end
       --call aurawatch
       self.AuraWatch = auras
     end
@@ -224,24 +224,25 @@ end
     local dead
 	local offline
 
-    if unit and UnitIsTapDenied(unit) then
-      color = {r = 0.65, g = 0.65, b = 0.65}
-    elseif UnitIsDeadOrGhost(unit) then
-      color = {r = 0.4, g = 0.4, b = 0.4}
-      dead = 1
+  if unit and UnitIsTapDenied(unit) then
+    color = {r = 0.65, g = 0.65, b = 0.65}
+  elseif UnitIsDeadOrGhost(unit) then
+    color = {r = 0.4, g = 0.4, b = 0.4}
+    dead = 1
 	elseif not UnitIsConnected(unit) then
 		color = {r = 0.4, g = 0.4, b = 0.4}
 		offline = 1
-    elseif not cfg.colorswitcher.classcolored then
-      color = cfg.colorswitcher.bright
-    elseif cfg.colorswitcher.threatColored and unit and UnitThreatSituation(unit) == 3 then
-      color = { r = 1, g = 0, b = 0, }
-    elseif UnitIsPlayer(unit) then
-      color = RAID_CLASS_COLORS[select(2, UnitClass(unit))]
-    else
-      color = FACTION_BAR_COLORS[UnitReaction(unit, "player")]
-    end
-    if not color then color = { r = 0.5, g = 0.5, b = 0.5, } end
+  elseif not cfg.colorswitcher.classcolored then
+    color = cfg.colorswitcher.bright
+  elseif cfg.colorswitcher.threatColored and unit and UnitThreatSituation(unit) == 3 then
+    color = { r = 1, g = 0, b = 0, }
+  elseif UnitIsPlayer(unit) then
+    color = RAID_CLASS_COLORS[select(2, UnitClass(unit))]
+  else
+    color = FACTION_BAR_COLORS[UnitReaction(unit, "player")]
+  end
+  
+  if not color then color = { r = 0.5, g = 0.5, b = 0.5, } end
     --dead
     if offline == 1 then
 		bar:SetStatusBarColor(0.4, 0.4, 0.4, 0.4)
