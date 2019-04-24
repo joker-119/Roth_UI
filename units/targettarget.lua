@@ -50,7 +50,7 @@
     h:SetPoint("LEFT",30.5,0)
     h:SetPoint("RIGHT",-30.5,0)
     h:SetPoint("BOTTOM",0,25.7)
-	h:SetFrameStrata("LOW")
+	  h:SetFrameStrata("BACKGROUND")
 
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)

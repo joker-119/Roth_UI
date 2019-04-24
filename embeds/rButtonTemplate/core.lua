@@ -237,7 +237,7 @@ function rButtonTemplate:StyleItemButton(button,cfg)
   local normalTexture = button:GetNormalTexture()
   local pushedTexture = button:GetPushedTexture()
   local highlightTexture = button:GetHighlightTexture()
-  local checkedTexture = button:GetCheckedTexture()
+  --local checkedTexture = button:GetCheckedTexture()
 
   --backdrop
   SetupBackdrop(button,cfg.backdrop)
