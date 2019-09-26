@@ -23,10 +23,12 @@ if not gcfg.embeds.rActionBarStyler then return end
   local frame = CreateFrame("Frame", "rABS_PetBar", UIParent, "SecureHandlerStateTemplate")
   frame:SetWidth(num*cfg.buttons.size + (num-1)*cfg.buttons.margin + 2*cfg.padding)
   frame:SetHeight(cfg.buttons.size + 2*cfg.padding)
+  frame:ClearAllPoints()
   frame:SetPoint(cfg.pos.a1,cfg.pos.af,cfg.pos.a2,cfg.pos.x,cfg.pos.y)
   frame:SetScale(cfg.scale)
 
   --move the buttons into position and reparent them
+  PetActionBarFrame:ClearAllPoints()
   PetActionBarFrame:SetParent(frame)
   PetActionBarFrame:EnableMouse(false)
 

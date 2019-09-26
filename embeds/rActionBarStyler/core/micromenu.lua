@@ -38,6 +38,7 @@ if not gcfg.embeds.rActionBarStyler then return end
   local frame = CreateFrame("Frame", "rABS_MicroMenu", UIParent, "SecureHandlerStateTemplate")
   frame:SetWidth(NUM_MICROBUTTONS*buttonWidth + (NUM_MICROBUTTONS-1)*gap + 2*cfg.padding)
   frame:SetHeight(buttonHeight + 2*cfg.padding)
+  frame:ClearAllPoints();
   frame:SetPoint(cfg.pos.a1,cfg.pos.af,cfg.pos.a2,cfg.pos.x,cfg.pos.y)
   frame:SetScale(cfg.scale)
 
@@ -50,6 +51,7 @@ if not gcfg.embeds.rActionBarStyler then return end
 
   --disable reanchoring of the micro menu by the petbattle ui
   PetBattleFrame.BottomFrame.MicroButtonFrame:SetScript("OnShow", nil) --remove the onshow script
+  MainMenuBar:ClearAllPoints();
   MainMenuBar:SetScript("OnShow", nil)
   
 

@@ -109,6 +109,9 @@ local createActionBarBackground = function(self)
 				--If we are displaying all 3 actionbars and all 3 'exp' bars
 				elseif bar == "3" and bar_count == 3 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_all")
+					Roth_UIExpBar:ClearAllPoints()
+					Roth_UIArtifactPower:ClearAllPoints()
+					Roth_UIRepBar:ClearAllPoints()
 					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
 					Roth_UIExpBar:SetSize(367*cfg.scale, 8*cfg.scale)
 					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 131*cfg.scale)
@@ -118,6 +121,9 @@ local createActionBarBackground = function(self)
 				--If we are displaying 3 action bars and only 2 'exp' bars, determing types and set positions accordingly. Exp/rep bars are static, Artifact will take free space
 				elseif bar == "3" and bar_count == 2 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_2")
+					Roth_UIExpBar:ClearAllPoints()
+					Roth_UIArtifactPower:ClearAllPoints()
+					Roth_UIRepBar:ClearAllPoints()
 					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
 					Roth_UIExpBar:SetSize(367*cfg.scale, 8*cfg.scale)
 					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 131*cfg.scale)
@@ -132,6 +138,9 @@ local createActionBarBackground = function(self)
 				--If we are displaying all 3 actionbars but only 1 'exp' bar, since only one bar is displayed, set position for all to avoid unecessary if/then/else functions
 				elseif bar == "3" and bar_count == 1 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_1")
+					Roth_UIExpBar:ClearAllPoints()
+					Roth_UIArtifactPower:ClearAllPoints()
+					Roth_UIRepBar:ClearAllPoints()
 					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
 					Roth_UIExpBar:SetSize(367*cfg.scale, 8*cfg.scale)
 					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
@@ -142,6 +151,9 @@ local createActionBarBackground = function(self)
 				--If we are displaying 2 actionbars and all 3 'exp' bars, set positions for all bars.
 				if bar == "2" and bar_count == 3 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_3")
+					Roth_UIExpBar:ClearAllPoints()
+					Roth_UIArtifactPower:ClearAllPoints()
+					Roth_UIRepBar:ClearAllPoints()
 					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 101*cfg.scale)
 					Roth_UIExpBar:SetSize(389*cfg.scale, 8*cfg.scale)
 					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 111*cfg.scale)
@@ -151,6 +163,9 @@ local createActionBarBackground = function(self)
 				--If we are displaying 2 action bars and 2 'exp' bars, set position for bars, and determine where artifact bar goes
 				elseif bar == "2" and bar_count == 2 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_2")
+					Roth_UIExpBar:ClearAllPoints()
+					Roth_UIArtifactPower:ClearAllPoints()
+					Roth_UIRepBar:ClearAllPoints()
 					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 101*cfg.scale)
 					Roth_UIExpBar:SetSize(389*cfg.scale, 8*cfg.scale)
 					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 111*cfg.scale)
@@ -165,6 +180,9 @@ local createActionBarBackground = function(self)
 				--If we are displaying 2 actionbars and 1 'exp' bar, set position for all bars to avoid unecessary if/then/else functions
 				elseif bar == "2" and bar_count == 1 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_1")
+					Roth_UIExpBar:ClearAllPoints()
+					Roth_UIArtifactPower:ClearAllPoints()
+					Roth_UIRepBar:ClearAllPoints()
 					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 101*cfg.scale)
 					Roth_UIExpBar:SetSize(389*cfg.scale, 8*cfg.scale)
 					if not levelbar then 
@@ -191,6 +209,9 @@ local createActionBarBackground = function(self)
 				end
 				if bar == "1" and bar_count == 3 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_1_3")
+					Roth_UIExpBar:ClearAllPoints()
+					Roth_UIArtifactPower:ClearAllPoints()
+					Roth_UIRepBar:ClearAllPoints()
 					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
 					Roth_UIExpBar:SetSize(367*cfg.scale, 8*cfg.scale)
 					Roth_UIArtifactPower:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 131*cfg.scale)
@@ -199,6 +220,9 @@ local createActionBarBackground = function(self)
 					Roth_UIRepBar:SetSize(367*cfg.scale, 8*cfg.scale)
 				elseif bar == "1" and bar_count == 2 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_1_2")
+					Roth_UIExpBar:ClearAllPoints()
+					Roth_UIArtifactPower:ClearAllPoints()
+					Roth_UIRepBar:ClearAllPoints()
 					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 101*cfg.scale)
 					Roth_UIExpBar:SetSize(389*cfg.scale, 8*cfg.scale)
 					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 111*cfg.scale)
@@ -213,6 +237,9 @@ local createActionBarBackground = function(self)
 				elseif bar == "1" and bar_count == 1 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_1_1")
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_1")
+					Roth_UIExpBar:ClearAllPoints()
+					Roth_UIArtifactPower:ClearAllPoints()
+					Roth_UIRepBar:ClearAllPoints()
 					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 101*cfg.scale)
 					Roth_UIExpBar:SetSize(389*cfg.scale, 8*cfg.scale)
 					if not levelbar then 

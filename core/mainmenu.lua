@@ -23,19 +23,3 @@ local MenuSetup = function() end
 	GameMenuFrame:SetBackdrop(cfg.backdrop)
 	
 	--Skin the Character Frame
-
-
-		
-for id, btn in pairs({GameMenuFrame:GetChildren()}) do
-	btn.Left:SetTexture(nil);
-	btn.Right:SetTexture(nil);
-	btn.Middle:SetTexture(nil);
-	--btn:SetHighlightTexture(nil);
-	btn.Text:SetFont(cfg.font, 13, "THINOUTLINE")
-	
-	btn.Left.SetTexture = MenuSetup;
-	btn.Right.SetTexture = MenuSetup;
-	btn.Middle.SetTexture = MenuSetup;
-end
-
-  

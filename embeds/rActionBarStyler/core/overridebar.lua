@@ -27,6 +27,7 @@ if not gcfg.embeds.rActionBarStyler then return end
   frame:SetScale(cfg.scale)
 
   --move the buttons into position and reparent them
+  OverrideActionBar:ClearAllPoints()
   OverrideActionBar:SetParent(frame)
   OverrideActionBar:EnableMouse(false)
   OverrideActionBar:SetScript("OnShow", nil) --remove the onshow script
