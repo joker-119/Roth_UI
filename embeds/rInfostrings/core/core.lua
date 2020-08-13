@@ -151,6 +151,7 @@ if not cfg.embeds.rInfoStrings then return end
       xp = "|c00FA58F4"..numformat(UnitXP("player")).."/"..numformat(UnitXPMax("player")).." |r|c00ffb400("..numformat(GetXPExhaustion() or 0)..")|r|c00FA58F4 | "..string.format("%.0f", (UnitXP("player")/UnitXPMax("player")*100)).."%|r"
     else
       local _, _, minimum, maximum, value = GetWatchedFactionInfo()
+
       if ((value-minimum)==999) and ((maximum-minimum)==1000) then
         xp = "|c0000FF00MAXED OUT|r"
       else

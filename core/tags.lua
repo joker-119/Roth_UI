@@ -195,7 +195,7 @@ end
     local val = oUF.Tags.Methods["perhp"](unit)
     return val or ""
   end
-  oUF.Tags.Events["diablo:bosshp"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_TARGETABLE_CHANGED"
+  oUF.Tags.Events["diablo:bosshp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_TARGETABLE_CHANGED"
   
   --boss power value
   oUF.Tags.Methods["diablo:bosspp"] = function(unit)

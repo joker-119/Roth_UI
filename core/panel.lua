@@ -237,9 +237,9 @@
 
   --basic color picker func
   local createBasicColorPicker = function(parent, name, title, width, height)
-    local picker = CF("Button", name, parent)
+    local picker = CF("Button", name, parent, BackdropTemplateMixin and "BackdropTemplate")
     picker:SetSize(width, height)
-    picker:SetBackdrop(backdrop)
+    picker:SetBackdrop({backdrop})
     picker:SetBackdropBorderColor(0.5,0.5,0.5)
     --texture
     local color = picker:CreateTexture(nil,"BACKGROUND",nil,-7)

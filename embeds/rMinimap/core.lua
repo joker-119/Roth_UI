@@ -30,6 +30,12 @@ Minimap:SetMaskTexture(mediapath.."mask2")
 Minimap:ClearAllPoints()
 Minimap:SetPoint("CENTER")
 Minimap:SetSize(190,190) --correct the cluster offset
+local function SetAlpha()
+	Minimap:SetAlpha(cfg.minimap.alpha)
+end
+C_Timer.After(5, SetAlpha)
+
+
 
 --hide regions
 MinimapBackdrop:Hide()
@@ -155,7 +161,6 @@ end
 Minimap:SetScript("OnLeave", SetTimer)
 rLib:RegisterCallback("PLAYER_ENTERING_WORLD", Hide)
 Hide(Minimap)
-
 
 --drag frame
 rLib:CreateDragFrame(MinimapCluster, L.dragFrames, -2, true)

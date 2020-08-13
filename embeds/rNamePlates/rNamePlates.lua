@@ -180,7 +180,7 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 	frame.name:SetFont(cfg.font, 12)
 	
 	--explosiove orbs
-	if (name == "Explosives") then
+	if (string.match( name, "Explosives" )) then
 		frame.healthBar:SetSize(384,48)
 		frame.healthBar:SetScale(0.35)
 		frame.healthBar:SetFrameStrata("TOOLTIP")
@@ -188,8 +188,7 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 		frame.healthBar.re:SetSize(128,128)
 		frame.healthBar.le:SetSize(128,128)
 	else
-		frame.healthBar.re:SetSize(64,64)
-		frame.healthBar.le:SetSize(64,64)
+		frame.healthBar:SetSize(64,64)
 	end
 end)
 

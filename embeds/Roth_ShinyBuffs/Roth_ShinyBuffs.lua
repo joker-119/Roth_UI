@@ -70,7 +70,7 @@ local function SkinningMachine(svtable, btn, dur, c, icon, bor, firstTime)
 			bor:SetDrawLayer("OVERLAY", 1)
 		end
 		--
-		btn.bar = CreateFrame("StatusBar", nil, btn.bg)
+		btn.bar = CreateFrame("StatusBar", nil, btn.bg, BackdropTemplateMixin and "BackdropTemplate")
 		btn.bar:SetPoint("TOPLEFT", icon, "BOTTOMLEFT", 0, -1.5)
 		btn.bar:SetPoint("TOPRIGHT", icon, "BOTTOMRIGHT", 0, -1.5)
 		btn.bar:SetPoint("BOTTOM", btn.bg, "BOTTOM", 0, 5.5)
@@ -99,21 +99,16 @@ local function SkinningMachine(svtable, btn, dur, c, icon, bor, firstTime)
 	dur:SetFont(LSM:Fetch("font", db.font), db[svtable].dfsize, db.fstyle)
 	c:SetFont(LSM:Fetch("font", db.font), db[svtable].cfsize, db.fstyle)
 	btn.bg:SetPoint("BOTTOMRIGHT", btn, "BOTTOMRIGHT", 2, -max(db[svtable].size*.2, 5))
-	btn.bg:SetBackdrop({	bgFile = LSM:Fetch("background", db.bg),
-						edgeFile = LSM:Fetch("border", db.border),
-						edgeSize = db.borderWidth,
-						insets = {left=3,right=3,top=3,bottom=3}
-					})
 	btn.bar:SetStatusBarTexture(LSM:Fetch("statusbar", db.sbar))
 	if db.classbg then
-		btn.bg:SetBackdropColor(classColor.r, classColor.g, classColor.b)
+		--btn.bg:SetBackdropColor(classColor.r, classColor.g, classColor.b)
 	else
-		btn.bg:SetBackdropColor(db.bgColor.r, db.bgColor.g, db.bgColor.b)
+		--btn.bg:SetBackdropColor(db.bgColor.r, db.bgColor.g, db.bgColor.b)
 	end
 	if db.classbor then
-		btn.bg:SetBackdropBorderColor(classColor.r, classColor.g, classColor.b)
+		--btn.bg:SetBackdropBorderColor(classColor.r, classColor.g, classColor.b)
 	else
-		btn.bg:SetBackdropBorderColor(db.borColor.r, db.borColor.g, db.borColor.b)
+		--btn.bg:SetBackdropBorderColor(db.borColor.r, db.borColor.g, db.borColor.b)
 	end
 	if db.classbar then
 		btn.bar:SetStatusBarColor(classColor.r, classColor.g, classColor.b)

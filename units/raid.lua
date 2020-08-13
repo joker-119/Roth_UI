@@ -65,9 +65,49 @@ end
 	elseif(dtype == 'Curse') then
 		ret = true
     elseif caster and caster:match("(boss)%d?$") == "boss" then
-      ret = true
-    end
+		ret = true
+	elseif(spellID == '313255') then
+		ret = true
+	end
+	if (whitelist[spellID]) then
+		ret = true
+	end
     return ret
+  end
+
+  local customFilterB = function(icons, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
+	local ret = false
+	if (whitelist[spellID]) then
+		ret = true
+	end
+    return ret
+  end
+
+  --create buffs
+  local createBuffs = function(self)
+	local f = CreateFrame("Frame", nil, self)
+	local cfg = self.cfg.auras
+	f.size = cfg.size or 26
+	f.num = cfg.num or 5
+	f.spacing = cfg.spacing or 5
+	f:SetAlpha(0.75)
+	f.initialAnchor = cfg.initialAnchor or "TOPLEFT"
+	f["growth-x"] = cfg.growthX or "RIGHT"
+	f["growth-y"] = cfg.growthY or "DOWN"
+	f.disableCooldown = cfg.disableCooldown or false
+	--f.showDebuffType = cfg.showDebuffType or false
+    f.showBuffType = cfg.showBuffType or false
+    if not cfg.doNotUseCustomFilter then
+      f.CustomFilter = customFilterB
+    end
+    f:SetHeight(f.size)
+    f:SetWidth((f.size+f.spacing)*f.num)
+    if cfg.buffPos then
+      f:SetPoint(cfg.buffPos.a1 or "CENTER", self, cfg.buffPos.a2 or "CENTER", cfg.buffPos.x or 0, cfg.buffPos.y or 0)
+    else
+      f:SetPoint("CENTER",0,-5)
+	end
+	self.Buffs = f
   end
 
   --create aura func
@@ -88,8 +128,8 @@ end
     end
     f:SetHeight(f.size)
     f:SetWidth((f.size+f.spacing)*f.num)
-    if cfg.pos then
-      f:SetPoint(cfg.pos.a1 or "CENTER", self, cfg.pos.a2 or "CENTER", cfg.pos.x or 0, cfg.pos.y or 0)
+    if cfg.debuffPos then
+      f:SetPoint(cfg.debuffPos.a1 or "CENTER", self, cfg.debuffPos.a2 or "CENTER", cfg.debuffPos.x or 0, cfg.debuffPos.y or 0)
     else
       f:SetPoint("CENTER",0,-5)
     end
@@ -127,18 +167,19 @@ end
     if cfg.playerclass == "PRIEST" then 
       spellIDs = {
         139, -- Renew
-		    17, -- Power Word Shield
-		    77489, -- Echo of Light
-		    41635, --Prayer of mending
+		17, -- Power Word Shield
+		77489, -- Echo of Light
+		41635, --Prayer of mending
 		
       }
     elseif cfg.playerclass == "PALADIN" then
       spellIDs = {
         223306, -- Bestow Faith
         53563, -- Beacon of Light
-        6940, -- Blessing of Sacrifice
+		6940, -- Blessing of Sacrifice
+		287280, -- Glimmer of Light
         156910, -- Beacon of Faith
-		    200025, -- Beacon of Virtue
+		200025, -- Beacon of Virtue
       }
 	elseif cfg.playerclass == "DRUID" then
 		  spellIDs = {
@@ -419,7 +460,8 @@ end
 
     --auras
     if self.cfg.auras.show then
-      createDebuffs(self)
+	  createDebuffs(self)
+	  createBuffs(self)
       self.Debuffs.PostCreateIcon = createAuraIcon
     end
 

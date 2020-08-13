@@ -120,10 +120,10 @@ end
 
 local function SetupBackdrop(button,backdrop)
   if not backdrop then return end
-  local bg = CreateFrame("Frame", nil, button)
+  local bg = CreateFrame("Frame", nil, button, BackdropTemplateMixin and "BackdropTemplate")
   ApplyPoints(bg, backdrop.points)
   bg:SetFrameLevel(button:GetFrameLevel()-1)
-  bg:SetBackdrop(backdrop)
+  bg:SetBackdrop({backdrop})
   if backdrop.backgroundColor then
     bg:SetBackdropColor(unpack(backdrop.backgroundColor))
   end

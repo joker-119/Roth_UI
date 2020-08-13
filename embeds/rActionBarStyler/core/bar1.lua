@@ -21,7 +21,6 @@ if not gcfg.embeds.rActionBarStyler then return end
 
   --create the frame to hold the buttons
   local frame = CreateFrame("Frame", "rABS_MainMenuBar", UIParent, "SecureHandlerStateTemplate")
-	frame:ClearAllPoints();
   if cfg.uselayout2x6 then
     frame:SetWidth(cfg.buttons.size*num/2 + (num/2-1)*cfg.buttons.margin + 2*cfg.padding)
     frame:SetHeight(cfg.buttons.size*num/6 + (num/6-1)*cfg.buttons.margin + 2*cfg.padding)
@@ -37,9 +36,11 @@ if not gcfg.embeds.rActionBarStyler then return end
   frame:SetScale(cfg.scale)
 
   --move the buttons into position and reparent them
+  MainMenuBarArtFrame:ClearAllPoints()
   MainMenuBarArtFrame:SetParent(frame)
   MainMenuBarArtFrame:EnableMouse(false)
   MainMenuBar:EnableMouse(false)
+  MainMenuBar:ClearAllPoints()
   MainMenuBar:Hide()
 
   for i=1, num do

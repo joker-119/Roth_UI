@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy119/Joker119 - 2016-2018
-  --  Version 2.7.1
+  --  Version 2.8.0
   ---------------------------------------------
 
   --get the addon namespace
@@ -629,29 +629,35 @@
         texture = (mediapath.."statusbar3"),
       },
       aurawatch = {
-        show            = true,
+        show            = false,
       },
       auras = {
         --put every single spellid here that you want to be tracked, be it buff or debuff doesn't matter
-        --maximum number of icons displayed at a time = 1
-        --this is for important boss mechanics only, this is not for tracking healing HOTs etc
         whitelist = {
-          
+			223306, -- Bestow Faith
+			53563, -- Beacon of Light
+			6940, -- Blessing of Sacrifice
+			287280, -- Glimmer of Light
+			156910, -- Beacon of Faith
+			200025, -- Beacon of Virtue
+			313255, -- Slow
         },
 		blacklist = {
-			--these are abilities that should definetly now be shown
+			--these are abilities that should definetly not be shown
 			164545,
 			164547,
+			54149,
 			},
         show            = true,
         disableCooldown = false,
         showBuffType    = true,
         showDebuffType  = true,
-		doNotUseCustomFilter = true,
+		doNotUseCustomFilter = false,
         size            = 13,
         num             = 5,
         spacing         = 3,
-        pos = { a1 = "CENTER", x = 0, y = -23},
+		debuffPos = { a1 = "CENTER", x = 0, y = -23},
+		buffPos = {a1 = "CENTER", x = 33, y = 0},
       },
       attributes = {
         visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; [group:raid] show; hide",
@@ -830,7 +836,7 @@
       mouseover       = {
         enable          = true,
         fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
+        fadeOut         = {time = 0.3, alpha = 1},
       },
     },
     bar6 = {
@@ -1021,6 +1027,7 @@ cfg.tracker = {
   --rMinimap
   cfg.minimap = {
 	scale = 1,
+	alpha = 0.5,
 	point = {"TOPRIGHT", 0, -18},
   }
 

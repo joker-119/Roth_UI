@@ -20,6 +20,6 @@ cfg.backdrop = { bgFile = mediapath.."Tooltip_Background", edgeFile = mediapath.
 
 local MenuSetup = function() end
 	--Skin the Game Menu
-	GameMenuFrame:SetBackdrop(cfg.backdrop)
+--	GameMenuFrame:SetBackdrop(cfg.backdrop)
 	
 	--Skin the Character Frame

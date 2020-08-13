@@ -70,12 +70,12 @@
   ---------------------------
 
   --create manager frame
-  local manager = CF("Frame", addon, UIP, "SecureHandlerStateTemplate")
+  local manager = CF("Frame", addon, UIP, "SecureHandlerStateTemplate" and "BackdropTemplate")
   manager:SetFrameStrata("DIALOG")
   manager:SetSize(200,390)
   manager:SetPoint("LEFT", -190, 0)
   manager:SetAlpha(0.4)
-  manager:SetBackdrop(backdrop)
+  manager:SetBackdrop({backdrop})
   manager:SetBackdropColor(0.1,0.1,0.1,0.9)
   manager:SetBackdropBorderColor(0.7,0.7,0.7)
   manager:RegisterEvent("PLAYER_LOGIN")
