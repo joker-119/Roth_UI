@@ -37,7 +37,7 @@
 
   --Target Frame
 	local createArtwork = function(self)
-    local t = self:CreateTexture(nil,"LOW",nil,-8)
+    local t = self:CreateTexture(nil,"BORDER",nil,-8)
     t:SetPoint("TOP",0,25)
     t:SetPoint("LEFT",-62,0)
     t:SetPoint("RIGHT",60,0)

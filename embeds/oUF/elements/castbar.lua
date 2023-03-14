@@ -528,9 +528,9 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player') then
-			CastingBarFrame:UnregisterAllEvents()
-			CastingBarFrame.Show = CastingBarFrame.Hide
-			CastingBarFrame:Hide()
+			PlayerCastingBarFrame:UnregisterAllEvents()
+			PlayerCastingBarFrame.Show = PlayerCastingBarFrame.Hide
+			PlayerCastingBarFrame:Hide()
 
 			PetCastingBarFrame:UnregisterAllEvents()
 			PetCastingBarFrame.Show = PetCastingBarFrame.Hide

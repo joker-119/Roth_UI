@@ -367,7 +367,7 @@ end
   
     --create galaxy func
   local createGalaxy = function(frame,type,x,y,size,duration,texture,sublevel,degree)
-    local t = frame:CreateTexture(nil, "MEDIUM", nil, sublevel)
+    local t = frame:CreateTexture(nil, "OVERLAY", nil, sublevel)
     t:SetSize(size,size)
     t:SetPoint("CENTER",x,y)
     t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\"..texture)
@@ -653,7 +653,7 @@ local DruidMana = function(self)
 			b:SetPoint("RIGHT")
 			b:SetFrameStrata("LOW")
 		
-		local br = b:CreateTexture(nil,"MEDIUM")
+		local br = b:CreateTexture(nil,"BORDER")
 			br:SetPoint("TOP",0,8)
 			br:SetPoint("LEFT",-50,0)
 			br:SetPoint("RIGHT",50,0)
@@ -726,15 +726,15 @@ end
     --icons
     if self.cfg.icons.resting.show then
       local pos = self.cfg.icons.resting.pos
-      self.Resting = func.createIcon(self,"TOOLTIP",32,self,pos.a1,pos.a2,pos.x,pos.y,-1)
+      self.Resting = func.createIcon(self,"OVERLAY",32,self,pos.a1,pos.a2,pos.x,pos.y,-1)
     end
     if self.cfg.icons.pvp.show then
       local pos = self.cfg.icons.pvp.pos
-      self.PvP = func.createIcon(self,"TOOLTIP",44,self,pos.a1,pos.a2,pos.x,pos.y,-1)
+      self.PvP = func.createIcon(self,"OVERLAY",44,self,pos.a1,pos.a2,pos.x,pos.y,-1)
     end
     if self.cfg.icons.combat.show then
       local pos = self.cfg.icons.combat.pos
-      self.Combat = func.createIcon(self,"TOOLTIP",32,self,pos.a1,pos.a2,pos.x,pos.y,-1)
+      self.Combat = func.createIcon(self,"OVERLAY",32,self,pos.a1,pos.a2,pos.x,pos.y,-1)
     end
 
     --castbar

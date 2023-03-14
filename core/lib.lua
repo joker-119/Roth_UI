@@ -754,7 +754,7 @@ func.createAuraWatch = function(self)
     --c.Text:SetPoint("RIGHT", c.Time, "LEFT", -10, 0) --right point of text will anchor left point of time
 
 
-    c.Spark = c:CreateTexture(nil,"LOW",nil,-7)
+    c.Spark = c:CreateTexture(nil,"OVERLAY",nil,-7)
     c.Spark:SetBlendMode("ADD")
     c.Spark:SetVertexColor(0.8,0.6,0,1)
 
@@ -798,7 +798,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
   --fontstring func
   func.createFontString = function(f, font, size, outline,layer)
-    local fs = f:CreateFontString(nil, layer or "TOOLTIP")
+    local fs = f:CreateFontString(nil, layer or "OVERLAY")
     fs:SetFont(font, size, outline)
     fs:SetShadowColor(0,0,0,1)
     return fs

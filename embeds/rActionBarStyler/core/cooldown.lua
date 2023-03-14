@@ -1,4 +1,16 @@
 
+  -----------------------------
+  -- INIT
+  -----------------------------
+
+  --get the addon namespace
+  local addon, ns = ...
+  local gcfg = ns.cfg
+
+  -----------------------------
+  -- FUNCTIONS
+  -----------------------------
+if not gcfg.embeds.rActionBarStyler then return end
   --cooldown spiral alpha fix
 
   --SetCooldownSwipeAlpha

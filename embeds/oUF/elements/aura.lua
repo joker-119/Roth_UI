@@ -243,7 +243,7 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 			end
 
 			icon.icon:SetTexture(texture)
-			icon.count:SetText((count > 1 and count))
+			icon.count:SetText(count)
 
 			local size = icons.size or 16
 			icon:SetSize(size, size)

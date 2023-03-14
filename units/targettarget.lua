@@ -34,7 +34,7 @@
 
   --actionbar background
   local createArtwork = function(self)
-    local t = self:CreateTexture(nil,"HIGH",nil,-8)
+    local t = self:CreateTexture(nil,"BORDER",nil,-8)
     t:SetAllPoints(self)
     t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget")
   end

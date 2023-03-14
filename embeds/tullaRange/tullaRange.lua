@@ -4,8 +4,9 @@
 -- Derived from RedRange with negligable improvements to CPU usage
 --------------------------------------------------------------------------------
 
-local AddonName = ...
+local AddonName, ns = ...
 
+if not ns.cfg.embeds.tullaRange then return end
 -- the addon event handler
 local Addon = CreateFrame('Frame', AddonName, _G.InterfaceOptionsFrame)
 
