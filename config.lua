@@ -28,14 +28,14 @@
   -- // Embeds // --
   ---------------------------------------------
   cfg.embeds = {
-	rChat = false, -- Simple chat frame
+	rChat = true, -- Simple chat frame
 	rActionBarStyler = false, -- Simple actionbar styler for Roth UI
 	rButtonTemplate = false, -- Simple button skinning mod
-	rMinimap = false, -- Simplistic square minimap
+	rMinimap = true, -- Simplistic square minimap
 	rNamePlates = false, -- Diablo style Nameplates
-	rInfoStrings = false, -- Information text displayed under Minimap
+	rInfoStrings = true, -- Information text displayed under Minimap
 	rRaidManager = false, -- Replacement for blizzard's pull-out raid manager
-	rTooltip = false, -- Diablo styled tooltips
+	rTooltip = true, -- Diablo styled tooltips
 	tullaRange = false, -- Creates Red/Blue overlay over icons that are not useable due to range or lack of resources
 	Roth_ShinyBuffs = false, -- ShinyBuffs buff frame, edited for use with Roth UI
 	rObjectiveTracker = false, -- Simple drag and resizeable Objective Tracker frame

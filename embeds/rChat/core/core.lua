@@ -28,15 +28,9 @@ FCFTab_UpdateColors = function(self, selected)
     if (selected) then
         self:SetAlpha(cfg.selectedTabAlpha)
         self:GetFontString():SetTextColor(unpack(cfg.selectedTabColor))
-        self.leftSelectedTexture:Show()
-        self.middleSelectedTexture:Show()
-        self.rightSelectedTexture:Show()
     else
         self:GetFontString():SetTextColor(unpack(cfg.notSelectedTabColor))
         self:SetAlpha(cfg.notSelectedTabAlpha)
-        self.leftSelectedTexture:Hide()
-        self.middleSelectedTexture:Hide()
-        self.rightSelectedTexture:Hide()
     end
 end
 
@@ -54,11 +48,10 @@ end
 
 local function skinChat(self)
     local name = self:GetName()
-
+    
     --chat frame resizing
     self:SetClampRectInsets(0, 0, 0, 0)
-    self:SetMaxResize(UIParent:GetWidth(), UIParent:GetHeight())
-    self:SetMinResize(100, 50)
+    self:SetResizeBounds(100, 50, UIParent:GetWidth(), UIParent:GetHeight())
     self:SetFrameStrata("HIGH")
 
     --chat fading
@@ -109,12 +102,8 @@ local function skinChat(self)
     tabFs:SetShadowColor(0,0,0,0.6)
     tabFs:SetTextColor(unpack(cfg.selectedTabColor))
     if cfg.hideChatTabBackgrounds then
-        _G[name.."TabLeft"]:SetTexture(nil)
-        _G[name.."TabMiddle"]:SetTexture(nil)
-        _G[name.."TabRight"]:SetTexture(nil)
-        _G[name.."TabSelectedLeft"]:SetTexture(nil)
-        _G[name.."TabSelectedMiddle"]:SetTexture(nil)
-        _G[name.."TabSelectedRight"]:SetTexture(nil)
+        
+        _G[name.."Tab"]:SetAlpha(0)
         --_G[name.."TabGlow"]:SetTexture(nil) --do not hide this texture, it will glow when a whisper hits a hidden chat
         --_G[name.."TabHighlightLeft"]:SetTexture(nil)
         --_G[name.."TabHighlightMiddle"]:SetTexture(nil)

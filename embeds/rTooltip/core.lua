@@ -112,8 +112,11 @@ end)
   end)
 
   --HookScript GameTooltip OnTooltipSetSpell
-  GameTooltip:HookScript("OnTooltipSetSpell", function(self)
-    local spellid = select(3,self:GetSpell())
+  hooksecurefunc("GameTooltip_OnUpdate", function(self, elapsed) 
+    
+  end)
+  GameTooltip:HookScript("OnShow", function(self)
+    local spellid = select(2,TooltipUtil.GetDisplayedSpell(self))
     if spellid then
       AddSpellIdRow(self,spellid)
     end
@@ -147,8 +150,8 @@ end)
   end
 
   --HookScript GameTooltip OnTooltipSetUnit
-  GameTooltip:HookScript("OnTooltipSetUnit", function(self,...)
-    local unit = select(2, self:GetUnit()) or (GetMouseFocus() and GetMouseFocus():GetAttribute("unit")) or (UnitExists("mouseover") and "mouseover")
+  GameTooltip:HookScript("OnShow", function(self,...)
+    local unit = select(1, TooltipUtil.GetDisplayedUnit(self)) or (GetMouseFocus() and GetMouseFocus():GetAttribute("unit")) or (UnitExists("mouseover") and "mouseover")
     if not unit or (unit and type(unit) ~= "string") then return end
     if not UnitGUID(unit) then return end
     local ricon = GetRaidTargetIndex(unit)
@@ -228,7 +231,7 @@ end)
     if itemLink then
       local itemRarity = select(3,GetItemInfo(itemLink))
       if itemRarity then
-        --self:SetBackdropBorderColor(unpack({GetItemQualityColor(itemRarity)}))
+        -- GameTooltip:SetBackdropColor(unpack({GetItemQualityColor(itemRarity)}))
       end
     end
   end
