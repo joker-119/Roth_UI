@@ -110,11 +110,8 @@ end)
       AddSpellIdRow(ItemRefTooltip,spellid)
     end
   end)
-
-  --HookScript GameTooltip OnTooltipSetSpell
-  hooksecurefunc("GameTooltip_OnUpdate", function(self, elapsed) 
-    
-  end)
+  
+  
   GameTooltip:HookScript("OnShow", function(self)
     local spellid = select(2,TooltipUtil.GetDisplayedSpell(self))
     if spellid then
@@ -222,34 +219,6 @@ end)
     end
 
   end)
-
-  --func TooltipOnShow
-  local function TooltipOnShow(self,...)
-    --self:SetBackdropColor(1,1,1,1)
-    --self:SetBackdropBorderColor(1,1,1,1)
-    local itemName, itemLink = self:GetItem()
-    if itemLink then
-      local itemRarity = select(3,GetItemInfo(itemLink))
-      if itemRarity then
-        -- GameTooltip:SetBackdropColor(unpack({GetItemQualityColor(itemRarity)}))
-      end
-    end
-  end
-  
-  --func TooltipOnShow
-  local function TooltipOnHide(self,...)
-    --self:SetBackdropColor(1,1,1,1)
-    --self:SetBackdropBorderColor(1,1,1,1)
-  end
-
-  --loop over tooltips
-  local tooltips = { GameTooltip, ItemRefTooltip, ShoppingTooltip1, ShoppingTooltip2, ShoppingTooltip3, WorldMapTooltip, }
-  for idx, tooltip in ipairs(tooltips) do
-    --tooltip:SetBackdrop(cfg.rtooltip.backdrop)
-    tooltip:SetScale(cfg.rtooltip.scale)
-    tooltip:HookScript("OnShow", TooltipOnShow)
-    tooltip:HookScript("OnHide", TooltipOnHide)
-  end
 
   --loop over menues
   local menues = {
