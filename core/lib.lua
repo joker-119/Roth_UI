@@ -13,6 +13,7 @@
   --object container
   local func = CreateFrame("Frame")
   ns.func = func
+  RothUI = {}
 
   ---------------------------------------------
   -- VARIABLES
@@ -88,8 +89,11 @@
     f:SetWidth((f.size+5)*4)
 	if self.cfg.style == "targettarget" then
 		f:SetPoint("BOTTOM", self, "RIGHT", 0, 0)
+	elseif self.cfg.style == "party" then
+		f:SetPoint("BOTTOM", self.Health, "RIGHT", 22,-19)
 	else
 		f:SetPoint("TOP", self, "RIGHT", 50, -5)
+
 	end
     f.initialAnchor = "TOPLEFT"
     f["growth-x"] = "RIGHT"
@@ -164,6 +168,48 @@
     self.Buffs = f
   end
   end
+  
+  func.checkColors = function(self, event, unit, full, auras)
+	local hasDebuff = false
+	AuraUtil.ForEachAura(unit, "HARMFUL", nil, function(name, icon, _, type, _, _, _, _, _, spellId, ...)
+		if (type) then
+			if (RothUI:canDispelDebuff(type)) then
+				local color = DebuffTypeColor[type] or DebuffTypeColor.none
+				if (color ~= DebuffTypeColor.none) then
+					hasDebuff = true
+					self.Health.buffOverride = true
+					if (self.Health.glow) then
+						self.Health.glow:SetVertexColor(color.r, color.g, color.b)
+					end
+				end
+			end
+		end
+	end)
+
+	if (not hasDebuff) then
+		self.Health.buffOverride = true
+		if (self.Health.glow) then
+			self.Health.glow:SetVertexColor(0, 0, 0)
+		end
+	end
+  end
+  
+  function RothUI:canDispelDebuff(type)
+	local role = GetSpecializationRole(GetSpecialization())
+	local class, _, _ = UnitClass("player")
+	if (type == 'Magic') then
+		return role == 'HEALER'
+	elseif (type == 'Curse') then
+		return class == 'Druid' or class == 'Mage' or class == 'Shaman'
+	elseif (type == 'Disease') then
+		return class == 'Monk' or class == 'Paladin' or class == 'Priest'
+	elseif (type == 'Poison') then
+		return class == 'Druid' or class == 'Monk' or class == 'Paladin'
+	else
+		return false
+	end
+  end
+	
 
   --Desaturated and Button CD
   func.postUpdateDebuff = function(element, unit, button, index, duration, expirationTime)
@@ -272,92 +318,102 @@
 
     --create aura watch func
 func.createAuraWatch = function(self)
- 
-    local auras = {}
-    local spellIDs
-    if cfg.playerclass == "PRIEST" then --Priest
-        spellIDs = {
-	    41635, -- Prayer of Mending
-            139, -- Renew
-            17, -- Power Word: Shield
-            33076, -- Prayer of Mending
-            47515, -- Divine Ageis
-            33206, -- Pain Suppression
-            109964, -- Spirit Shell
-            152118, -- Clairity of Will
-        }
- 
-    elseif cfg.playerclass == "PALADIN" then --Paladin    
-        spellIDs = {
-            86273, -- Illuminated Healing
-            53563, -- Beacon of Light
-            114039, -- Hand of Purity
-            6940, -- Hand of Sacrifice
-            148039, -- Sacred Shield
-            156910, -- Beacon of Faith
-            114917, -- Stay of Execution
-            157047, -- Saved by the Light
-            114163, -- Eternal Flame
-            157007, -- Beacon of Insight
-            54597, -- Glyph of FoL
-            31821, -- Devotion Aura
-        }
-
-   elseif cfg.playerclass == "DRUID" then --Druid
-       spellIDs = {
-           774, -- Rejuvenation
-           8936, -- Regrowth
-           33763, -- Lifebloom
-           48504, -- Living Seed
-           22812, -- Barkskin
-           102342, -- Ironbark
-           48438, -- Wild Growth
-           740, -- Tranquility
-           102351, -- Cenarion Ward
-         }
-           
-    elseif cfg.playerclass == "SHAMAN" then --Shaman
-        spellIDs = {
-		61295, -- Riptide
-		}
-    else -- Non-Healer
-	spellIDs = { }
-    end
- 
-    auras.onlyShowPresent = false
-    auras.presentAlpha = 1
-    auras.PostCreateIcon = func.createAuraIcon
- 
-    -- Set any other AuraWatch settings
-    auras.icons = {}
-   if cfg.units.party.vertical == false then
-    local columns = 2
-    local xGrowth = 19
-    local yGrowth = -20
-    local parentAnchorPoint = "TOPRIGHT"
-    local iconAnchorPoint = "TOPRIGHT"
-    for i, sid in pairs(spellIDs) do
-        local icon = CreateFrame("Frame", nil, self)
-        icon:SetFrameStrata("BACKGROUND")
-        icon.spellID = sid
-        -- set the dimensions and positions
-        icon:SetSize(self.cfg.auras.size,self.cfg.auras.size)
-        auras.icons[sid] = icon
-        local xOffset = (i % columns) * xGrowth
-        local yOffset = math.floor(i / columns) * yGrowth +60
-        icon:SetPoint(iconAnchorPoint, self, parentAnchorPoint, xOffset, yOffset)
-        -- Set any other AuraWatch icon settings
-		local cd = CreateFrame("Cooldown", nil, icon)
-		cd:SetFrameStrata("TOOLTIP")
-		cd:SetAllPoints(icon)
-		icon.cd = cd
+   
+      local auras = {}
+	  local spellIDs
+    if cfg.playerclass == "PRIEST" then 
+      spellIDs = {
+        139, -- Renew
+		17, -- Power Word Shield
+		77489, -- Echo of Light
+		41635, --Prayer of mending
+		
+      }
+    elseif cfg.playerclass == "PALADIN" then
+      spellIDs = {
+        223306, -- Bestow Faith
+        53563, -- Beacon of Light
+		6940, -- Blessing of Sacrifice
+		287280, -- Glimmer of Light
+        156910, -- Beacon of Faith
+		200025, -- Beacon of Virtue
+      }
+	elseif cfg.playerclass == "DRUID" then
+		  spellIDs = {
+		    33763, -- Lifebloom
+		    774, -- Rejuvination
+		    8936, -- Regrowth
+		    102342, -- Ironback
+		    102351, -- Cenarion Ward
+		    48438, -- Wild Growth
+		    155777, -- Germination
+		  }
+	elseif cfg.playerclass == "SHAMAN" then
+		  spellIDs = {
+		    61295, -- Riptide
+		  }
+	elseif cfg.playerclass == "MONK" then
+		  spellIDs = {
+		    119611, --Renewing mist
+		    124682, -- Enveloping Mist
+		  }
+	else -- Non Healer Classes
+		  spellIDs = {
+		
+		  }
 	end
-   end
-	auras.PostCreateIcon = func.createAuraIcon
+      local dir = {
+        [1] = {size = 15, pos = "CENTER",       x = 0, y = 12.5 },
+        [2] = {size = 15, pos = "CENTER",       x = 15, y = 12.5 },
+        [3] = {size = 15, pos = "CENTER",       x = -15, y = 12.5 },
+        [4] = {size = 15, pos = "CENTER",       x = 30, y = 12.5 },
+        [5] = {size = 15, pos = "CENTER",       x = -30, y = 12.5 },
+        [6] = {size = 15, pos = "CENTER",       x = 15, y = 12.5 },
+        [7] = {size = 15, pos = "CENTER",       x = 15, y = 12.5 },
+      }
+      auras.onlyShowPresent = true
+      auras.presentAlpha = .75
 
-    --call aurawatch
-    self.AuraWatch = auras
-end
+      auras.PostCreateIcon = function(self, icon, sid)
+        if icon.cd then
+          icon.cd:SetPoint("TOPLEFT", 1, -1)
+          icon.cd:SetPoint("BOTTOMRIGHT", -1, 1)
+        end
+        --count hack for lifebloom
+        if sid == 33763 and icon.count then
+          icon.count:SetFont("Interface\\AddOns\\Roth_UI\\media\\visitor1.ttf",8,"THINOUTLINE, MONOCHROME")
+          icon.count:ClearAllPoints()
+          icon.count:SetPoint("CENTER", 3, 3)
+          icon.count:SetParent(icon.cd)
+        end
+      end
+
+      -- Set any other AuraWatch settings
+      auras.icons = {}
+        for i, sid in pairs(spellIDs) do
+          local icon = CreateFrame("Frame", nil, self)
+		        icon:SetFrameStrata("HIGH")
+            icon.spellID = sid
+            -- set the dimensions and positions
+            icon.size = dir[i].size
+            icon:SetSize(dir[i].size,dir[i].size)
+            --position icon
+            icon:SetPoint(dir[i].pos, self, dir[i].pos, dir[i].x, dir[i].y)
+            --make indicator
+            --if dir[i].indicator then
+            local tex = icon:CreateTexture()
+              tex:SetAllPoints()
+              tex:SetTexture("Interface\\AddOns\\Roth_UI\\media\\indicator")
+              --tex:SetVertexColor(dir[i].color.r,dir[i].color.g,dir[i].color.b)
+              icon.icon = tex
+
+
+              auras.icons[sid] = icon
+        -- Set any other AuraWatch icon settings
+        end
+      --call aurawatch
+      self.AuraWatch = auras
+    end
 
 
   --update health func
@@ -410,7 +466,7 @@ end
       else
         bar.glow:SetVertexColor(1,0,0,1)
       end
-    else
+    elseif (not bar.buffOverride) then
       --inner shadow
       bar.glow:SetVertexColor(0,0,0,0.7)
       bar.highlight:SetAlpha(cfg.highlightMultiplier)
@@ -738,6 +794,8 @@ end
 
   end
 
+local LSM = LibStub("LibSharedMedia-3.0")
+
   --fontstring func
   func.createFontString = function(f, font, size, outline,layer)
     local fs = f:CreateFontString(nil, layer or "TOOLTIP")
@@ -745,6 +803,16 @@ end
     fs:SetShadowColor(0,0,0,1)
     return fs
   end
+
+local function CheckFont()
+	if (Roth_UI.db == nil) then 
+		return false
+	elseif (LSM:Fetch("font", Roth_UI.db.profile.chatFont) == nil) then
+		return false
+	else
+		return true
+	end
+end
 
   --allows frames to become movable but frames can be locked or set to default positions
   func.applyDragFunctionality = function(f,special)
@@ -761,7 +829,7 @@ end
     df:SetAllPoints(f)
     df:SetFrameStrata("HIGH")
     --df:SetHitRectInsets(-15,-15,-15,-15)
-    df:SetScript("OnDragStart", function(self) if IsAltKeyDown() and IsShiftKeyDown() then self:GetParent():StartMoving() end end)
+    df:SetScript("OnDragStart", function(self) if IsShiftKeyDown() then self:GetParent():StartMoving() end end)
     df:SetScript("OnDragStop", function(self) self:GetParent():StopMovingOrSizing() end)
     local t = df:CreateTexture(nil,"OVERLAY",nil,6)
     t:SetAllPoints(df)
@@ -785,7 +853,7 @@ end
         f.dragframe:SetScript("OnEnter", function(s)
           GameTooltip:SetOwner(s, "ANCHOR_TOP")
           GameTooltip:AddLine(s:GetParent():GetName(), 0, 1, 0.5, 1, 1, 1)
-          GameTooltip:AddLine("Hold down ALT+SHIFT to drag!", 1, 1, 1, 1, 1, 1)
+          GameTooltip:AddLine("Hold down SHIFT to drag!", 1, 1, 1, 1, 1, 1)
           GameTooltip:Show()
         end)
         f.dragframe:SetScript("OnLeave", function(s) GameTooltip:Hide() end)

@@ -55,7 +55,7 @@ local Visibility = function(self, event, unit)
     or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= ""))
   then
     bar:Hide()
-  elseif class == "ROGUE" or (class == "DRUID" and GetSpecialization() == 2) then
+  elseif class == "ROGUE" or (class == "DRUID" and (GetSpecialization() == 2 or (select(4, GetTalentInfo(3,2,1)) and GetShapeshiftForm() == 2))) then
     bar:Show()
     element.ForceUpdate(element)
   else

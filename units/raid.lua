@@ -447,6 +447,7 @@ end
     --health update
     self.Health.PostUpdate = updateHealth
     self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", checkThreat)
+	self:RegisterEvent("UNIT_AURA", func.checkColors)
     self.Power.PostUpdate = func.updatePower
 
     --debuffglow
@@ -477,6 +478,8 @@ end
     self.LFDRole = func.createIcon(self,"TOOLTIP",14,self.Health,"CENTER","CENTER",0,0,-1)
     self.LFDRole:SetTexture("Interface\\AddOns\\Roth_UI\\media\\lfd_role")
     self.LFDRole:SetDesaturated(1)
+	self.Leader = func.createIcon(self,"TOOLTIP",14,self.Name,"TOPLEFT","TOPLEFT",-7,-10,0)
+	self.Leader:SetTexture("Interface\\AddOns\\Roth_UI\\media\\leader")
 
     --add heal prediction
     func.healPrediction(self)

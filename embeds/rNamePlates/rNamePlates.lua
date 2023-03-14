@@ -43,10 +43,10 @@ if not IsInInstance() then
 		showClassificationIndicator = true,
 		}
 	for i, group  in next, groups do
-	for key, value in next, options do
-		_G["DefaultCompactNamePlate"..group.."FrameOptions"][key] = value
+		for key, value in next, options do
+			_G["DefaultCompactNamePlate"..group.."FrameOptions"][key] = value
+		end
 	end
-end
 end
 
 
@@ -83,6 +83,12 @@ h:SetScript("OnEvent", function(h, event, ...)
 				frame.healthBar.le:SetTexture(mediapath.."edge_left")
 				frame.healthBar.le:SetSize(64,64)
 				frame.healthBar.le:SetPoint("RIGHT",frame.healthBar,"LEFT",0,0)
+			end
+
+			if (not frame.healthBar.text) then
+				frame.healthBar.text = frame.healthBar:CreateFontString(nil,"OVERLAY")
+				frame.healthBar.text:SetFont(cfg.font, cfg.Nameplates.fontSize, "THICKOUTLINE")
+				frame.healthBar.text:SetPoint("CENTER",frame.healthBar,"CENTER",0,0)
 			end
 	
             --Right Edge artwork
@@ -142,16 +148,43 @@ h:SetScript("OnEvent", function(h, event, ...)
     end
 end)
 
+hooksecurefunc("CompactUnitFrame_OnUpdate", function(frame)
+	if (frame:IsForbidden()) then return end
+	
+	local name = UnitName(frame.unit)
+	local spell, rank, displayName, icon, startTime, endTime, isTradeSkill, castID, interrupt = UnitCastingInfo(frame.unit)
+	
+	if (IsControlKeyDown()) then
+		if (name ~= 'Explosives') then
+			frame:SetScale(0.1)
+			frame.healthBar:Hide()
+		end
+	else
+		frame:SetScale(1)
+		frame.healthBar:Show()
+		frame.healthBar:SetScale(0.35)
+	end
 
---Name
-hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
-	if frame:IsForbidden() then return end
-   --Set the tag based on UnitClassification, can return "worldboss", "rare", "rareelite", "elite", "normal", "minus"
+	if (name == 'Swarm Training Dummy') then
+		frame:SetFrameStrata("TOOLTIP")
+	end
+	
+	if (spell) then
+		if (interrupt == true) then
+			frame:SetScale(1.5)
+			frame.healthBar:SetScale(0.6)
+		end
+	end
+end)
+
+hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
+	if (frame:IsForbidden()) then return end
+	
 	local tag 
 	local level = UnitLevel(frame.unit)
 	local name = UnitName(frame.unit)
 	local hexColor
-   
+
 	if level >= UnitLevel("player")+5 then
 		hexColor = GetHexColorFromRGB(1,0,0)
 	elseif level >= UnitLevel("player")+3 then
@@ -163,7 +196,7 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 	else
 		hexColor = GetHexColorFromRGB(1,1,0)
 	end
-
+	
 	if UnitClassification(frame.unit) == "worldboss" or UnitLevel(frame.unit) == -1 then
 		level = "??"
 		hexColor = "ff6600"
@@ -175,20 +208,53 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function (frame)
 	elseif UnitClassification(frame.unit) == "elite" then
 		level = "+"..level
 	end
-	--Set the nameplate name to include tag(if any), name and level
-	frame.name:SetText("|cff"..hexColor.."("..level..")|r "..name)
-	frame.name:SetFont(cfg.font, 12)
-	
-	--explosiove orbs
-	if (string.match( name, "Explosives" )) then
-		frame.healthBar:SetSize(384,48)
-		frame.healthBar:SetScale(0.35)
-		frame.healthBar:SetFrameStrata("TOOLTIP")
-		frame.healthBar:SetFrameLevel(20)
-		frame.healthBar.re:SetSize(128,128)
-		frame.healthBar.le:SetSize(128,128)
+
+	local nameHex = GetHexColorFromRGB(1,0,0)
+	local reaction = UnitReaction(frame.unit, "player")
+	if (reaction == 4) then
+		nameHex = GetHexColorFromRGB(1,1,0)
+	elseif (reaction >= 5) then
+		nameHex = GetHexColorFromRGB(0,1,0)
 	else
-		frame.healthBar:SetSize(64,64)
+		nameHex = GetHexColorFromRGB(1,0,0)
+	end
+
+	if (UnitAffectingCombat(frame.unit)) then
+		nameHex = GetHexColorFromRGB(1,0,0)
+	end
+
+	if (UnitIsUnit(frame.unit, "target")) then
+		nameHex = GetHexColorFromRGB(.5,.5,1)
+	end
+
+	if (UnitIsTapDenied(frame.unit)) then
+		nameHex = GetHexColorFromRGB(.5,.5,.5)
+	end
+	--Set the nameplate name to include tag(if any), name and level
+	frame.name:SetText("|cff"..hexColor.."("..level..")|r ".."|cff"..nameHex..name.."|r")
+	frame.name:SetFont(cfg.font, 12)
+end)
+
+--Name
+hooksecurefunc("CompactUnitFrame_UpdateHealth", function (frame)
+	if frame:IsForbidden() then return end
+	
+	if (cfg.Nameplates.showHealthValue) then
+
+		local color = GetHexColorFromRGB(0,1,0)
+		local healthPerc = ceil((UnitHealth(frame.displayedUnit) / UnitHealthMax(frame.displayedUnit) * 100))
+
+		if (healthPerc < 21) then
+			color = GetHexColorFromRGB(1,0,0)
+		elseif (healthPerc < 76) then
+			color = GetHexColorFromRGB(1,1,0)
+		end
+
+		if (cfg.Nameplates.healthValueAsPercent) then
+			frame.healthBar.text:SetText("|cff"..color..healthPerc.."%|r")
+		else
+			frame.healthBar.text:SetText("|cff"..color..UnitHealth(frame.unit).."|r")
+		end
 	end
 end)
 

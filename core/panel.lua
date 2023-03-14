@@ -228,7 +228,7 @@
 
   --basic checkbutton func
   local createBasicCheckButton = function(parent, name, title)
-    local button = CF("CheckButton", name, parent, "InterfaceOptionsCheckButtonTemplate")
+    local button = CF("CheckButton", name, parent, "OptionsCheckButtonTemplate")
     button.text = _G[name.."Text"]
     button.text:SetText(title)
     button.text:SetTextColor(1,1,1)
@@ -407,7 +407,7 @@
   --create element health orb color auto
   local createCheckButtonHealthOrbFillingColorAuto = function(parent)
     local button = createBasicCheckButton(parent, addon.."PanelHealthOrbFillingColorAuto", "Automatic coloring (class/power)?")
-    button:HookScript("OnClick", function(self,value)
+    button:SetScript("OnClick", function(self,value)
       --save value
       panel.saveHealthOrbFillingColorAuto(self:GetChecked())
       --update orb view
@@ -421,7 +421,7 @@
   --create element power orb color auto
   local createCheckButtonPowerOrbFillingColorAuto = function(parent)
     local button = createBasicCheckButton(parent, addon.."PanelPowerOrbFillingColorAuto", "Automatic coloring (class/power)?")
-    button:HookScript("OnClick", function(self,value)
+    button:SetScript("OnClick", function(self,value)
       --save value
       panel.savePowerOrbFillingColorAuto(self:GetChecked())
       --update orb view
@@ -459,7 +459,7 @@
   --create element health orb model enable
   local createCheckButtonHealthOrbModelEnable = function(parent)
     local button = createBasicCheckButton(parent, addon.."PanelHealthOrbModelEnable", "Enable")
-    button:HookScript("OnClick", function(self,value)
+    button:SetScript("OnClick", function(self,value)
       --save value
       panel.saveHealthOrbModelEnable(self:GetChecked())
       --update orb view
@@ -473,7 +473,7 @@
   --create element power orb model enable
   local createCheckButtonPowerOrbModelEnable = function(parent)
     local button = createBasicCheckButton(parent, addon.."PanelPowerOrbModelEnable", "Enable")
-    button:HookScript("OnClick", function(self,value)
+    button:SetScript("OnClick", function(self,value)
       --save value
       panel.savePowerOrbModelEnable(self:GetChecked())
       --update orb view
@@ -753,7 +753,7 @@
   --create element health orb value hide empty
   local createCheckButtonHealthOrbValueHideEmpty = function(parent)
     local button = createBasicCheckButton(parent, addon.."PanelHealthOrbValueHideEmpty", "Hide on empty*")
-    button:HookScript("OnClick", function(self,value)
+    button:SetScript("OnClick", function(self,value)
       --save value
       panel.saveHealthOrbValueHideEmpty(self:GetChecked())
     end)
@@ -763,7 +763,7 @@
   --create element power orb value hide empty
   local createCheckButtonPowerOrbValueHideEmpty = function(parent)
     local button = createBasicCheckButton(parent, addon.."PanelPowerOrbValueHideEmpty", "Hide on empty*")
-    button:HookScript("OnClick", function(self,value)
+    button:SetScript("OnClick", function(self,value)
       --save value
       panel.savePowerOrbValueHideEmpty(self:GetChecked())
     end)
@@ -774,7 +774,7 @@
   --create element health orb value hide full
   local createCheckButtonHealthOrbValueHideFull = function(parent)
     local button = createBasicCheckButton(parent, addon.."PanelHealthOrbValueHideFull", "Hide on full*")
-    button:HookScript("OnClick", function(self,value)
+    button:SetScript("OnClick", function(self,value)
       --save value
       panel.saveHealthOrbValueHideFull(self:GetChecked())
     end)
@@ -784,7 +784,7 @@
   --create element power orb value hide full
   local createCheckButtonPowerOrbValueHideFull = function(parent)
     local button = createBasicCheckButton(parent, addon.."PanelPowerOrbValueHideFull", "Hide on full*")
-    button:HookScript("OnClick", function(self,value)
+    button:SetScript("OnClick", function(self,value)
       --save value
       panel.savePowerOrbValueHideFull(self:GetChecked())
     end)
@@ -2675,7 +2675,6 @@
   function panel:Enable()
     --register some stuff
     self.eventHelper:RegisterUnitEvent("UNIT_HEALTH", "player")
-    self.eventHelper:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", "player")
     self.eventHelper:RegisterUnitEvent("UNIT_POWER_UPDATE", "player")
     self.eventHelper:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
     self.eventHelper:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
@@ -2685,7 +2684,6 @@
 
   function panel:Disable()
     self.eventHelper:UnregisterEvent("UNIT_HEALTH")
-    self.eventHelper:UnregisterEvent("UNIT_HEALTH_FREQUENT")
     self.eventHelper:UnregisterEvent("UNIT_POWER_UPDATE")
     self.eventHelper:UnregisterEvent("UNIT_POWER_FREQUENT")
     self.eventHelper:UnregisterEvent("UNIT_DISPLAYPOWER")

@@ -72,7 +72,14 @@
 
     h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
     h.glow:SetTexture(mediapath.."targettarget_hpglow")
-	h.glow:SetAllPoints(self)
+	if self.cfg.vertical == true then
+		h.glow:SetPoint("TOP",0,15)
+		h.glow:SetPoint("LEFT",-40,0)
+		h.glow:SetPoint("RIGHT",40,0)
+		h.glow:SetPoint("BOTTOM",0,-25)
+	else
+		h.glow:SetAllPoints(self)
+	end
 		
     h.highlight = h:CreateTexture(nil,"OVERLAY",nil,-4)
     h.highlight:SetTexture("Interface\\AddOns\\Roth_UI\\media\\targettarget_highlight")
@@ -230,6 +237,7 @@
       self.Leader = func.createIcon(self,"TOOLTIP",13,self,"RIGHT","LEFT",70,30,-1)
       self.LFDRole = func.createIcon(self,"TOOLTIP",12,self,"CENTER","CENTER",0,10,-1)
     end
+	self.Leader:SetTexture("Interface\\AddOns\\Roth_UI\\media\\leader")
     self.LFDRole:SetTexture("Interface\\AddOns\\Roth_UI\\media\\lfd_role")
     --self.LFDRole:SetDesaturated(1)
 
@@ -241,6 +249,9 @@
 
     --threat
     self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", func.checkThreat)
+	
+	-- debuff coloring
+	self:RegisterEvent("UNIT_AURA", func.checkColors)
 
   end
   

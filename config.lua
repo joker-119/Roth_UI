@@ -5,7 +5,7 @@
 
   --  A Diablo themed unitframe layout for oUF 1.6.x
   --  Galaxy119/Joker119 - 2016-2018
-  --  Version 2.8.0
+  --  Version 2.9.3
   ---------------------------------------------
 
   --get the addon namespace
@@ -19,6 +19,7 @@
   local cfg = {}
   ns.cfg = cfg
   local locale = GetLocale()
+  RothConfig = {}
   ---------------------------------------------
   -- // CONFIG // --
   ---------------------------------------------
@@ -27,7 +28,7 @@
   -- // Embeds // --
   ---------------------------------------------
   cfg.embeds = {
-	rChat = true, -- Simple chat frame
+	rChat = false, -- Simple chat frame
 	rActionBarStyler = true, -- Simple actionbar styler for Roth UI 
 	rButtonTemplate = true, -- Simple button skinning mod
 	rMinimap = true, -- Simplistic square minimap
@@ -126,7 +127,7 @@
         },
       },
       holypower = { --class bar PALADIN
-        show = true,
+        show = false,
         scale = 0.40,
         color = {r = 200/255, g = 135/255, b = 190/255, },
         pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 650 },
@@ -213,6 +214,7 @@
           show = true,
           pos = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 0 },
           scale = 1,
+		  combatfade = true,
         },
         angel = {
           show = true,
@@ -288,7 +290,7 @@
         size = 15,
         onlyShowPlayerBuffs = false,
         showStealableBuffs = true,
-        onlyShowPlayerDebuffs = false,
+        onlyShowPlayerDebuffs = true,
         showDebuffType = true,
         desaturateDebuffs = false,
         buffs = {
@@ -401,7 +403,7 @@
       },
       portrait = {
         show = true,
-        use3D = true,
+        use3D = false,
       },
       castbar = {
         show = false,
@@ -452,7 +454,7 @@
       },
       portrait = {
         show = true,
-        use3D = true,
+        use3D = false,
       },
       castbar = {
         show = false,
@@ -549,15 +551,15 @@
       height = 64,
       pos = { a1 = "CENTER", a2 = "CENTER", af = "UIParent", x = -335, y = 150 },
       aurawatch = {
-        show            = false,
+        show            = true,
         size            = 18,
       },
       auras = {
         show = true,
-        size = 22,
+        size = 12,
         onlyShowPlayerDebuffs = false,
         showDebuffType = true,
-        showBuffs = true,
+        showBuffs = false,
         onlyShowPlayerBuffs = true,
 		showBuffType = true,
 		number = 5,
@@ -585,7 +587,7 @@
         visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; hide",  --show this header in party
         showPlayer          = true,     --make this true to show player in party
         showSolo            = false,    --make this true to show while solo (only works if solo is in visiblity aswell
-        showParty           = false,    --make this true to show headerin party
+        showParty           = true,    --make this true to show headerin party
         showRaid            = false,    --show in raid
 	hideInArena         = false,     --hides the party frame while inside an arena
 	VerticalPoint       = "TOP",
@@ -641,6 +643,12 @@
 			156910, -- Beacon of Faith
 			200025, -- Beacon of Virtue
 			313255, -- Slow
+			774, -- Rejuv
+			155777, -- germination
+			8936, --regrowth
+			33763, --lifebloom
+			48438, -- wild growth
+			335305, -- Barbed Shackles
         },
 		blacklist = {
 			--these are abilities that should definetly not be shown
@@ -663,7 +671,7 @@
         visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; [group:raid] show; hide",
         showPlayer          = true,  --make this true to show player in party
         showSolo            = false,  --make this true to show while solo (only works if solo is in visiblity aswell
-        showParty           = true,  --make this true to show raid in party
+        showParty           = false,  --make this true to show raid in party
         showRaid            = true,  --show in raid
 	showInArena         = false, --shows this frame while in an arena 
         point               = "TOP",
@@ -735,9 +743,9 @@
         enable          = true,
       },
       mouseover       = {
-        enable          = false,
+        enable          = true,
         fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
+        fadeOut         = {time = 0.3, alpha = 0},
       },
     },
     --OVERRIDE BAR (vehicle ui)
@@ -754,9 +762,9 @@
         enable          = true,
       },
       mouseover       = {
-        enable          = false,
+        enable          = true,
         fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
+        fadeOut         = {time = 0.3, alpha = 0},
       },
     },
     --BAR 2
@@ -774,9 +782,9 @@
         enable          = true,
       },
       mouseover       = {
-        enable          = false,
+        enable          = true,
         fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
+        fadeOut         = {time = 0.3, alpha = 0},
       },
     },
     --BAR 3
@@ -793,9 +801,9 @@
         enable          = true,
       },
       mouseover       = {
-        enable          = false,
+        enable          = true,
         fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
+        fadeOut         = {time = 0.3, alpha = 0},
       },
     },
     --BAR 4
@@ -855,7 +863,7 @@
       mouseover       = {
         enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.2},
+        fadeOut         = {time = 0.3, alpha = 0},
       },
     },
     --PETBAR
@@ -875,7 +883,7 @@
       mouseover       = {
         enable          = true,
         fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.4},
+        fadeOut         = {time = 0.3, alpha = 0},
       },
     },
     --STANCE- + POSSESSBAR
@@ -893,9 +901,9 @@
 		  enable          = true,
 	  },
       mouseover       = {
-        enable          = false,
+        enable          = true,
         fadeIn          = {time = 0.4, alpha = 1},
-        fadeOut         = {time = 0.3, alpha = 0.4},
+        fadeOut         = {time = 0.3, alpha = 0},
       },
     },
     --EXTRABAR
@@ -947,7 +955,7 @@
         enable          = true,
       },
       mouseover       = {
-        enable          = false,
+        enable          = true,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0},
       },
@@ -963,7 +971,7 @@
         enable          = true,
       },
       mouseover       = {
-        enable          = false,
+        enable          = true,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0},
       },
@@ -1035,6 +1043,12 @@ cfg.tracker = {
   ----------------------------------------
   -- other
   ----------------------------------------
+
+  cfg.Nameplates = {
+		showHealthValue = true,
+		healthValueAsPercent = true,
+		fontSize = 25,
+  }
   
   cfg.powercolors = PowerBarColor
   cfg.powercolors["MANA"] = { r = 0, g = 0.4, b = 1 }

@@ -127,7 +127,6 @@ end
 
 --add emotes to scrolling text 
 local function scrollingEmotes(self, event, message, sender, language, channelstring, target, ...)
-	if not cfg.ScrollingEmotes then return end
 	if event == "CHAT_MSG_EMOTE" or event == "CHAT_MSG_TEXT_EMOTE" then
 			message = "|cffff4500"..(message).."|r"
 			UIErrorsFrame:AddMessage(message)
@@ -187,6 +186,8 @@ a:SetScript("OnEvent", fixStuffOnLogin)
 local b = CreateFrame("Frame")
 b:RegisterEvent("CHAT_MSG_TEXT_EMOTE")
 b:RegisterEvent("CHAT_MSG_EMOTE")
+b:RegisterEvent("CHAT_MSG_CHANNEL")
+b:RegisterEvent("CHAT_MSG_SAY")
 b:SetScript("OnEvent", scrollingEmotes)
 
 

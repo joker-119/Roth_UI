@@ -1,4 +1,4 @@
-## Interface: 80205
+## Interface: 91500
 ## Author: Galaxy
 ## Title: Roth UI
 ## Notes: Galaxy's oUF layout with Diablo flavor!
@@ -37,7 +37,6 @@ embeds\rObjectiveTracker\core.lua
 embeds\RothFont\font.xml
 
 modules\oUF_acharges.lua
-modules\oUF_ArtifactPower.lua
 modules\oUF_AuraWatch.lua
 modules\oUF_HolyPower.lua
 modules\oUF_ComboPoints.lua

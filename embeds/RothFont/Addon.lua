@@ -138,6 +138,7 @@ function Addon:SetFonts(event, addon)
 	-- Chat frames
 	local _, size = ChatFrame1:GetFont()
 	FCF_SetChatWindowFontSize(nil, ChatFrame1, size)
+	cfg.font = textFont
 end
 
 ------------------------------------------------------------------------
@@ -210,9 +211,7 @@ Roth_UI:ListenForLoaded(function()
 	end
 
 	-- Fix help frame category buttons, NFI why they need fixing
-	for i = 1, 6 do
-		_G["HelpFrameButton"..i.."Text"]:SetFontObject(GameFontNormalMed3)
-	end
+
 
 	BattlePetTooltip.Name:SetFontObject(GameTooltipHeaderText)
 	FloatingBattlePetTooltip.Name:SetFontObject(GameTooltipHeaderText)

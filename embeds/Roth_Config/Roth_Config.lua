@@ -42,4 +42,5 @@ function Roth_UI:LoadConfig()
   local OpenFunc = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Roth_Config", "Roth UI")
   -- This is to handle the situation where a reload happens...want to make sure we restart at order 1
   order = 1
+  Roth_UI.cfg.font = LSM:Fetch("font", Roth_UI.db.profile.chatFont)
 end

@@ -13,7 +13,7 @@ local A, L = ...
 -----------------------------
 
 local function OnDragStart(self, button)
-  if IsAltKeyDown() and IsShiftKeyDown() then
+  if IsShiftKeyDown() then
     if button == "LeftButton" then
       self:GetParent():StartMoving()
     end

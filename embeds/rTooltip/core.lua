@@ -48,8 +48,7 @@ cfg.rtooltip.backdrop = { bgFile = (mediapath.."Tooltip_Background"), edgeFile =
   --HookScript GameTooltip OnTooltipCleared
   GameTooltip:HookScript("OnTooltipCleared", function(self)
     GameTooltip_ClearStatusBars(self)
-    self:SetBackdropColor(0,0,0,1)
-    self:SetBackdropBorderColor(1,1,1,1)
+    --self:SetBackdropBorderColor(1,1,1,1)
   end)
 
   --hooksecurefunc GameTooltip_SetDefaultAnchor
@@ -229,7 +228,7 @@ end)
     if itemLink then
       local itemRarity = select(3,GetItemInfo(itemLink))
       if itemRarity then
-        self:SetBackdropBorderColor(unpack({GetItemQualityColor(itemRarity)}))
+        --self:SetBackdropBorderColor(unpack({GetItemQualityColor(itemRarity)}))
       end
     end
   end
@@ -243,7 +242,7 @@ end)
   --loop over tooltips
   local tooltips = { GameTooltip, ItemRefTooltip, ShoppingTooltip1, ShoppingTooltip2, ShoppingTooltip3, WorldMapTooltip, }
   for idx, tooltip in ipairs(tooltips) do
-    tooltip:SetBackdrop(cfg.rtooltip.backdrop)
+    --tooltip:SetBackdrop(cfg.rtooltip.backdrop)
     tooltip:SetScale(cfg.rtooltip.scale)
     tooltip:HookScript("OnShow", TooltipOnShow)
     tooltip:HookScript("OnHide", TooltipOnHide)

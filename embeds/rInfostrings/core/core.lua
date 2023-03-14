@@ -2,19 +2,22 @@
 -- Variables
 -----------------------------------------
 local A, L = ...
+local addonName, Roth_UI = ...
 
 L.addonName        = A
 L.dragFrames       = {}
 LaddonColor        = "0000FF00"
 L.addonShortcut    = "ris"
 
-
   --get the addon namespace
   local addon, ns = ...
   --get the config values
   local cfg = ns.cfg
   local dragFrameList = ns.dragFrameList
+  local LSM = LibStub("LibSharedMedia-3.0")
+  local font = cfg.font
 
+Roth_UI:ListenForLoaded(function()
   ---------------------------------------
   -- FUNCTIONS
   ---------------------------------------
@@ -76,7 +79,7 @@ if not cfg.embeds.rInfoStrings then return end
 
   local function rsiCreateFontString(f,size)
     local t = f:CreateFontString(nil, "BACKGROUND")
-    t:SetFont(cfg.font, size, "THINOUTLINE")
+    t:SetFont(font, size, "THINOUTLINE")
     t:SetPoint("CENTER", f)
     return t
   end
@@ -151,7 +154,7 @@ if not cfg.embeds.rInfoStrings then return end
       xp = "|c00FA58F4"..numformat(UnitXP("player")).."/"..numformat(UnitXPMax("player")).." |r|c00ffb400("..numformat(GetXPExhaustion() or 0)..")|r|c00FA58F4 | "..string.format("%.0f", (UnitXP("player")/UnitXPMax("player")*100)).."%|r"
     else
       local _, _, minimum, maximum, value = GetWatchedFactionInfo()
-
+      if (value==0) or (maximum==0) then return end
       if ((value-minimum)==999) and ((maximum-minimum)==1000) then
         xp = "|c0000FF00MAXED OUT|r"
       else
@@ -249,14 +252,17 @@ if not cfg.embeds.rInfoStrings then return end
   end
 
   --init
-  local a = CreateFrame("Frame")
+	font = LSM:Fetch("font", Roth_UI.db.profile.chatFont)
+	rLib:CreateDragFrame(frame, L.dragFrames, -2, true)
+	rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)
+    local a = CreateFrame("Frame")
 	a:RegisterEvent("PLAYER_ENTERING_WORLD")
 	a:SetScript("OnEvent", function(self,event,...)
 	  	if event == "PLAYER_ENTERING_WORLD" then
 	  		startSearch(self)
 	  	end
 	end)
+end)
 
   -- Create slash commands (hopefully this works?)  IT DOES, but this frame is anchored to minimap so no need
-rLib:CreateDragFrame(frame, L.dragFrames, -2, true)
-rLib:CreateSlashCmd(L.addonName, L.addonShortcut, L.dragFrames, L.addonColor)
+

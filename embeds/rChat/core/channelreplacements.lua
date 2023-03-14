@@ -1,6 +1,12 @@
 local addon, ns = ...
 local cfg = ns.cfg
 if not cfg.embeds.rChat then return end  
+
+function GetLevel(playerName)
+	print("ahhhh")
+	return UnitLevel(gsub(playerName, "%-", ""))
+end
+  
   --guild
   CHAT_GUILD_GET = "|Hchannel:GUILD|hG|h %s "
   CHAT_OFFICER_GET = "|Hchannel:OFFICER|hO|h %s "
@@ -12,7 +18,7 @@ if not cfg.embeds.rChat then return end
   
   --party
   CHAT_PARTY_GET = "|Hchannel:PARTY|hP|h %s "
-  CHAT_PARTY_LEADER_GET =  "|Hchannel:PARTY|hPL|h %s "
+  CHAT_PARTY_LEADER_GET =  "|Hchannel:PARTY|hPL|h "
   CHAT_PARTY_GUIDE_GET =  "|Hchannel:PARTY|hPG|h %s "
 
   --instance
