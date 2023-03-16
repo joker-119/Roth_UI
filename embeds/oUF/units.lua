@@ -48,7 +48,7 @@ local function updateArenaPreparationElements(self, event, elementName, specID)
 			-- this section just replicates the color options available to the Health and Power elements
 			local r, g, b, color, _
 			-- if(element.colorPower and elementName == 'Power') then
-				-- FIXME: no idea if we can get power type here without the unit
+			-- FIXME: no idea if we can get power type here without the unit
 			if(element.colorClass) then
 				local _, _, _, _, _, class = GetSpecializationInfoByID(specID)
 				color = self.colors.class[class]
@@ -61,7 +61,7 @@ local function updateArenaPreparationElements(self, event, elementName, specID)
 			end
 
 			if(color) then
-				r, g, b = color.r, color.g, color.b
+				r, g, b = color[1], color[2], color[3]
 			end
 
 			if(r or g or b) then
@@ -117,9 +117,7 @@ local function updateArenaPreparation(self, event)
 		end
 	elseif(event == 'PLAYER_ENTERING_WORLD' and not UnitExists(self.unit)) then
 		-- semi-recursive call for when the player zones into an arena
-		if oUF.isRetail then
-			updateArenaPreparation(self, 'ARENA_PREP_OPPONENT_SPECIALIZATIONS')
-		end
+		updateArenaPreparation(self, 'ARENA_PREP_OPPONENT_SPECIALIZATIONS')
 	elseif(event == 'ARENA_PREP_OPPONENT_SPECIALIZATIONS') then
 		if(InCombatLockdown()) then
 			-- prevent calling protected functions if entering arena while in combat
@@ -155,7 +153,6 @@ local function updateArenaPreparation(self, event)
 			if(self.Debuffs) then self.Debuffs:Hide() end
 			if(self.Castbar) then self.Castbar:Hide() end
 			if(self.CombatIndicator) then self.CombatIndicator:Hide() end
-			if(self.PartyIndicator) then self.PartyIndicator:Hide() end
 			if(self.GroupRoleIndicator) then self.GroupRoleIndicator:Hide() end
 			if(self.Portrait) then self.Portrait:Hide() end
 			if(self.PvPIndicator) then self.PvPIndicator:Hide() end
@@ -188,9 +185,7 @@ function oUF:HandleUnit(object, unit)
 		object:RegisterEvent('UNIT_TARGETABLE_CHANGED', object.UpdateAllElements)
 	elseif(unit:match('arena%d?$')) then
 		object:RegisterEvent('ARENA_OPPONENT_UPDATE', object.UpdateAllElements, true)
-		if oUF.isRetail then
-			object:RegisterEvent('ARENA_PREP_OPPONENT_SPECIALIZATIONS', updateArenaPreparation, true)
-		end
+		object:RegisterEvent('ARENA_PREP_OPPONENT_SPECIALIZATIONS', updateArenaPreparation, true)
 		object:SetAttribute('oUF-enableArenaPrep', true)
 		-- the event handler only fires for visible frames, so we have to hook it for arena prep
 		object:HookScript('OnEvent', updateArenaPreparation)
@@ -234,7 +229,7 @@ function oUF:HandleEventlessUnit(object)
 	-- Remove it, in case it's already registered with any timer
 	for _, objects in next, eventlessObjects do
 		for i, obj in next, objects do
-			if obj == object then
+			if(obj == object) then
 				table.remove(objects, i)
 				break
 			end

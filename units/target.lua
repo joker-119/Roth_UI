@@ -43,7 +43,7 @@
 
 
     h:SetStatusBarTexture(cfg.texture)
-    h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
+    h.bg = h:CreateTexture(nil,"BACKGROUND")
     h.bg:SetTexture(cfg.texture)
     h.bg:SetAllPoints(h)
 
@@ -72,7 +72,6 @@
     self:SetScript("OnLeave", UnitFrame_OnLeave)
     func.applyDragFunctionality(self)
     self:SetHitRectInsets(10,10,10,10)
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", createHealthFrame)
 	ZoneTextFrame:SetFrameStrata("HIGH")
 	SubZoneTextFrame:SetFrameStrata("HIGH")
   end
