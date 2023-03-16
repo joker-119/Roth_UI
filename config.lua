@@ -585,9 +585,9 @@
       attributes = {
         visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; show",  --show this header in party
         showPlayer          = true,     --make this true to show player in party
-        showSolo            = true,    --make this true to show while solo (only works if solo is in visiblity aswell
+        showSolo            = false,    --make this true to show while solo (only works if solo is in visiblity aswell
         showParty           = true,    --make this true to show headerin party
-        showRaid            = true,    --show in raid
+        showRaid            = false,    --show in raid
 	hideInArena         = false,     --hides the party frame while inside an arena
 	VerticalPoint       = "TOP",
 	HorizontalPoint     = "LEFT",

@@ -905,7 +905,6 @@ end
   func.healPrediction = function(self)
     if not self.cfg.healprediction or (self.cfg.healprediction and not self.cfg.healprediction.show) then return end
     local w = self.Health:GetWidth()
-      print(w)
     if w == 0 then
       w = self:GetWidth()-24.5-24.5 --raids and party have no width on the health frame for whatever reason, thus use self and subtract the setpoint values
     end

@@ -152,7 +152,6 @@
   ---------------------------------------------
 
   local function createStyle(self)
-      print("party style")
     --apply config to self
     self.cfg = cfg.units.party
     self.cfg.style = "party"

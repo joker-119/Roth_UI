@@ -3,7 +3,6 @@ local cfg = ns.cfg
 if not cfg.embeds.rChat then return end  
 
 function GetLevel(playerName)
-	print("ahhhh")
 	return UnitLevel(gsub(playerName, "%-", ""))
 end
   
