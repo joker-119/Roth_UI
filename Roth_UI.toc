@@ -1,6 +1,7 @@
-## Interface: 100200
+## Interface: 100005
 ## Author: Galaxy
 ## Title: Roth UI
+## Version: 3.0.0
 ## Notes: Galaxy's oUF layout with Diablo flavor!
 ## RequiredDeps:
 ## SavedVariables: Roth_UI_DB_GLOB, ShinyBuffsDB, PhanxFontDB, Roth_UI_DB

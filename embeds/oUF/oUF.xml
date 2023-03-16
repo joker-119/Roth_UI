@@ -9,6 +9,7 @@
 	<Script file="units.lua"/>
 	<Script file="colors.lua"/>
 
+	<Script file="elements\target_border.lua"/>
 	<Script file="elements\additionalpower.lua"/>
 	<Script file="elements\alternativepower.lua"/>
 	<Script file="elements\assistantindicator.lua"/>

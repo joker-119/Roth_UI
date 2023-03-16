@@ -30,7 +30,6 @@
 
   --actionbar background
   local createArtwork = function(self)
-      print("party art")
     local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
 	if self.cfg.vertical == true then
 		t:SetPoint("TOP",0,40)
