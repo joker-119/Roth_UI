@@ -107,7 +107,7 @@
       if f and f:IsUserPlaced() then
         f.dragframe:Hide()
         f.dragframe:EnableMouse(false)
-        f.dragframe:RegisterForDrag(nil)
+        --f.dragframe:RegisterForDrag(nil)
         f.dragframe:SetScript("OnEnter", nil)
         f.dragframe:SetScript("OnLeave", nil)
       end

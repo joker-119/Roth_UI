@@ -196,7 +196,7 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 			25771,
 			209858,
 		}
-		
+
 		local hasValue = function(value)
 			for index,val in ipairs(debuffWhitelist) do
 				if (value == val) then
@@ -210,7 +210,7 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 		if (not UnitIsUnit("target", unit) and isDebuff and not (RothUI:canDispelDebuff(dtype) or isBossDebuff or hasValue(spellId))) then
 			show = false
 		end
-		
+
 		if(show) then
 			-- We might want to consider delaying the creation of an actual cooldown
 			-- object to this point, but I think that will just make things needlessly
@@ -224,7 +224,7 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 					cd:Hide()
 				end
 			end
-			
+
 
 			if ((isDebuff and icons.showDebuffType) or (not isDebuff and icons.showBuffType) or icons.showType) then
 				local color = DebuffTypeColor[dtype] or DebuffTypeColor.none

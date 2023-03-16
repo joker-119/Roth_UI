@@ -188,8 +188,9 @@ local function SkinDebuffs(i, firstTime)
 end
 
 local function SkinTench(firstTime)
-	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
+	for i = 1, 10 do
 		local t = _G["TempEnchant"..i]
+		if not t then return end
 		local dur = t.duration
 		local c = t.count
 		local icon = _G["TempEnchant"..i.."Icon"]

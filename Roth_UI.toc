@@ -40,9 +40,9 @@ modules\oUF_acharges.lua
 modules\oUF_AuraWatch.lua
 modules\oUF_HolyPower.lua
 modules\oUF_ComboPoints.lua
-modules\oUF_Experience.lua
+## modules\oUF_Experience.lua
 modules\oUF_Harmony.lua
-modules\oUF_Reputation.lua
+## modules\oUF_Reputation.lua
 modules\oUF_RuneOrbs.lua
 modules\oUF_Smooth.lua
 modules\oUF_SoulShards.lua

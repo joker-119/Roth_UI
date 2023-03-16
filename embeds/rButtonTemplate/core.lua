@@ -275,9 +275,9 @@ function rButtonTemplate:StyleAllActionButtons(cfg)
     rButtonTemplate:StyleActionButton(_G["PetActionButton"..i],cfg)
   end
   --stancebar buttons
-  for i=1, NUM_STANCE_SLOTS do
-    rButtonTemplate:StyleActionButton(_G["StanceButton"..i],cfg)
-  end
+  --for i=1, NUM_STANCE_SLOTS do
+  --  rButtonTemplate:StyleActionButton(_G["StanceButton"..i],cfg)
+  --end
   --possess buttons
   for i=1, NUM_POSSESS_SLOTS do
     rButtonTemplate:StyleActionButton(_G["PossessButton"..i],cfg)

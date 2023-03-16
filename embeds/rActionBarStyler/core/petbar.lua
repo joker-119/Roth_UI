@@ -28,9 +28,9 @@ if not gcfg.embeds.rActionBarStyler then return end
   frame:SetScale(cfg.scale)
 
   --move the buttons into position and reparent them
-  PetActionBarFrame:ClearAllPoints()
-  PetActionBarFrame:SetParent(frame)
-  PetActionBarFrame:EnableMouse(false)
+  PetActionBar:ClearAllPoints()
+  PetActionBar:SetParent(frame)
+  PetActionBar:EnableMouse(false)
 
   for i=1, num do
     local button = _G["PetActionButton"..i]

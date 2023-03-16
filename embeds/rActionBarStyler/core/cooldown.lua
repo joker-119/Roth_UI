@@ -44,11 +44,7 @@ if not gcfg.embeds.rActionBarStyler then return end
       ApplyButtonCooldownAlphaFix(_G["PetActionButton"..i])
     end
     --stancebar buttons
-    for i=1, NUM_STANCE_SLOTS do
+    for i=1, 10 do
       ApplyButtonCooldownAlphaFix(_G["StanceButton"..i])
-    end
-    --possess buttons
-    for i=1, NUM_POSSESS_SLOTS do
-      ApplyButtonCooldownAlphaFix(_G["PossessButton"..i])
     end
   end

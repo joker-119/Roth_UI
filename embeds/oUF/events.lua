@@ -1,43 +1,74 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
 
 local argcheck = Private.argcheck
-local error = Private.error
+local validateEvent = Private.validateEvent
+local validateUnit = Private.validateUnit
+local isUnitEvent = Private.isUnitEvent
 local frame_metatable = Private.frame_metatable
 
 -- Original event methods
-local RegisterEvent = frame_metatable.__index.RegisterEvent
-local RegisterUnitEvent = frame_metatable.__index.RegisterUnitEvent
-local UnregisterEvent = frame_metatable.__index.UnregisterEvent
-local IsEventRegistered = frame_metatable.__index.IsEventRegistered
+local registerEvent = frame_metatable.__index.RegisterEvent
+local registerUnitEvent = frame_metatable.__index.RegisterUnitEvent
+local unregisterEvent = frame_metatable.__index.UnregisterEvent
+local isEventRegistered = frame_metatable.__index.IsEventRegistered
 
-local unitEvents = {}
+-- to update unit frames correctly, some events need to be registered for
+-- a specific combination of primary and secondary units
+local secondaryUnits = {
+	UNIT_ENTERED_VEHICLE = {
+		pet = 'player',
+	},
+	UNIT_EXITED_VEHICLE = {
+		pet = 'player',
+	},
+	UNIT_PET = {
+		pet = 'player',
+	},
+}
 
-Private.UpdateUnits = function(frame, unit, realUnit)
-	if unit == realUnit then
+function Private.UpdateUnits(frame, unit, realUnit)
+	if(unit == realUnit) then
 		realUnit = nil
 	end
-	if frame.unit ~= unit or frame.realUnit ~= realUnit then
-		for event in next, unitEvents do
-			-- IsEventRegistered returns the units in case of an event
-			-- registered with RegisterUnitEvent
-			local registered, unit1 = IsEventRegistered(frame, event)
-			if registered and unit1 ~= unit then
-				-- RegisterUnitEvent erases previously registered units so
-				-- do not bother to unregister it
-				RegisterUnitEvent(frame, event, unit, realUnit)
+
+	if(frame.unit ~= unit or frame.realUnit ~= realUnit) then
+		-- don't let invalid units in, otherwise unit events will end up being
+		-- registered as unitless
+		if(frame.unitEvents and validateUnit(unit)) then
+			local resetRealUnit = false
+
+			for event in next, frame.unitEvents do
+				if(not realUnit and secondaryUnits[event]) then
+					realUnit = secondaryUnits[event][unit]
+					resetRealUnit = true
+				end
+
+				local registered, unit1, unit2 = isEventRegistered(frame, event)
+				-- we don't want to re-register unitless/shared events in case
+				-- someone added them by hand to the unitEvents table
+				if(not registered or unit1 and (unit1 ~= unit or unit2 ~= realUnit)) then
+					registerUnitEvent(frame, event, unit, realUnit)
+				end
+
+				if(resetRealUnit) then
+					realUnit = nil
+					resetRealUnit = false
+				end
 			end
 		end
+
 		frame.unit = unit
 		frame.realUnit = realUnit
-		frame.id = unit:match'^.-(%d+)'
+		frame.id = unit:match('^.-(%d+)')
+
 		return true
 	end
 end
 
-local OnEvent = function(self, event, ...)
-	if self:IsVisible() then
+local function onEvent(self, event, ...)
+	if(self:IsVisible()) then
 		return self[event](self, event, ...)
 	end
 end
@@ -50,24 +81,29 @@ local event_metatable = {
 	end,
 }
 
+--[[ Events: frame:RegisterEvent(event, func, unitless)
+Used to register a frame for a game event and add an event handler. OnUpdate polled frames are prevented from
+registering events.
+
+* self     - frame that will be registered for the given event.
+* event    - name of the event to register (string)
+* func     - a function that will be executed when the event fires. Multiple functions can be added for the same frame
+             and event (function)
+* unitless - indicates that the event does not fire for a specific unit, so the event arguments won't be
+             matched to the frame unit(s). Obligatory for unitless event (boolean)
+--]]
 function frame_metatable.__index:RegisterEvent(event, func, unitless)
-	-- Block OnUpdate polled frames from registering events.
-	if(self.__eventless) then return end
+	-- Block OnUpdate polled frames from registering events except for
+	-- UNIT_PORTRAIT_UPDATE and UNIT_MODEL_CHANGED which are used for
+	-- portrait updates.
+	if(self.__eventless and event ~= 'UNIT_PORTRAIT_UPDATE' and event ~= 'UNIT_MODEL_CHANGED') then return end
 
 	argcheck(event, 2, 'string')
-
-	if(type(func) == 'string' and type(self[func]) == 'function') then
-		func = self[func]
-	end
-
-	-- TODO: should warn the user.
-	if not unitless and not (unitEvents[event] or event:match'^UNIT_') then
-		unitless = true
-	end
+	argcheck(func, 3, 'function')
 
 	local curev = self[event]
-	local kind = type(curev)
-	if(curev and func) then
+	if(curev) then
+		local kind = type(curev)
 		if(kind == 'function' and curev ~= func) then
 			self[event] = setmetatable({curev, func}, event_metatable)
 		elseif(kind == 'table') then
@@ -77,51 +113,79 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 
 			table.insert(curev, func)
 		end
-	elseif(IsEventRegistered(self, event)) then
-		return
-	else
-		if(type(func) == 'function') then
-			self[event] = func
-		elseif(not self[event]) then
-			return error("Style [%s] attempted to register event [%s] on unit [%s] with a handler that doesn't exist.", self.style, event, self.unit or 'unknown')
+
+		if(unitless or self.__eventless) then
+			-- re-register the event in case we have mixed registration
+			registerEvent(self, event)
+
+			if(self.unitEvents) then
+				self.unitEvents[event] = nil
+			end
+		end
+	elseif(validateEvent(event)) then
+		self[event] = func
+
+		if(not self:GetScript('OnEvent')) then
+			self:SetScript('OnEvent', onEvent)
 		end
 
-		if not self:GetScript('OnEvent') then
-			self:SetScript('OnEvent', OnEvent)
-		end
-
-		if unitless then
-			RegisterEvent(self, event)
+		if(unitless or self.__eventless) then
+			registerEvent(self, event)
 		else
-			unitEvents[event] = true
-			RegisterUnitEvent(self, event, self.unit)
+			self.unitEvents = self.unitEvents or {}
+			self.unitEvents[event] = true
+
+			-- UpdateUnits will take care of unit event registration for header
+			-- units in case we don't have a valid unit yet
+			local unit1, unit2 = self.unit
+			if(unit1 and validateUnit(unit1)) then
+				if(secondaryUnits[event]) then
+					unit2 = secondaryUnits[event][unit1]
+				end
+
+				-- be helpful and throw a custom error when attempting to register
+				-- an event that is unitless
+				assert(isUnitEvent(event, unit1), string.format('Event "%s" is not an unit event', event))
+
+				registerUnitEvent(self, event, unit1, unit2 or '')
+			end
 		end
 	end
 end
 
+--[[ Events: frame:UnregisterEvent(event, func)
+Used to remove a function from the event handler list for a game event.
+
+* self  - the frame registered for the event
+* event - name of the registered event (string)
+* func  - function to be removed from the list of event handlers. If this is the only handler for the given event, then
+          the frame will be unregistered for the event (function)
+--]]
 function frame_metatable.__index:UnregisterEvent(event, func)
 	argcheck(event, 2, 'string')
 
+	local cleanUp = false
 	local curev = self[event]
 	if(type(curev) == 'table' and func) then
 		for k, infunc in next, curev do
 			if(infunc == func) then
-				table.remove(curev, k)
-
-				local n = #curev
-				if(n == 1) then
-					local _, handler = next(curev)
-					self[event] = handler
-				elseif(n == 0) then
-					-- This should not happen
-					UnregisterEvent(self, event)
-				end
+				curev[k] = nil
 
 				break
 			end
 		end
-	elseif(curev == func) then
+
+		if(not next(curev)) then
+			cleanUp = true
+		end
+	end
+
+	if(cleanUp or curev == func) then
 		self[event] = nil
-		UnregisterEvent(self, event)
+		if(self.unitEvents) then
+			self.unitEvents[event] = nil
+		end
+
+		unregisterEvent(self, event)
 	end
 end

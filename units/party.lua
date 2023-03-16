@@ -20,7 +20,7 @@
   ---------------------------------------------
   -- UNIT SPECIFIC FUNCTIONS
   ---------------------------------------------
-
+  
   --init parameters
   local initUnitParameters = function(self)
     self:RegisterForClicks("AnyDown")
@@ -30,6 +30,7 @@
 
   --actionbar background
   local createArtwork = function(self)
+      print("party art")
     local t = self:CreateTexture(nil,"BACKGROUND",nil,-8)
 	if self.cfg.vertical == true then
 		t:SetPoint("TOP",0,40)
@@ -47,17 +48,16 @@
 
   --create health frames
   local createHealthFrame = function(self)
-
     local cfg = self.cfg.health
 
     --health
     local h = CreateFrame("StatusBar", nil, self)
 	if self.cfg.vertical == true then
-	 h:SetPoint("TOP",0,-30)
+	 h:SetPoint("TOP",0,-15)
 	 h:SetPoint("LEFT",47,0)
 	 h:SetPoint("RIGHT",-47,0)
-	 h:SetPoint("BOTTOM",0,52)
-	 h:SetFrameStrata("LOW")
+	 h:SetPoint("BOTTOM",0,35)
+	 h:SetFrameStrata("BACKGROUND")
 	else
      h:SetPoint("TOP",0,-25)
      h:SetPoint("LEFT",20,0)
@@ -66,7 +66,7 @@
 	 h:SetFrameStrata("LOW")
 	end
     h:SetStatusBarTexture(cfg.texture)
-    h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
+    h.bg = h:CreateTexture(nil,"BORDER",nil,-6)
     h.bg:SetTexture(cfg.texture)
     h.bg:SetAllPoints(h)
 
@@ -76,7 +76,7 @@
 		h.glow:SetPoint("TOP",0,15)
 		h.glow:SetPoint("LEFT",-40,0)
 		h.glow:SetPoint("RIGHT",40,0)
-		h.glow:SetPoint("BOTTOM",0,-25)
+		h.glow:SetPoint("BOTTOM",0,-35)
 	else
 		h.glow:SetAllPoints(self)
 	end
@@ -97,21 +97,21 @@
     --power
     local h = CreateFrame("StatusBar", nil, self.Health)
 	if self.cfg.vertical == true then
-     h:SetPoint("TOP",0,-25.5)
+     h:SetPoint("TOP",0,-20)
      h:SetPoint("LEFT",6,0)
      h:SetPoint("RIGHT",-6,0)
      h:SetPoint("BOTTOM",0,-20)
-	 h:SetFrameStrata("LOW")
+	 h:SetFrameStrata("BACKGROUND")
 	else
      h:SetPoint("TOP",0,-18.5)
      h:SetPoint("LEFT",7,0)
      h:SetPoint("RIGHT",-7,0)
      h:SetPoint("BOTTOM",0,-8)
-	 h:SetFrameStrata("LOW")
+	 h:SetFrameStrata("BACKGROUND")
 	end
     h:SetStatusBarTexture(cfg.texture)
 
-    h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
+    h.bg = h:CreateTexture(nil,"BORDER",nil,-6)
     h.bg:SetTexture(cfg.texture)
     h.bg:SetAllPoints(h)
 
@@ -123,7 +123,7 @@
 
   --create health power strings
   local createHealthPowerStrings = function(self)
-
+      
     local name = func.createFontString(self.Health, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
 	if self.cfg.vertical == true then
 		name:SetPoint("BOTTOM", self, "TOP", 0, -3)
@@ -153,7 +153,7 @@
   ---------------------------------------------
 
   local function createStyle(self)
-
+      print("party style")
     --apply config to self
     self.cfg = cfg.units.party
     self.cfg.style = "party"
@@ -223,19 +223,19 @@
     }
 
     --icons
-    self.RaidIcon = func.createIcon(self,"TOOLTIP",18,self.Name,"RIGHT","LEFT",25,0,-1)
+    self.RaidIcon = func.createIcon(self,"OVERLAY",18,self.Name,"RIGHT","LEFT",25,0,-1)
 	self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
-    self.ReadyCheck = func.createIcon(self,"TOOLTIP",24,self.Health,"CENTER","CENTER",0,0,-1)
+    self.ReadyCheck = func.createIcon(self,"OVERLAY",24,self.Health,"CENTER","CENTER",0,0,-1)
     if self.Border then
-      self.Leader = func.createIcon(self,"TOOLTIP",13,self.Border,"BOTTOMRIGHT","TOPRIGHT",-5,-27,-1)
+      self.Leader = func.createIcon(self,"OVERLAY",13,self.Border,"BOTTOMRIGHT","TOPRIGHT",-5,-27,-1)
       if self.cfg.portrait.use3D then
-        self.LFDRole = func.createIcon(self.BorderHolder,"TOOLTIP",12,self.Health,"CENTER","CENTER",0,0,5)
+        self.LFDRole = func.createIcon(self.BorderHolder,"OVERLAY",12,self.Health,"CENTER","CENTER",0,0,5)
       else
-        self.LFDRole = func.createIcon(self.PortraitHolder,"TOOLTIP",12,self.Name,"CENTER","CENTER",0,0,5)
+        self.LFDRole = func.createIcon(self.PortraitHolder,"OVERLAY",12,self.Name,"CENTER","CENTER",0,0,5)
       end
     else
-      self.Leader = func.createIcon(self,"TOOLTIP",13,self,"RIGHT","LEFT",70,30,-1)
-      self.LFDRole = func.createIcon(self,"TOOLTIP",12,self,"CENTER","CENTER",0,10,-1)
+      self.Leader = func.createIcon(self,"OVERLAY",13,self,"RIGHT","LEFT",70,30,-1)
+      self.LFDRole = func.createIcon(self,"OVERLAY",12,self,"CENTER","CENTER",0,10,-1)
     end
 	self.Leader:SetTexture("Interface\\AddOns\\Roth_UI\\media\\leader")
     self.LFDRole:SetTexture("Interface\\AddOns\\Roth_UI\\media\\lfd_role")
@@ -262,7 +262,8 @@
 
   if cfg.units.party.show then
     oUF:RegisterStyle("diablo:party", createStyle)
-    oUF:SetActiveStyle("diablo:party")
+    oUF:SetActiveStyle("diablo:party") 
+      oUF:Spawn("party", "RothUI_PartyFrame")
 
     local attr = cfg.units.party.attributes
 	
@@ -281,7 +282,7 @@ if cfg.units.party.vertical == true then
       attr.visibility,
       "showPlayer",         attr.showPlayer,
       "showSolo",           attr.showSolo,
-      "showParty",          attr.showParty,
+      "showParty",          true,
       "showRaid",           attr.showRaid,
       "point",              attr.VerticalPoint,
       "yoffset",            attr.yoffset,

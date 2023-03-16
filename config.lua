@@ -29,16 +29,16 @@
   ---------------------------------------------
   cfg.embeds = {
 	rChat = true, -- Simple chat frame
-	rActionBarStyler = false, -- Simple actionbar styler for Roth UI
-	rButtonTemplate = false, -- Simple button skinning mod
+	rActionBarStyler = true, -- Simple actionbar styler for Roth UI
+	rButtonTemplate = true, -- Simple button skinning mod
 	rMinimap = true, -- Simplistic square minimap
-	rNamePlates = false, -- Diablo style Nameplates
+	rNamePlates = true, -- Diablo style Nameplates
 	rInfoStrings = true, -- Information text displayed under Minimap
 	rRaidManager = false, -- Replacement for blizzard's pull-out raid manager
 	rTooltip = true, -- Diablo styled tooltips
-	tullaRange = false, -- Creates Red/Blue overlay over icons that are not useable due to range or lack of resources
+	tullaRange = true, -- Creates Red/Blue overlay over icons that are not useable due to range or lack of resources
 	Roth_ShinyBuffs = false, -- ShinyBuffs buff frame, edited for use with Roth UI
-	rObjectiveTracker = false, -- Simple drag and resizeable Objective Tracker frame
+	rObjectiveTracker = true, -- Simple drag and resizeable Objective Tracker frame
 	RothFont = false, -- makes game client use a font (as defined in config file) for all game text
   }
   ----------------------------------------
@@ -579,16 +579,16 @@
 		NameFontSize = 14
 	  },
       portrait = {
-        show = false,
+        show = true,
         use3D = true,
 		width = 85,
       },
       attributes = {
-        visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; hide",  --show this header in party
+        visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; show",  --show this header in party
         showPlayer          = true,     --make this true to show player in party
-        showSolo            = false,    --make this true to show while solo (only works if solo is in visiblity aswell
+        showSolo            = true,    --make this true to show while solo (only works if solo is in visiblity aswell
         showParty           = true,    --make this true to show headerin party
-        showRaid            = false,    --show in raid
+        showRaid            = true,    --show in raid
 	hideInArena         = false,     --hides the party frame while inside an arena
 	VerticalPoint       = "TOP",
 	HorizontalPoint     = "LEFT",
@@ -668,10 +668,9 @@
 		buffPos = {a1 = "CENTER", x = 33, y = 0},
       },
       attributes = {
-        visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; [group:raid] show; hide",
         showPlayer          = true,  --make this true to show player in party
-        showSolo            = false,  --make this true to show while solo (only works if solo is in visiblity aswell
-        showParty           = false,  --make this true to show raid in party
+        showSolo            = true,  --make this true to show while solo (only works if solo is in visiblity aswell
+        showParty           = true,  --make this true to show raid in party
         showRaid            = true,  --show in raid
 	showInArena         = false, --shows this frame while in an arena 
         point               = "TOP",

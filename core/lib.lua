@@ -468,8 +468,12 @@ func.createAuraWatch = function(self)
       end
     elseif (not bar.buffOverride) then
       --inner shadow
-      bar.glow:SetVertexColor(0,0,0,0.7)
-      bar.highlight:SetAlpha(cfg.highlightMultiplier)
+        if (bar.glow) then
+            bar.glow:SetVertexColor(0,0,0,0.7)
+        end
+        if (bar.highlight) then
+            bar.highlight:SetAlpha(cfg.highlightMultiplier)
+        end
     end
     --bar.highlight:SetAlpha((min/max)*cfg.highlightMultiplier)
   end
@@ -901,14 +905,15 @@ end
   func.healPrediction = function(self)
     if not self.cfg.healprediction or (self.cfg.healprediction and not self.cfg.healprediction.show) then return end
     local w = self.Health:GetWidth()
+      print(w)
     if w == 0 then
       w = self:GetWidth()-24.5-24.5 --raids and party have no width on the health frame for whatever reason, thus use self and subtract the setpoint values
     end
     -- my heals
     local mhpb = CreateFrame("StatusBar", nil, self.Health)
     mhpb:SetFrameLevel(self.Health:GetFrameLevel())
-    mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-    mhpb:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+    mhpb:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", 0, 0)
+    mhpb:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", 0, 0)
     mhpb:SetWidth(w)
     mhpb:SetStatusBarTexture(self.cfg.healprediction.texture)
     mhpb:SetStatusBarColor(self.cfg.healprediction.color.myself.r,self.cfg.healprediction.color.myself.g,self.cfg.healprediction.color.myself.b,self.cfg.healprediction.color.myself.a)

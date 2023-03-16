@@ -17,19 +17,21 @@ if not gcfg.embeds.rActionBarStyler then return end
   if not cfg.enable then return end
 
   --micro menu button objects
-  local MICRO_BUTTONS = MICRO_BUTTONS
-  local buttonList = {}
+  local MicroMenuButtons = {
+    CharacterMicroButton,
+    SpellbookMicroButton,
+    TalentMicroButton,
+    AchievementMicroButton,
+    QuestLogMicroButton,
+    GuildMicroButton,
+    LFDMicroButton,
+    CollectionsMicroButton,
+    EJMicroButton,
+    StoreMicroButton,
+    MainMenuMicroButton,
+  }
 
-  --check the buttons in the MICRO_BUTTONS table
-  for _, buttonName in pairs(MICRO_BUTTONS) do
-    local button = _G[buttonName]
-    if button then
-      --if not button:IsShown() then print(buttonName.." is not shown") end
-      tinsert(buttonList, button)
-    end
-  end
-
-  local NUM_MICROBUTTONS = # buttonList
+  local NUM_MICROBUTTONS = # MicroMenuButtons
   local buttonWidth = CharacterMicroButton:GetWidth()
   local buttonHeight = CharacterMicroButton:GetHeight()
   local gap = -3
@@ -43,7 +45,7 @@ if not gcfg.embeds.rActionBarStyler then return end
   frame:SetScale(cfg.scale)
 
   --move the buttons into position and reparent them
-  for _, button in pairs(buttonList) do
+  for _, button in pairs(MicroMenuButtons) do
     button:SetParent(frame)
   end
   CharacterMicroButton:ClearAllPoints();
@@ -70,5 +72,5 @@ if not gcfg.embeds.rActionBarStyler then return end
 
   --create the mouseover functionality
   if cfg.mouseover.enable then
-    rButtonBarFader(frame, buttonList, cfg.mouseover.fadeIn, cfg.mouseover.fadeOut) --frame, buttonList, fadeIn, fadeOut
+    rButtonBarFader(frame, MicroMenuButtons, cfg.mouseover.fadeIn, cfg.mouseover.fadeOut) --frame, buttonList, fadeIn, fadeOut
   end

@@ -211,12 +211,14 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
 
 	local nameHex = GetHexColorFromRGB(1,0,0)
 	local reaction = UnitReaction(frame.unit, "player")
-	if (reaction == 4) then
-		nameHex = GetHexColorFromRGB(1,1,0)
-	elseif (reaction >= 5) then
-		nameHex = GetHexColorFromRGB(0,1,0)
-	else
-		nameHex = GetHexColorFromRGB(1,0,0)
+	if reaction then
+		if (reaction == 4) then
+			nameHex = GetHexColorFromRGB(1,1,0)
+		elseif (reaction >= 5) then
+			nameHex = GetHexColorFromRGB(0,1,0)
+		else
+			nameHex = GetHexColorFromRGB(1,0,0)
+		end
 	end
 
 	if (UnitAffectingCombat(frame.unit)) then
@@ -231,7 +233,8 @@ hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
 		nameHex = GetHexColorFromRGB(.5,.5,.5)
 	end
 	--Set the nameplate name to include tag(if any), name and level
-	frame.name:SetText("|cff"..hexColor.."("..level..")|r ".."|cff"..nameHex..name.."|r")
+	if not name then return end
+	frame.name:SetText("|cff"..hexColor.."("..level..")|r ".."|cff"..nameHex..name or "Unknown".."|r")
 	frame.name:SetFont(cfg.font, 12)
 end)
 
@@ -250,6 +253,8 @@ hooksecurefunc("CompactUnitFrame_UpdateHealth", function (frame)
 			color = GetHexColorFromRGB(1,1,0)
 		end
 
+		if not frame.healthBar.text then return end
+		
 		if (cfg.Nameplates.healthValueAsPercent) then
 			frame.healthBar.text:SetText("|cff"..color..healthPerc.."%|r")
 		else

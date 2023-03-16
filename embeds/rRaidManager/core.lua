@@ -81,8 +81,8 @@
   manager:RegisterEvent("PLAYER_LOGIN")
   manager:SetScript("OnEvent", function()
     local needReload = false
-    if (LoadAddOn("Blizzard_CUFProfiles")) then print("|cffffff00"..addon.."|r Blizzard_CUFProfiles is loadable") needReload = true end
-    if (LoadAddOn("Blizzard_CompactRaidFrames")) then print("|cffffff00"..addon.."|r Blizzard_CompactRaidFrames is loadable") needReload = true end
+    --if (LoadAddOn("Blizzard_CUFProfiles")) then print("|cffffff00"..addon.."|r Blizzard_CUFProfiles is loadable") needReload = true end
+    --if (LoadAddOn("Blizzard_CompactRaidFrames")) then print("|cffffff00"..addon.."|r Blizzard_CompactRaidFrames is loadable") needReload = true end
     if needReload then
       DisableAddOn("Blizzard_CUFProfiles")
       DisableAddOn("Blizzard_CompactRaidFrames")

@@ -17,51 +17,15 @@
   ---------------------------------------------
   -- UNIT SPECIFIC FUNCTIONS
   ---------------------------------------------
-
-  --init parameters
-  local initUnitParameters = function(self)
-    self:SetFrameStrata("LOW")
-    self:SetFrameLevel(1)
-    self:SetSize(self.cfg.width, self.cfg.height)
-    self:SetScale(self.cfg.scale)
-    self:SetPoint(self.cfg.pos.a1,self.cfg.pos.af,self.cfg.pos.a2,self.cfg.pos.x,self.cfg.pos.y)
-    self:RegisterForClicks("AnyDown")
-    self:SetScript("OnEnter", UnitFrame_OnEnter)
-    self:SetScript("OnLeave", UnitFrame_OnLeave)
-    func.applyDragFunctionality(self)
-    self:SetHitRectInsets(10,10,10,10)
-	self:RegisterEvent("PLAYER_TARGET_CHANGED")
-	ZoneTextFrame:SetFrameStrata("HIGH")
-	SubZoneTextFrame:SetFrameStrata("HIGH")
-  end
-
   --Target Frame
-	local createArtwork = function(self)
+  local createArtwork = function(self)
     local t = self:CreateTexture(nil,"BORDER",nil,-8)
     t:SetPoint("TOP",0,25)
     t:SetPoint("LEFT",-62,0)
     t:SetPoint("RIGHT",60,0)
     t:SetPoint("BOTTOM",0,-15)
-		
-	self.RareIcon = t
-end
 
-
-  --make a sound when target gets selected
-  local playTargetSound = function(self,event)
-    if event == "PLAYER_TARGET_CHANGED" then
-      if (UnitExists(self.unit)) then
-        if (UnitIsEnemy(self.unit, "player")) then
-          PlaySound(873)
-        elseif ( UnitIsFriend("player", self.unit)) then
-          PlaySound(867)
-        else
-          PlaySound(871)
-        end
-      else
-        PlaySound(684)
-      end
-    end
+    self.RareIcon = t
   end
 
   --create health frames
@@ -75,8 +39,8 @@ end
     h:SetPoint("LEFT",24.5,0)
     h:SetPoint("RIGHT",-24.5,0)
     h:SetPoint("BOTTOM",0,29.7)
-  	h:SetFrameStrata("BACKGROUND")
-	
+    h:SetFrameStrata("BACKGROUND")
+
 
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BACKGROUND",nil,-6)
@@ -94,6 +58,41 @@ end
     self.Health = h
     self.Health.Smooth = true
     self.Health.frequentUpdates = self.cfg.health.frequentUpdates or false
+  end
+  
+  --init parameters
+  local initUnitParameters = function(self)
+    self:SetFrameStrata("LOW")
+    self:SetFrameLevel(1)
+    self:SetSize(self.cfg.width, self.cfg.height)
+    self:SetScale(self.cfg.scale)
+    self:SetPoint(self.cfg.pos.a1,self.cfg.pos.af,self.cfg.pos.a2,self.cfg.pos.x,self.cfg.pos.y)
+    self:RegisterForClicks("AnyDown")
+    self:SetScript("OnEnter", UnitFrame_OnEnter)
+    self:SetScript("OnLeave", UnitFrame_OnLeave)
+    func.applyDragFunctionality(self)
+    self:SetHitRectInsets(10,10,10,10)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", createHealthFrame)
+	ZoneTextFrame:SetFrameStrata("HIGH")
+	SubZoneTextFrame:SetFrameStrata("HIGH")
+  end
+
+
+  --make a sound when target gets selected
+  local playTargetSound = function(self,event)
+    if event == "PLAYER_TARGET_CHANGED" then
+      if (UnitExists(self.unit)) then
+        if (UnitIsEnemy(self.unit, "player")) then
+          PlaySound(873)
+        elseif ( UnitIsFriend("player", self.unit)) then
+          PlaySound(867)
+        else
+          PlaySound(871)
+        end
+      else
+        PlaySound(684)
+      end
+    end
   end
   
 
@@ -117,7 +116,7 @@ end
 
     h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
     h.glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_ppglow")
-    h.glow:SetAllPoints(self)
+    h.glow:SetAllPoints(h)
     h.glow:SetVertexColor(0,0,0,1)
 
     self.Power = h

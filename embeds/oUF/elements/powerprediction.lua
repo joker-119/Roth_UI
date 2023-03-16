@@ -1,117 +1,144 @@
---[[ Element: Power Prediction Bar
- Handles updating and visibility of the power prediction status bars.
+--[[
+# Element: Power Prediction Bar
 
- Widget
+Handles the visibility and updating of power cost prediction.
 
- PowerPrediction - A table containing `mainBar` and `altBar`.
+## Widget
 
- Sub-Widgets
+PowerPrediction - A `table` containing the sub-widgets.
 
- mainBar - A StatusBar used to represent power cost of spells, that consume
-           your main power, e.g. mana for mages;
- altBar  - A StatusBar used to represent power cost of spells, that consume
-           your additional power, e.g. mana for balance druids.
+## Sub-Widgets
 
- Notes
+mainBar - A `StatusBar` used to represent power cost of spells on top of the Power element.
+altBar  - A `StatusBar` used to represent power cost of spells on top of the AdditionalPower element.
 
- The default StatusBar texture will be applied if the UI widget doesn't have a
- status bar texture.
+## Notes
 
- Examples
+A default texture will be applied if the widget is a StatusBar and doesn't have a texture set.
 
-   -- Position and size
-   local mainBar = CreateFrame('StatusBar', nil, self.Power)
-   mainBar:SetReverseFill(true)
-   mainBar:SetPoint('TOP')
-   mainBar:SetPoint('BOTTOM')
-   mainBar:SetPoint('RIGHT', self.Power:GetStatusBarTexture(), 'RIGHT')
-   mainBar:SetWidth(200)
+## Examples
 
-   local altBar = CreateFrame('StatusBar', nil, self.DruidMana)
-   altBar:SetReverseFill(true)
-   altBar:SetPoint('TOP')
-   altBar:SetPoint('BOTTOM')
-   altBar:SetPoint('RIGHT', self.DruidMana:GetStatusBarTexture(), 'RIGHT')
-   altBar:SetWidth(200)
+    -- Position and size
+    local mainBar = CreateFrame('StatusBar', nil, self.Power)
+    mainBar:SetReverseFill(true)
+    mainBar:SetPoint('TOP')
+    mainBar:SetPoint('BOTTOM')
+    mainBar:SetPoint('RIGHT', self.Power:GetStatusBarTexture(), 'RIGHT')
+    mainBar:SetWidth(200)
 
-   -- Register with oUF
-   self.PowerPrediction = {
-      mainBar = mainBar,
-      altBar = altBar
-   }
+    local altBar = CreateFrame('StatusBar', nil, self.AdditionalPower)
+    altBar:SetReverseFill(true)
+    altBar:SetPoint('TOP')
+    altBar:SetPoint('BOTTOM')
+    altBar:SetPoint('RIGHT', self.AdditionalPower:GetStatusBarTexture(), 'RIGHT')
+    altBar:SetWidth(200)
 
- Hooks
-
- Override(self) - Used to completely override the internal update function.
-                  Removing the table key entry will make the element fall-back
-                  to its internal function again.
-]]
-
-if(select(4, GetBuildInfo()) < 70000) then return end
+    -- Register with oUF
+    self.PowerPrediction = {
+        mainBar = mainBar,
+        altBar = altBar
+    }
+--]]
 
 local _, ns = ...
 local oUF = ns.oUF
 
-local playerClass = select(2, UnitClass('player'))
+-- sourced from FrameXML/AlternatePowerBar.lua
+local ADDITIONAL_POWER_BAR_INDEX = _G.ADDITIONAL_POWER_BAR_INDEX or 0
+local ALT_MANA_BAR_PAIR_DISPLAY_INFO = _G.ALT_MANA_BAR_PAIR_DISPLAY_INFO
+
+local _, playerClass = UnitClass('player')
 
 local function Update(self, event, unit)
 	if(self.unit ~= unit) then return end
 
-	local pp = self.PowerPrediction
+	local element = self.PowerPrediction
 
-	if(pp.PreUpdate) then
-		pp:PreUpdate(unit)
+	--[[ Callback: PowerPrediction:PreUpdate(unit)
+	Called before the element has been updated.
+
+	* self - the PowerPrediction element
+	* unit - the unit for which the update has been triggered (string)
+	--]]
+	if(element.PreUpdate) then
+		element:PreUpdate(unit)
 	end
 
-	local _, _, _, startTime, endTime, _, _, _, spellID = UnitCastingInfo(unit)
-	local mainPowerType = UnitPowerType(unit)
-	local hasAltManaBar = ALT_MANA_BAR_PAIR_DISPLAY_INFO[playerClass] and ALT_MANA_BAR_PAIR_DISPLAY_INFO[playerClass][mainPowerType]
 	local mainCost, altCost = 0, 0
+	local mainType = UnitPowerType(unit)
+	local mainMax = UnitPowerMax(unit, mainType)
+	local isPlayer = UnitIsUnit('player', unit)
+	local altManaInfo = isPlayer and oUF.isRetail and ALT_MANA_BAR_PAIR_DISPLAY_INFO[playerClass]
+	local hasAltManaBar = altManaInfo and altManaInfo[mainType]
+	local _, _, _, startTime, endTime, _, _, _, spellID = UnitCastingInfo(unit)
 
-	if(event == 'UNIT_SPELLCAST_START' or startTime ~= endTime) then
+	if(event == 'UNIT_SPELLCAST_START' and startTime ~= endTime) then
 		local costTable = GetSpellPowerCost(spellID)
+		if not costTable then
+			element.mainCost = mainCost
+			element.altCost = altCost
+		else
+			local checkRequiredAura = isPlayer and #costTable > 1
+			for _, costInfo in next, costTable do
+				local cost, ctype, cperc = costInfo.cost, costInfo.type, costInfo.costPercent
+				local checkSpec = not checkRequiredAura or costInfo.hasRequiredAura
+				if checkSpec and ctype == mainType then
+					mainCost = ((isPlayer or cost < mainMax) and cost) or (mainMax * cperc) / 100
+					element.mainCost = mainCost
 
-		for _, costInfo in pairs(costTable) do
-			--[[costInfo content:
-				-- name: string (powerToken)
-				-- type: number (powerType)
-				-- cost: number
-				-- costPercent: number
-				-- costPerSec: number
-				-- minCost: number
-				-- hasRequiredAura: boolean
-				-- requiredAuraID: number
-			]]
-			if(costInfo.type == mainPowerType) then
-				mainCost = costInfo.cost
+					break
+				elseif hasAltManaBar and checkSpec and ctype == ADDITIONAL_POWER_BAR_INDEX then
+					altCost = cost
+					element.altCost = altCost
 
-				break
-			elseif(costInfo.type == ADDITIONAL_POWER_BAR_INDEX) then
-				altCost = costInfo.cost
-
-				break
+					break
+				end
 			end
 		end
+	elseif(spellID) then
+		-- if we try to cast a spell while casting another one we need to avoid resetting the element
+		mainCost = element.mainCost or 0
+		altCost = element.altCost or 0
+	else
+		element.mainCost = mainCost
+		element.altCost = altCost
 	end
 
-	if(pp.mainBar) then
-		pp.mainBar:SetMinMaxValues(0, UnitPowerMax(unit, mainPowerType))
-		pp.mainBar:SetValue(mainCost)
-		pp.mainBar:Show()
+	if(element.mainBar) then
+		element.mainBar:SetMinMaxValues(0, mainMax)
+		element.mainBar:SetValue(mainCost)
+		element.mainBar:Show()
 	end
 
-	if(pp.altBar and hasAltManaBar) then
-		pp.altBar:SetMinMaxValues(0, UnitPowerMax(unit, ADDITIONAL_POWER_BAR_INDEX))
-		pp.altBar:SetValue(altCost)
-		pp.altBar:Show()
+	if(element.altBar and hasAltManaBar) then
+		element.altBar:SetMinMaxValues(0, UnitPowerMax(unit, ADDITIONAL_POWER_BAR_INDEX))
+		element.altBar:SetValue(altCost)
+		element.altBar:Show()
 	end
 
-	if(pp.PostUpdate) then
-		return pp:PostUpdate(unit, mainCost, altCost, hasAltManaBar)
+	--[[ Callback: PowerPrediction:PostUpdate(unit, mainCost, altCost, hasAltManaBar)
+	Called after the element has been updated.
+
+	* self          - the PowerPrediction element
+	* unit          - the unit for which the update has been triggered (string)
+	* mainCost      - the main power type cost of the cast ability (number)
+	* altCost       - the secondary power type cost of the cast ability (number)
+	* hasAltManaBar - indicates if the unit has a secondary power bar (boolean)
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(unit, mainCost, altCost, hasAltManaBar)
 	end
 end
 
 local function Path(self, ...)
+	--[[ Override: PowerPrediction.Override(self, event, unit, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	* ...   - the arguments accompanying the event
+	--]]
 	return (self.PowerPrediction.Override or Update) (self, ...)
 end
 
@@ -120,27 +147,26 @@ local function ForceUpdate(element)
 end
 
 local function Enable(self)
-	local pp = self.PowerPrediction
+	local element = self.PowerPrediction
+	if(element) then
+		element.__owner = self
+		element.ForceUpdate = ForceUpdate
 
-	if(pp) then
-		pp.__owner = self
-		pp.ForceUpdate = ForceUpdate
+		oUF:RegisterEvent(self, 'UNIT_SPELLCAST_START', Path)
+		oUF:RegisterEvent(self, 'UNIT_SPELLCAST_STOP', Path)
+		oUF:RegisterEvent(self, 'UNIT_SPELLCAST_FAILED', Path)
+		oUF:RegisterEvent(self, 'UNIT_SPELLCAST_SUCCEEDED', Path)
+		oUF:RegisterEvent(self, 'UNIT_DISPLAYPOWER', Path)
 
-		self:RegisterEvent('UNIT_SPELLCAST_START', Path)
-		self:RegisterEvent('UNIT_SPELLCAST_STOP', Path)
-		self:RegisterEvent('UNIT_SPELLCAST_FAILED', Path)
-		self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', Path)
-		self:RegisterEvent('UNIT_DISPLAYPOWER', Path)
-
-		if(pp.mainBar) then
-			if(pp.mainBar:IsObjectType('StatusBar') and not pp.mainBar:GetStatusBarTexture()) then
-				pp.mainBar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+		if(element.mainBar) then
+			if(element.mainBar:IsObjectType('StatusBar') and not element.mainBar:GetStatusBarTexture()) then
+				element.mainBar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 			end
 		end
 
-		if(pp.altBar) then
-			if(pp.altBar:IsObjectType('StatusBar') and not pp.altBar:GetStatusBarTexture()) then
-				pp.altBar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+		if(element.altBar) then
+			if(element.altBar:IsObjectType('StatusBar') and not element.altBar:GetStatusBarTexture()) then
+				element.altBar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 			end
 		end
 
@@ -149,22 +175,21 @@ local function Enable(self)
 end
 
 local function Disable(self)
-	local pp = self.PowerPrediction
-
-	if(pp) then
-		if(pp.mainBar) then
-			pp.mainBar:Hide()
+	local element = self.PowerPrediction
+	if(element) then
+		if(element.mainBar) then
+			element.mainBar:Hide()
 		end
 
-		if(pp.altBar) then
-			pp.altBar:Hide()
+		if(element.altBar) then
+			element.altBar:Hide()
 		end
 
-		self:UnregisterEvent('UNIT_SPELLCAST_START', Path)
-		self:UnregisterEvent('UNIT_SPELLCAST_STOP', Path)
-		self:UnregisterEvent('UNIT_SPELLCAST_FAILED', Path)
-		self:UnregisterEvent('UNIT_SPELLCAST_SUCCEEDED', Path)
-		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)
+		oUF:UnregisterEvent(self, 'UNIT_SPELLCAST_START', Path)
+		oUF:UnregisterEvent(self, 'UNIT_SPELLCAST_STOP', Path)
+		oUF:UnregisterEvent(self, 'UNIT_SPELLCAST_FAILED', Path)
+		oUF:UnregisterEvent(self, 'UNIT_SPELLCAST_SUCCEEDED', Path)
+		oUF:UnregisterEvent(self, 'UNIT_DISPLAYPOWER', Path)
 	end
 end
 

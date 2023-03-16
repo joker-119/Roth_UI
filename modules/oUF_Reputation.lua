@@ -66,7 +66,7 @@ local function Enable(self, unit)
     reputation.__owner = self
     reputation.ForceUpdate = ForceUpdate
 
-    self:RegisterEvent('UPDATE_FACTION', Path)
+    oUF:RegisterEvent(self, 'UPDATE_FACTION', Path)
 
     if(not reputation:GetStatusBarTexture()) then
       reputation:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
