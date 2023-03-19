@@ -738,13 +738,14 @@ end
     end
 
     --castbar
-    if self.cfg.castbar.show then
-      --load castingbar
-      func.createCastbar(self)
-    elseif self.cfg.castbar.hideDefault then
-      CastingBarFrame:UnregisterAllEvents()
-      CastingBarFrame.Show = CastingBarFrame.Hide
-      CastingBarFrame:Hide()
+      if self.cfg.castbar.show then
+          --load castingbar
+          func.createCastbar(self)
+      end
+    if self.cfg.castbar.hideDefault then
+        PlayerCastingBarFrame:UnregisterAllEvents() 
+        PlayerCastingBarFrame.Show = PlayerCastingBarFrame.Hide
+        PlayerCastingBarFrame:Hide()
     end
 
     --warlock bars

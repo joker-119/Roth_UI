@@ -40,7 +40,7 @@ local function Update(self, event, unit)
   end
 
   reputation:SetMinMaxValues(0, max - min)
-  reputation:SetValue(value - min)
+  reputation:SetValue(value)
 
   if(reputation.colorStanding) then
     local color = FACTION_BAR_COLORS[standing]
@@ -60,13 +60,15 @@ local function ForceUpdate(element)
   return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
-local function Enable(self, unit)
+local function Enable(self)
   local reputation = self.Reputation
   if(reputation) then
     reputation.__owner = self
     reputation.ForceUpdate = ForceUpdate
 
-    oUF:RegisterEvent(self, 'UPDATE_FACTION', Path)
+    self:RegisterEvent('UPDATE_FACTION', Path, true)
+    self:RegisterEvent('COMBAT_TEXT_UPDATE', Path, true)
+    self:RegisterEvent('QUEST_FINISHED', Path, true)
 
     if(not reputation:GetStatusBarTexture()) then
       reputation:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])

@@ -19,12 +19,6 @@ if not gcfg.embeds.rActionBarStyler then return end
   local num = NUM_ACTIONBAR_BUTTONS
   local buttonList = {}
 
-  if not gcfg.embeds.rActionBarStyler then return end
-  if not cfg.enable then return end
-
-  local num = NUM_ACTIONBAR_BUTTONS
-  local buttonList = {}
-
   --create the frame to hold the buttons
   local frame = CreateFrame("Frame", "rAbs_MainMenuBar", UIParent, "SecureHandlerStateTemplate")
   if cfg.uselayout2x6 then

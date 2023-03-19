@@ -68,11 +68,11 @@ local function Enable(self, unit)
     experience.ForceUpdate = ForceUpdate
 
     self:RegisterEvent('PLAYER_XP_UPDATE', Path)
-    self:RegisterEvent('PLAYER_LEVEL_UP', Path)
+    --self:RegisterEvent('PLAYER_LEVEL_UP', Path)
 
     local rested = experience.Rested
     if(rested) then
-      self:RegisterEvent('UPDATE_EXHAUSTION', Path)
+      --self:RegisterEvent('UPDATE_EXHAUSTION', Path)
       rested:SetFrameLevel(experience:GetFrameLevel() - 1)
 
       if(not rested:GetStatusBarTexture()) then

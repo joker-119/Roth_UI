@@ -1,7 +1,7 @@
 ## Interface: 100005
 ## Author: Galaxy
 ## Title: Roth UI
-## Version: 3.0.0
+## Version: 3.0.1
 ## Notes: Galaxy's oUF layout with Diablo flavor!
 ## RequiredDeps:
 ## SavedVariables: Roth_UI_DB_GLOB, ShinyBuffsDB, PhanxFontDB, Roth_UI_DB
@@ -41,9 +41,9 @@ modules\oUF_acharges.lua
 modules\oUF_AuraWatch.lua
 modules\oUF_HolyPower.lua
 modules\oUF_ComboPoints.lua
-## modules\oUF_Experience.lua
+modules\oUF_Experience.lua
 modules\oUF_Harmony.lua
-## modules\oUF_Reputation.lua
+modules\oUF_Reputation.lua
 modules\oUF_RuneOrbs.lua
 modules\oUF_Smooth.lua
 modules\oUF_SoulShards.lua

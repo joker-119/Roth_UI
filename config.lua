@@ -947,13 +947,13 @@
       enable          = true, --enable module
       show            = true, --true/false
       scale           = 0.6,
-      padding         = 10, --frame padding
+      padding         = 0, --frame padding
       pos             = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -155, y = 159 },
       userplaced      = {
         enable          = true,
       },
       mouseover       = {
-        enable          = true,
+        enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0},
       },
@@ -969,7 +969,7 @@
         enable          = true,
       },
       mouseover       = {
-        enable          = true,
+        enable          = false,
         fadeIn          = {time = 0.4, alpha = 1},
         fadeOut         = {time = 0.3, alpha = 0},
       },

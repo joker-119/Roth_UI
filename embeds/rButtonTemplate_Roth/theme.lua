@@ -60,21 +60,45 @@ actionButtonConfig.flyoutBorderShadow = {
 
 --border
 actionButtonConfig.border = {
-  file = mediapath.."border",
+  file = mediapath.."icon_border",
   points = {
     {"TOPLEFT", -2, 2 },
     {"BOTTOMRIGHT", 2, -2 },
   },
 }
 
+actionButtonConfig.checkedTexture = {
+	file = mediapath.."gloss2",
+	points = {
+		{"TOPLEFT", -2, 2 },
+		{ "BOTTOMRIGHT", 2, -2 },
+	},
+}
+
 --normalTexture
 actionButtonConfig.normalTexture = {
-  file = mediapath.."normal",
+  file = mediapath.."icon_border",
   color = {0.5,0.5,0.5,0.6},
   points = {
     {"TOPLEFT", 0, 0 },
     {"BOTTOMRIGHT", 0, 0 },
   },
+}
+
+actionButtonConfig.pushedTexture = {
+	file = mediapath.."pushed",
+	points = {
+		{ "TOPLEFT", -2, 2 },
+		{ "BOTTOMRIGHT", 2, -2 },
+	},
+}
+
+actionButtonConfig.highlightTexture = {
+	file = mediapath.."icon_border",
+	point = {
+		{ "TOPLEFT", -2, 2 },
+		{ "BOTTOMRIGHT", 2, -2 },
+	},
 }
 
 --cooldown
@@ -154,13 +178,23 @@ itemButtonConfig.backdrop = actionButtonConfig.backdrop
 itemButtonConfig.icon = actionButtonConfig.icon
 itemButtonConfig.count = actionButtonConfig.count
 itemButtonConfig.stock = actionButtonConfig.name
-itemButtonConfig.border = { file = "" }
+itemButtonConfig.border = actionButtonConfig.border
+itemButtonConfig.highlightTexture = actionButtonConfig.highlightTexture
 itemButtonConfig.normalTexture = actionButtonConfig.normalTexture
 
 --rButtonTemplate:StyleItemButton
-local itemButtons = { MainMenuBarBackpackButton, CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, CharacterBag3Slot }
+local itemButtons = { CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, CharacterBag3Slot }
 for i, button in next, itemButtons do
   rButtonTemplate:StyleItemButton(button, itemButtonConfig)
+end
+for bag=0, NUM_TOTAL_EQUIPPED_BAG_SLOTS do
+	for slot=1,C_Container.GetContainerNumSlots(bag) do
+		local item = C_Container.GetContainerItemID(bag,slot);
+		if (item) then
+			local button = _G["ContainerFrame"..bag.."Item"..slot]
+			rButtonTemplate:StyleItemButton(button, itemButtonConfig)
+		end
+	end
 end
 
 -----------------------------

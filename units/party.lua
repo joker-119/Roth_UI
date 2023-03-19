@@ -59,10 +59,10 @@
 	 h:SetFrameStrata("BACKGROUND")
 	else
      h:SetPoint("TOP",0,-25)
-     h:SetPoint("LEFT",20,0)
-     h:SetPoint("RIGHT",-20,0)
-     h:SetPoint("BOTTOM",0,20)
-	 h:SetFrameStrata("LOW")
+     h:SetPoint("LEFT",10,0)
+     h:SetPoint("RIGHT",-10,0)
+     h:SetPoint("BOTTOM",0,25)
+	 h:SetFrameStrata("BACKGROUND")
 	end
     h:SetStatusBarTexture(cfg.texture)
     h.bg = h:CreateTexture(nil,"BORDER",nil,-6)
@@ -77,7 +77,10 @@
 		h.glow:SetPoint("RIGHT",40,0)
 		h.glow:SetPoint("BOTTOM",0,-35)
 	else
-		h.glow:SetAllPoints(self)
+		h.glow:SetPoint("TOP", 0, 20)
+        h.glow:SetPoint("LEFT",-20,0)
+        h.glow:SetPoint("RIGHT",20,0)
+        h.glow:SetPoint("BOTTOM",0,-20)
 	end
 		
     h.highlight = h:CreateTexture(nil,"OVERLAY",nil,-4)
@@ -102,10 +105,10 @@
      h:SetPoint("BOTTOM",0,-20)
 	 h:SetFrameStrata("BACKGROUND")
 	else
-     h:SetPoint("TOP",0,-18.5)
-     h:SetPoint("LEFT",7,0)
-     h:SetPoint("RIGHT",-7,0)
-     h:SetPoint("BOTTOM",0,-8)
+     h:SetPoint("TOP",0,-20)
+     h:SetPoint("LEFT",5,0)
+     h:SetPoint("RIGHT",-5,0)
+     h:SetPoint("BOTTOM",0,-15)
 	 h:SetFrameStrata("BACKGROUND")
 	end
     h:SetStatusBarTexture(cfg.texture)
