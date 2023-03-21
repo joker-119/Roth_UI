@@ -234,7 +234,9 @@ local function updateAura(element, unit, index, offset, filter, isDebuff, visibl
 		return false
 	end
 
-	local show = (element.CustomFilter or customFilter) (element, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
+	local show = (element.CustomFilter or customFilter) (element, unit, button, name, icon,
+			count, debuffType, duration, expiration, source, isStealable, nameplateShowPersonal, spellID,
+			canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, modRate, effect1, effect2, effect3)
 	if (not UnitIsUnit("target", unit) and isDebuff and not (RothUI:canDispelDebuff(dtype) or isBossDebuff or hasValue(spellId))) then
 		show = false
 	end
