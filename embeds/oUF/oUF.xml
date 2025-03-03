@@ -9,7 +9,6 @@
 	<Script file="units.lua"/>
 	<Script file="colors.lua"/>
 
-	<Script file="elements\target_border.lua"/>
 	<Script file="elements\additionalpower.lua"/>
 	<Script file="elements\alternativepower.lua"/>
 	<Script file="elements\assistantindicator.lua"/>
@@ -21,8 +20,6 @@
 	<Script file="elements\health.lua"/>
 	<Script file="elements\healthprediction.lua"/>
 	<Script file="elements\leaderindicator.lua"/>
-	<Script file="elements\masterlooterindicator.lua"/>
-	<Script file="elements\partyindicator.lua"/>
 	<Script file="elements\phaseindicator.lua"/>
 	<Script file="elements\portrait.lua"/>
 	<Script file="elements\power.lua"/>
@@ -40,25 +37,10 @@
 	<Script file="elements\stagger.lua"/>
 	<Script file="elements\summonindicator.lua"/>
 	<Script file="elements\tags.lua"/>
+	<Script file="elements\target_border.lua"/>
 	<Script file="elements\threatindicator.lua"/>
 	<Script file="elements\totems.lua"/>
 
-	<!-- Clique support -->
-	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate">
-		<Attributes>
-			<Attribute name="_onenter" type="string" value="local snippet = self:GetAttribute('clickcast_onenter'); if snippet then self:Run(snippet) end"/>
-			<Attribute name="_onleave" type="string" value="local snippet = self:GetAttribute('clickcast_onleave'); if snippet then self:Run(snippet) end"/>
-		</Attributes>
-	</Button>
-
-	<!-- Pet Battle Hider Frame -->
-	<Frame name="oUF_PetBattleFrameHider" inherits="SecureHandlerStateTemplate" parent="UIParent" setAllPoints="true">
-		<Scripts>
-			<OnLoad>
-				RegisterStateDriver(self, "visibility", "[petbattle] hide; show")
-			</OnLoad>
-		</Scripts>
-	</Frame>
 	<Script file="finalize.lua"/>
 
 	<!--

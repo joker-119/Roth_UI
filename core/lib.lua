@@ -253,7 +253,7 @@
     button.Overlay:SetVertexColor(0.4,0.35,0.35,1)
     button.Overlay:Show()
     button.Overlay.Hide = function() end
-    local back = button:CreateTexture(nil, "BACKGROUND")
+    local back = button:CreateTexture(nil, "BACKGROUND", nil, 0)
     back:SetPoint("TOPLEFT",button.Icon,"TOPLEFT",-0.18*size,0.18*size)
     back:SetPoint("BOTTOMRIGHT",button.Icon,"BOTTOMRIGHT",0.18*size,-0.18*size)
     back:SetTexture(mediapath.."simplesquare_glow")
@@ -401,7 +401,7 @@ func.createAuraWatch = function(self)
             icon:SetPoint(dir[i].pos, self, dir[i].pos, dir[i].x, dir[i].y)
             --make indicator
             --if dir[i].indicator then
-            local tex = icon:CreateTexture()
+            local tex = icon:CreateTexture(nil, "OVERLAY")
               tex:SetAllPoints()
               tex:SetTexture("Interface\\AddOns\\Roth_UI\\media\\indicator")
               --tex:SetVertexColor(dir[i].color.r,dir[i].color.g,dir[i].color.b)
@@ -792,12 +792,25 @@ func.createAuraWatch = function(self)
       c.SafeZone:SetPoint("BOTTOMRIGHT")
     end
 
+    if f.cfg.style == "player" then
+      c.PostUpdateStage = func.PostUpdateStage
+      c.cfg = f.cfg
+    end
     func.applyDragFunctionality(frame)
 
     f.Castbar = c
 
   end
 
+  func.PostUpdateStage = function(self, stage)
+    if (stage == 1) then
+      self:SetStatusBarColor(1, 0, 0)
+    elseif (stage == 2) then
+      self:SetStatusBarColor(0, 0, 1)
+    elseif (stage == 3) then
+      self:SetStatusBarColor(self.cfg.castbar.color.bar.r,self.cfg.castbar.color.bar.g,self.cfg.castbar.color.bar.b,self.cfg.castbar.color.bar.a)
+    end
+  end
 local LSM = LibStub("LibSharedMedia-3.0")
 
   --fontstring func
@@ -925,7 +938,7 @@ end
     ohpb:SetStatusBarTexture(self.cfg.healprediction.texture)
     ohpb:SetStatusBarColor(self.cfg.healprediction.color.other.r,self.cfg.healprediction.color.other.g,self.cfg.healprediction.color.other.b,self.cfg.healprediction.color.other.a)
     -- Register it with oUF
-    self.HealPrediction = {
+    self.HealthPrediction = {
       myBar = mhpb,
       otherBar = ohpb,
       maxOverflow = self.cfg.healprediction.maxoverflow,

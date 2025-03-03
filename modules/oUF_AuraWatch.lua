@@ -150,8 +150,8 @@ local function DefaultResetIcon(watch, icon, count, duration, expire)
 				icon.cd:Hide()
 			end
 		end
-		if icon.count then
-			icon.count:SetText(count > 1 and count)
+		if icon.count and count > 1 then
+			icon.count:SetText(count)
 		end
 		if icon.overlay then
 			icon.overlay:Hide()
@@ -212,7 +212,7 @@ do
 		end
 		
 		while true do
-			name, texture, count, _, duration, expire, caster, _, _, spellid = UnitAura(unit, index, filter)
+			name, texture, count, _, duration, expire, caster, _, _, spellid = C_Spell.GetSpellInfo(unit, index, filter)
 			if not name then 
 				if filter == "HELPFUL" then
 					filter = "HARMFUL"
@@ -252,7 +252,7 @@ local function SetupIcons(self)
 	
 	for _,icon in pairs(icons) do
 	
-		local name, _, image = GetSpellInfo(icon.spellID)
+		local name, _, image = C_Spell.GetSpellInfo(icon.spellID)
 		if not name then error("oUF_AuraWatch error: no spell with "..tostring(icon.spellID).." spell ID exists") end
 		icon.name = name
 	

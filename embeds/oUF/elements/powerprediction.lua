@@ -43,11 +43,24 @@ A default texture will be applied if the widget is a StatusBar and doesn't have 
 local _, ns = ...
 local oUF = ns.oUF
 
--- sourced from FrameXML/AlternatePowerBar.lua
-local ADDITIONAL_POWER_BAR_INDEX = _G.ADDITIONAL_POWER_BAR_INDEX or 0
-local ALT_MANA_BAR_PAIR_DISPLAY_INFO = _G.ALT_MANA_BAR_PAIR_DISPLAY_INFO
+-- sourced from Blizzard_UnitFrame/AlternatePowerBar.lua
+local ALT_POWER_BAR_PAIR_DISPLAY_INFO = _G.ALT_POWER_BAR_PAIR_DISPLAY_INFO
+
+local ADDITIONAL_POWER_BAR_INDEX = 0
 
 local _, playerClass = UnitClass('player')
+
+local function UpdateSize(self, event, unit)
+	local element = self.PowerPrediction
+
+	if(element.mainBar and element.mainSize) then
+		element.mainBar[element.isMainHoriz and 'SetWidth' or 'SetHeight'](element.mainBar, element.mainSize)
+	end
+
+	if(element.altBar and element.altSize) then
+		element.altBar[element.isAltHoriz and 'SetWidth' or 'SetHeight'](element.altBar, element.altSize)
+	end
+end
 
 local function Update(self, event, unit)
 	if(self.unit ~= unit) then return end
@@ -64,31 +77,28 @@ local function Update(self, event, unit)
 		element:PreUpdate(unit)
 	end
 
-	local mainCost, altCost = 0, 0
-	local mainType = UnitPowerType(unit)
-	local mainMax = UnitPowerMax(unit, mainType)
-	local isPlayer = UnitIsUnit('player', unit)
-	local altManaInfo = isPlayer and oUF.isRetail and ALT_MANA_BAR_PAIR_DISPLAY_INFO[playerClass]
-	local hasAltManaBar = altManaInfo and altManaInfo[mainType]
 	local _, _, _, startTime, endTime, _, _, _, spellID = UnitCastingInfo(unit)
+	local mainPowerType = UnitPowerType(unit)
+	local hasAltManaBar = ALT_POWER_BAR_PAIR_DISPLAY_INFO[playerClass]
+		and ALT_POWER_BAR_PAIR_DISPLAY_INFO[playerClass][mainPowerType]
+	local mainCost, altCost = 0, 0
 
 	if(event == 'UNIT_SPELLCAST_START' and startTime ~= endTime) then
-		local costTable = GetSpellPowerCost(spellID)
-		if not costTable then
-			element.mainCost = mainCost
-			element.altCost = altCost
-		else
-			local checkRequiredAura = isPlayer and #costTable > 1
-			for _, costInfo in next, costTable do
-				local cost, ctype, cperc = costInfo.cost, costInfo.type, costInfo.costPercent
-				local checkSpec = not checkRequiredAura or costInfo.hasRequiredAura
-				if checkSpec and ctype == mainType then
-					mainCost = ((isPlayer or cost < mainMax) and cost) or (mainMax * cperc) / 100
+		local costTable = C_Spell.GetSpellPowerCost(spellID)
+		if(not costTable) then return end
+
+		-- hasRequiredAura is always false if there's only 1 subtable
+		local checkRequiredAura = #costTable > 1
+
+		for _, costInfo in next, costTable do
+			if(not checkRequiredAura or costInfo.hasRequiredAura) then
+				if(costInfo.type == mainPowerType) then
+					mainCost = costInfo.cost
 					element.mainCost = mainCost
 
 					break
-				elseif hasAltManaBar and checkSpec and ctype == ADDITIONAL_POWER_BAR_INDEX then
-					altCost = cost
+				elseif(costInfo.type == ADDITIONAL_POWER_BAR_INDEX) then
+					altCost = costInfo.cost
 					element.altCost = altCost
 
 					break
@@ -96,7 +106,8 @@ local function Update(self, event, unit)
 			end
 		end
 	elseif(spellID) then
-		-- if we try to cast a spell while casting another one we need to avoid resetting the element
+		-- if we try to cast a spell while casting another one we need to avoid
+		-- resetting the element
 		mainCost = element.mainCost or 0
 		altCost = element.altCost or 0
 	else
@@ -105,7 +116,7 @@ local function Update(self, event, unit)
 	end
 
 	if(element.mainBar) then
-		element.mainBar:SetMinMaxValues(0, mainMax)
+		element.mainBar:SetMinMaxValues(0, UnitPowerMax(unit, mainPowerType))
 		element.mainBar:SetValue(mainCost)
 		element.mainBar:Show()
 	end
@@ -130,7 +141,45 @@ local function Update(self, event, unit)
 	end
 end
 
+local function shouldUpdateMainSize(self)
+	if(not self.Power) then return end
+
+	local isHoriz = self.Power:GetOrientation() == 'HORIZONTAL'
+	local newSize = self.Power[isHoriz and 'GetWidth' or 'GetHeight'](self.Power)
+	if(isHoriz ~= self.PowerPrediction.isMainHoriz or newSize ~= self.PowerPrediction.mainSize) then
+		self.PowerPrediction.isMainHoriz = isHoriz
+		self.PowerPrediction.mainSize = newSize
+
+		return true
+	end
+end
+
+local function shouldUpdateAltSize(self)
+	if(not self.AdditionalPower) then return end
+
+	local isHoriz = self.AdditionalPower:GetOrientation() == 'HORIZONTAL'
+	local newSize = self.AdditionalPower[isHoriz and 'GetWidth' or 'GetHeight'](self.AdditionalPower)
+	if(isHoriz ~= self.PowerPrediction.isAltHoriz or newSize ~= self.PowerPrediction.altSize) then
+		self.PowerPrediction.isAltHoriz = isHoriz
+		self.PowerPrediction.altSize = newSize
+
+		return true
+	end
+end
+
 local function Path(self, ...)
+	--[[ Override: PowerPrediction.UpdateSize(self, event, unit, ...)
+	Used to completely override the internal function for updating the widgets' size.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	if(shouldUpdateMainSize(self) or shouldUpdateAltSize(self)) then
+		(self.PowerPrediction.UpdateSize or UpdateSize) (self, ...)
+	end
+
 	--[[ Override: PowerPrediction.Override(self, event, unit, ...)
 	Used to completely override the internal update function.
 
@@ -146,17 +195,17 @@ local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
-local function Enable(self)
+local function Enable(self, unit)
 	local element = self.PowerPrediction
-	if(element) then
+	if(element and UnitIsUnit(unit, 'player')) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		oUF:RegisterEvent(self, 'UNIT_SPELLCAST_START', Path)
-		oUF:RegisterEvent(self, 'UNIT_SPELLCAST_STOP', Path)
-		oUF:RegisterEvent(self, 'UNIT_SPELLCAST_FAILED', Path)
-		oUF:RegisterEvent(self, 'UNIT_SPELLCAST_SUCCEEDED', Path)
-		oUF:RegisterEvent(self, 'UNIT_DISPLAYPOWER', Path)
+		self:RegisterEvent('UNIT_SPELLCAST_START', Path)
+		self:RegisterEvent('UNIT_SPELLCAST_STOP', Path)
+		self:RegisterEvent('UNIT_SPELLCAST_FAILED', Path)
+		self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', Path)
+		self:RegisterEvent('UNIT_DISPLAYPOWER', Path)
 
 		if(element.mainBar) then
 			if(element.mainBar:IsObjectType('StatusBar') and not element.mainBar:GetStatusBarTexture()) then
@@ -185,11 +234,11 @@ local function Disable(self)
 			element.altBar:Hide()
 		end
 
-		oUF:UnregisterEvent(self, 'UNIT_SPELLCAST_START', Path)
-		oUF:UnregisterEvent(self, 'UNIT_SPELLCAST_STOP', Path)
-		oUF:UnregisterEvent(self, 'UNIT_SPELLCAST_FAILED', Path)
-		oUF:UnregisterEvent(self, 'UNIT_SPELLCAST_SUCCEEDED', Path)
-		oUF:UnregisterEvent(self, 'UNIT_DISPLAYPOWER', Path)
+		self:UnregisterEvent('UNIT_SPELLCAST_START', Path)
+		self:UnregisterEvent('UNIT_SPELLCAST_STOP', Path)
+		self:UnregisterEvent('UNIT_SPELLCAST_FAILED', Path)
+		self:UnregisterEvent('UNIT_SPELLCAST_SUCCEEDED', Path)
+		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)
 	end
 end
 

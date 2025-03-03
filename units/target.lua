@@ -326,8 +326,8 @@ local function createStyle(self)
   func.createDebuffGlow(self)
 
   --icons
-  self.RaidIcon = func.createIcon(self,"BACKGROUND",24,self.Name,"BOTTOM","TOP",0,0,-1)
-  self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
+  self.RaidTargetIndicator = func.createIcon(self,"BACKGROUND",24,self.Name,"BOTTOM","TOP",0,0,-1)
+  self.RaidTargetIndicator:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
 
   --create portrait
   if self.cfg.portrait.show then

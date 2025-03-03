@@ -1,76 +1,92 @@
---[[ Element: Raid Role Icon
+--[[
+# Element: Raid Role Indicator
 
- Handles visibility and updating of `self.RaidRole` based upon the units
- party assignment.
+Handles the visibility and updating of an indicator based on the unit's raid assignment (main tank or main assist).
 
- Widget
+## Widget
 
- RaidRole - A Texture representing the units party assignment. This is can be
-            main tank, main assist or blank.
+RaidRoleIndicator - A `Texture` representing the unit's raid assignment.
 
- Notes
+## Notes
 
- This element updates by changing the texture.
+This element updates by changing the texture.
 
- Examples
+## Examples
 
-   -- Position and size
-   local RaidRole = self:CreateTexture(nil, 'OVERLAY')
-   RaidRole:SetSize(16, 16)
-   RaidRole:SetPoint('TOPLEFT')
-   
-   -- Register it with oUF
-   self.RaidRole = RaidRole
+    -- Position and size
+    local RaidRoleIndicator = self:CreateTexture(nil, 'OVERLAY')
+    RaidRoleIndicator:SetSize(16, 16)
+    RaidRoleIndicator:SetPoint('TOPLEFT')
 
- Hooks
+    -- Register it with oUF
+    self.RaidRoleIndicator = RaidRoleIndicator
+--]]
 
- Override(self) - Used to completely override the internal update function.
-                  Removing the table key entry will make the element fall-back
-                  to its internal function again.
-]]
-
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
-local Update = function(self, event)
+local MAINTANK_ICON = [[Interface\GROUPFRAME\UI-GROUP-MAINTANKICON]]
+local MAINASSIST_ICON = [[Interface\GROUPFRAME\UI-GROUP-MAINASSISTICON]]
+
+local function Update(self, event)
+	local element = self.RaidRoleIndicator
 	local unit = self.unit
-	if(not UnitInRaid(unit)) then return end
 
-	local raidrole = self.RaidRole
-	if(raidrole.PreUpdate) then
-		raidrole:PreUpdate()
+	--[[ Callback: RaidRoleIndicator:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the RaidRoleIndicator element
+	--]]
+	if(element.PreUpdate) then
+		element:PreUpdate()
 	end
 
-	local inVehicle = UnitHasVehicleUI(unit)
-	if(GetPartyAssignment('MAINTANK', unit) and not inVehicle) then
-		raidrole:Show()
-		raidrole:SetTexture[[Interface\GROUPFRAME\UI-GROUP-MAINTANKICON]]
-	elseif(GetPartyAssignment('MAINASSIST', unit) and not inVehicle) then
-		raidrole:Show()
-		raidrole:SetTexture[[Interface\GROUPFRAME\UI-GROUP-MAINASSISTICON]]
-	else
-		raidrole:Hide()
+	local role, isShown
+	if(UnitInRaid(unit) and not UnitHasVehicleUI(unit)) then
+		if(GetPartyAssignment('MAINTANK', unit)) then
+			isShown = true
+			element:SetTexture(MAINTANK_ICON)
+			role = 'MAINTANK'
+		elseif(GetPartyAssignment('MAINASSIST', unit)) then
+			isShown = true
+			element:SetTexture(MAINASSIST_ICON)
+			role = 'MAINASSIST'
+		end
 	end
 
-	if(raidrole.PostUpdate) then
-		return raidrole:PostUpdate(rinfo)
+	element:SetShown(isShown)
+
+	--[[ Callback: RaidRoleIndicator:PostUpdate(role)
+	Called after the element has been updated.
+
+	* self - the RaidRoleIndicator element
+	* role - the unit's raid assignment (string?)['MAINTANK', 'MAINASSIST']
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(role)
 	end
 end
 
-local Path = function(self, ...)
-	return (self.RaidRole.Override or Update)(self, ...)
+local function Path(self, ...)
+	--[[ Override: RaidRoleIndicator.Override(self, event, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	return (self.RaidRoleIndicator.Override or Update)(self, ...)
 end
 
-local ForceUpdate = function(element)
+local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate')
 end
 
-local Enable = function(self)
-	local raidrole = self.RaidRole
-
-	if(raidrole) then
-		raidrole.__owner = self
-		raidrole.ForceUpdate = ForceUpdate
+local function Enable(self)
+	local element = self.RaidRoleIndicator
+	if(element) then
+		element.__owner = self
+		element.ForceUpdate = ForceUpdate
 
 		self:RegisterEvent('GROUP_ROSTER_UPDATE', Path, true)
 
@@ -78,12 +94,13 @@ local Enable = function(self)
 	end
 end
 
-local Disable = function(self)
-	local raidrole = self.RaidRole
+local function Disable(self)
+	local element = self.RaidRoleIndicator
+	if(element) then
+		element:Hide()
 
-	if(raidrole) then
 		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path)
 	end
 end
 
-oUF:AddElement('RaidRole', Path, Enable, Disable)
+oUF:AddElement('RaidRoleIndicator', Path, Enable, Disable)

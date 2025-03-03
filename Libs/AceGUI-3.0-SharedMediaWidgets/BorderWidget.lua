@@ -47,7 +47,7 @@ do
 				frame:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]], "ADD")
 				frame:SetScript("OnClick", ContentOnClick)
 				frame:SetScript("OnEnter", ContentOnEnter)
-			local check = frame:CreateTexture("OVERLAY")
+			local check = frame:CreateTexture(nil, "OVERLAY")
 				check:SetWidth(16)
 				check:SetHeight(16)
 				check:SetPoint("LEFT",frame,"LEFT",1,-1)

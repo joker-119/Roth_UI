@@ -4,23 +4,23 @@ assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
 for tag, func in pairs({
   ['currep'] = function()
-    local __, __, min, __, value = GetWatchedFactionInfo()
+    local __, __, min, __, value = C_Reputation.GetWatchedFactionData()
     return value - min
   end,
   ['maxrep'] = function()
-    local __, __, min, max = GetWatchedFactionInfo()
+    local __, __, min, max = C_Reputation.GetWatchedFactionData()
     return max - min
   end,
   ['perrep'] = function()
-    local __, __, min, max, value = GetWatchedFactionInfo()
+    local __, __, min, max, value = C_Reputation.GetWatchedFactionData()
     return math.floor((value - min) / (max - min) * 100 + 0.5)
   end,
   ['standing'] = function()
-    local __, standing = GetWatchedFactionInfo()
+    local __, standing = C_Reputation.GetWatchedFactionData()
     return GetText('FACTION_STANDING_LABEL' .. standing, UnitSex('player'))
   end,
   ['reputation'] = function()
-    return GetWatchedFactionInfo()
+    return C_Reputation.GetWatchedFactionData()
   end,
 }) do
   oUF.Tags.Methods[tag] = func
@@ -32,7 +32,7 @@ oUF.Tags.SharedEvents.UPDATE_FACTION = true
 local function Update(self, event, unit)
   local reputation = self.Reputation
 
-  local name, standing, min, max, value = GetWatchedFactionInfo()
+  local _, name, _, standing, min, max, value = C_Reputation.GetWatchedFactionData()
   if(not name) then
     return reputation:Hide()
   else

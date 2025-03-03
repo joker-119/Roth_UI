@@ -1,87 +1,116 @@
---[[ Element: Leader Icon
+--[[
+# Element: Leader Indicator
 
- Toggles visibility based on the units leader status.
+Toggles the visibility of an indicator based on the unit's leader status.
 
- Widget
+## Widget
 
- Leader - Any UI widget.
+LeaderIndicator - A `Texture` used to display if the unit is a leader.
 
- Notes
+## Notes
 
- The default leader icon will be applied if the UI widget is a texture and
- doesn't have a texture or color defined.
+This element updates by changing the texture.
 
- Examples
+## Examples
 
-   -- Position and size
-   local Leader = self:CreateTexture(nil, "OVERLAY")
-   Leader:SetSize(16, 16)
-   Leader:SetPoint("BOTTOM", self, "TOP")
-   
-   -- Register it with oUF
-   self.Leader = Leadera
+    -- Position and size
+    local LeaderIndicator = self:CreateTexture(nil, 'OVERLAY')
+    LeaderIndicator:SetSize(16, 16)
+    LeaderIndicator:SetPoint('BOTTOM', self, 'TOP')
 
- Hooks
+    -- Register it with oUF
+    self.LeaderIndicator = LeaderIndicator
+--]]
 
- Override(self) - Used to completely override the internal update function.
-                  Removing the table key entry will make the element fall-back
-                  to its internal function again.
-]]
-
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
-local Update = function(self, event)
-	local leader = self.Leader
-	if(leader.PreUpdate) then
-		leader:PreUpdate()
-	end
-
+local function Update(self, event)
+	local element = self.LeaderIndicator
 	local unit = self.unit
-	local isLeader = (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsGroupLeader(unit)
+
+	--[[ Callback: LeaderIndicator:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the LeaderIndicator element
+	--]]
+	if(element.PreUpdate) then
+		element:PreUpdate()
+	end
+
+	-- There are two kinds of group leaders: guides and leaders. Guides are leaders of groups formed via LFD/LFR.
+	-- There are also two types of groups: home (LE_PARTY_CATEGORY_HOME) and instance (LE_PARTY_CATEGORY_INSTANCE).
+	-- A unit can be the leader of both, only one, or none. Use UnitIsGroupLeader(unit, LE_PARTY_CATEGORY_HOME) and
+	-- UnitIsGroupLeader(unit, LE_PARTY_CATEGORY_INSTANCE) for more detailed info.
+	-- There can be only ONE guide in any given party, but there can be multiple leaders, for instance, if two 2-man
+	-- premades were put in one group, they'll keep their leader roles which can be seen by other members of their
+	-- own groups via UnitIsGroupLeader(unit, LE_PARTY_CATEGORY_HOME) or by members of other groups via
+	-- UnitLeadsAnyGroup(unit). Inside the group formed by the dungeon finder UnitIsGroupLeader(unit) will only return
+	-- true for the instance leader.
+	local isInLFGInstance = HasLFGRestrictions()
+	local isLeader = UnitIsGroupLeader(unit)
 	if(isLeader) then
-		leader:Show()
+		if(isInLFGInstance) then
+			element:SetTexture([[Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES]])
+			element:SetTexCoord(0, 0.296875, 0.015625, 0.3125)
+		else
+			element:SetTexture([[Interface\GroupFrame\UI-Group-LeaderIcon]])
+			element:SetTexCoord(0, 1, 0, 1)
+		end
+
+		element:Show()
 	else
-		leader:Hide()
+		element:Hide()
 	end
 
-	if(leader.PostUpdate) then
-		return leader:PostUpdate(isLeader)
+	--[[ Callback: LeaderIndicator:PostUpdate(isLeader)
+	Called after the element has been updated.
+
+	* self            - the LeaderIndicator element
+	* isLeader        - indicates whether the unit is the leader of the group (boolean)
+	* isInLFGInstance - indicates whether the current party is subject to LFG restrictions (boolean)
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(isLeader, isInLFGInstance)
 	end
 end
 
-local Path = function(self, ...)
-	return (self.Leader.Override or Update) (self, ...)
+local function Path(self, ...)
+	--[[ Override: LeaderIndicator.Override(self, event, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	return (self.LeaderIndicator.Override or Update) (self, ...)
 end
 
-local ForceUpdate = function(element)
+local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate')
 end
 
-local Enable = function(self)
-	local leader = self.Leader
-	if(leader) then
-		leader.__owner = self
-		leader.ForceUpdate = ForceUpdate
+local function Enable(self)
+	local element = self.LeaderIndicator
+	if(element) then
+		element.__owner = self
+		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("PARTY_LEADER_CHANGED", Path, true)
-		self:RegisterEvent("GROUP_ROSTER_UPDATE", Path, true)
-
-		if(leader:IsObjectType"Texture" and not leader:GetTexture()) then
-			leader:SetTexture[[Interface\GroupFrame\UI-Group-LeaderIcon]]
-		end
+		self:RegisterEvent('PARTY_LEADER_CHANGED', Path, true)
+		self:RegisterEvent('GROUP_ROSTER_UPDATE', Path, true)
 
 		return true
 	end
 end
 
-local Disable = function(self)
-	local leader = self.Leader
-	if(leader) then
-		leader:Hide()
-		self:UnregisterEvent("PARTY_LEADER_CHANGED", Path)
-		self:UnregisterEvent("GROUP_ROSTER_UPDATE", Path)
+local function Disable(self)
+	local element = self.LeaderIndicator
+	if(element) then
+		element:Hide()
+
+		self:UnregisterEvent('PARTY_LEADER_CHANGED', Path)
+		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path)
 	end
 end
 
-oUF:AddElement('Leader', Path, Enable, Disable)
+oUF:AddElement('LeaderIndicator', Path, Enable, Disable)

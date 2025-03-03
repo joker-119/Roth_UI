@@ -71,14 +71,14 @@ local createActionBarBackground = function(self)
 	
 			--Setup Actionbars
 		local setupBarTexture = function()
-		if IsAddOnLoaded("Bartender4") then 
+		if C_AddOns.IsAddOnLoaded("Bartender4") then
 			t:SetTexture(mediapath.."actionbar_3_2")
 		else
 			--Establish Variables
 			local actionbar
 			local levelbar
 			local repbar
-			
+			MainMenuBar.BorderArt:Hide()
 				--Determine ActionBar Status and report vehicle, 3, 2 or 1 depending on actionbars displayed
 				if ((HasVehicleActionBar() and UnitVehicleSkin("player") and UnitVehicleSkin("player") ~= "") or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= "")) or UnitHasVehicleUI("player") then
 					bar = "vehicle"
@@ -100,7 +100,7 @@ local createActionBarBackground = function(self)
 				end
 		
 				--Determine if player is 'watching' a faction (show rep as exp bar)
-				if GetWatchedFactionInfo() and self.cfg.repbar.show then
+				if C_Reputation.GetWatchedFactionData() and self.cfg.repbar.show then
 					repbar = true
 					bar_count = bar_count+1
 				else
@@ -111,7 +111,7 @@ local createActionBarBackground = function(self)
 				--If player is in vehicle, display vehicleUI artwork
 				if bar == "vehicle" then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\vehiclebar")
-				elseif (IsAddOnLoaded("ElvUI")) then
+				elseif (C_AddOns.IsAddOnLoaded("ElvUI")) then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_0")
 				--If we are displaying all 3 actionbars and all 3 'exp' bars
 				elseif bar == "3" and bar_count == 3 then

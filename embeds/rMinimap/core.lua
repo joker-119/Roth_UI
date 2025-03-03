@@ -75,7 +75,7 @@ MinimapCluster.Tracking:ClearAllPoints()
 MinimapCluster.Tracking:SetPoint("TOPLEFT",Minimap,5,-5)
 
 --Blizzard_TimeManager
-LoadAddOn("Blizzard_TimeManager")
+C_AddOns.LoadAddOn("Blizzard_TimeManager")
 --TimeManagerClockButton:GetRegions():Hide()
 TimeManagerClockButton:ClearAllPoints()
 TimeManagerClockButton:SetPoint("BOTTOM",0,5)

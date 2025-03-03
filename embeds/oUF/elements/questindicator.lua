@@ -1,86 +1,100 @@
---[[ Element: Quest Icon
+--[[
+# Element: Quest Indicator
 
- Handles updating and toggles visibility based upon the units connection to a
- quest.
+Handles the visibility and updating of an indicator based on the unit's involvement in a quest.
 
- Widget
+## Widget
 
- QuestIcon - Any UI widget.
+QuestIndicator - Any UI widget.
 
- Notes
+## Notes
 
- The default quest icon will be used if the UI widget is a texture and doesn't
- have a texture or color defined.
+A default texture will be applied if the widget is a Texture and doesn't have a texture or a color set.
 
- Examples
+## Examples
 
-   -- Position and size
-   local QuestIcon = self:CreateTexture(nil, 'OVERLAY')
-   QuestIcon:SetSize(16, 16)
-   QuestIcon:SetPoint('TOPRIGHT', self)
-   
-   -- Register it with oUF
-   self.QuestIcon = QuestIcon
+    -- Position and size
+    local QuestIndicator = self:CreateTexture(nil, 'OVERLAY')
+    QuestIndicator:SetSize(16, 16)
+    QuestIndicator:SetPoint('TOPRIGHT', self)
 
- Hooks
+    -- Register it with oUF
+    self.QuestIndicator = QuestIndicator
+--]]
 
- Override(self) - Used to completely override the internal update function.
-                  Removing the table key entry will make the element fall-back
-                  to its internal function again.
-]]
-
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
-local Update = function(self, event, unit)
+local function Update(self, event, unit)
 	if(unit ~= self.unit) then return end
 
-	local qicon = self.QuestIcon
-	if(qicon.PreUpdate) then
-		qicon:PreUpdate()
+	local element = self.QuestIndicator
+
+	--[[ Callback: QuestIndicator:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the QuestIndicator element
+	--]]
+	if(element.PreUpdate) then
+		element:PreUpdate()
 	end
 
 	local isQuestBoss = UnitIsQuestBoss(unit)
 	if(isQuestBoss) then
-		qicon:Show()
+		element:Show()
 	else
-		qicon:Hide()
+		element:Hide()
 	end
 
-	if(qicon.PostUpdate) then
-		return qicon:PostUpdate(isQuestBoss)
+	--[[ Callback: QuestIndicator:PostUpdate(isQuestBoss)
+	Called after the element has been updated.
+
+	* self        - the QuestIndicator element
+	* isQuestBoss - indicates if the element is shown (boolean)
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(isQuestBoss)
 	end
 end
 
-local Path = function(self, ...)
-	return (self.QuestIcon.Override or Update) (self, ...)
+local function Path(self, ...)
+	--[[ Override: QuestIndicator.Override(self, event, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	return (self.QuestIndicator.Override or Update) (self, ...)
 end
 
-local ForceUpdate = function(element)
+local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
-local Enable = function(self)
-	local qicon = self.QuestIcon
-	if(qicon) then
-		qicon.__owner = self
-		qicon.ForceUpdate = ForceUpdate
+local function Enable(self)
+	local element = self.QuestIndicator
+	if(element) then
+		element.__owner = self
+		element.ForceUpdate = ForceUpdate
 
 		self:RegisterEvent('UNIT_CLASSIFICATION_CHANGED', Path)
 
-		if(qicon:IsObjectType'Texture' and not qicon:GetTexture()) then
-			qicon:SetTexture[[Interface\TargetingFrame\PortraitQuestBadge]]
+		if(element:IsObjectType('Texture') and not element:GetTexture()) then
+			element:SetTexture([[Interface\TargetingFrame\PortraitQuestBadge]])
 		end
 
 		return true
 	end
 end
 
-local Disable = function(self)
-	if(self.QuestIcon) then
-		self.QuestIcon:Hide()
+local function Disable(self)
+	local element = self.QuestIndicator
+	if(element) then
+		element:Hide()
+
 		self:UnregisterEvent('UNIT_CLASSIFICATION_CHANGED', Path)
 	end
 end
 
-oUF:AddElement('QuestIcon', Path, Enable, Disable)
+oUF:AddElement('QuestIndicator', Path, Enable, Disable)

@@ -578,15 +578,15 @@
 		NameFontSize = 14
 	  },
       portrait = {
-        show = true,
+        show = false,
         use3D = true,
 		width = 85,
       },
       attributes = {
-        visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] show; show",  --show this header in party
+        visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party,nogroup:raid] hide; [group:raid] hide; show",  --show this header in party
         showPlayer          = true,     --make this true to show player in party
         showSolo            = false,    --make this true to show while solo (only works if solo is in visiblity aswell
-        showParty           = true,    --make this true to show headerin party
+        showParty           = false,    --make this true to show headerin party
         showRaid            = false,    --show in raid
 	hideInArena         = false,     --hides the party frame while inside an arena
 	VerticalPoint       = "TOP",
@@ -630,7 +630,7 @@
         texture = (mediapath.."statusbar3"),
       },
       aurawatch = {
-        show            = false,
+        show            = true,
       },
       auras = {
         --put every single spellid here that you want to be tracked, be it buff or debuff doesn't matter
@@ -655,9 +655,10 @@
 			164547,
 			54149,
 			},
-        show            = true,
+        show            = false,
         disableCooldown = false,
         showBuffType    = true,
+        onlyShowPlayer  = true,
         showDebuffType  = true,
 		doNotUseCustomFilter = false,
         size            = 13,
@@ -667,11 +668,12 @@
 		buffPos = {a1 = "CENTER", x = 33, y = 0},
       },
       attributes = {
+        visibility          = "custom [nogroup:party,nogroup:raid] show; [group:party] show; [group:raid] show; hide",  --show this
         showPlayer          = true,  --make this true to show player in party
         showSolo            = true,  --make this true to show while solo (only works if solo is in visiblity aswell
         showParty           = true,  --make this true to show raid in party
         showRaid            = true,  --show in raid
-	showInArena         = false, --shows this frame while in an arena 
+        showInArena         = false, --shows this frame while in an arena
         point               = "TOP",
         yOffset             = 15,
         xoffset             = 0,

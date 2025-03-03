@@ -11,7 +11,7 @@ if not AGSMW then
   return	-- already loaded and no upgrade necessary
 end
 
-LoadAddOn("LibSharedMedia-3.0")
+C_AddOns.LoadAddOn("LibSharedMedia-3.0")
 local AceGUI = LibStub("AceGUI-3.0")
 local Media = LibStub("LibSharedMedia-3.0")
 

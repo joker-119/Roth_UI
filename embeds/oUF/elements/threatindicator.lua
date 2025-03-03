@@ -15,7 +15,7 @@ A default texture will be applied if the widget is a Texture and doesn't have a 
 ## Options
 
 .feedbackUnit - The unit whose threat situation is being requested. If defined, it'll be passed as the first argument to
-                [UnitThreatSituation](https://wow.gamepedia.com/API_UnitThreatSituation).
+                [UnitThreatSituation](https://warcraft.wiki.gg/wiki/API_UnitThreatSituation).
 
 ## Examples
 
@@ -62,7 +62,7 @@ local function Update(self, event, unit)
 	local r, g, b
 	if(status and status > 0) then
 		local color = self.colors.threat[status]
-		r, g, b = color.r, color.g, color.b
+		r, g, b = color[1], color[2], color[3]
 
 		if(element.SetVertexColor) then
 			element:SetVertexColor(r, g, b)
@@ -78,7 +78,7 @@ local function Update(self, event, unit)
 
 	* self   - the ThreatIndicator element
 	* unit   - the unit for which the update has been triggered (string)
-	* status - the unit's threat status (see [UnitThreatSituation](http://wowprogramming.com/docs/api/UnitThreatSituation.html))
+	* status - the unit's threat status (see [UnitThreatSituation](https://warcraft.wiki.gg/wiki/API_UnitThreatSituation))
 	* r      - the red color component based on the unit's threat status (number?)[0-1]
 	* g      - the green color component based on the unit's threat status (number?)[0-1]
 	* b      - the blue color component based on the unit's threat status (number?)[0-1]

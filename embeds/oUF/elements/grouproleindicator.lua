@@ -1,94 +1,115 @@
---[[ Element: LFD Role Icon
+--[[
+# Element: Group Role Indicator
 
- Toggles visibility of the LFD role icon based upon the units current dungeon
- role.
+Toggles the visibility of an indicator based on the unit's current group role (tank, healer or damager).
 
- Widget
+## Widget
 
- LFDRole - A Texture containing the LFD role icons at specific locations. Look
-           at the default LFD role icon texture for an example of this.
-           Alternatively you can look at the return values of
-           GetTexCoordsForRoleSmallCircle(role).
+GroupRoleIndicator - A `Texture` used to display the group role icon.
 
- Notes
+## Notes
 
- The default LFD role texture will be applied if the UI widget is a texture and
- doesn't have a texture or color defined.
+A default texture will be applied if the widget is a Texture and doesn't have a texture or a color set.
 
- Examples
+## Examples
 
-   -- Position and size
-   local LFDRole = self:CreateTexture(nil, "OVERLAY")
-   LFDRole:SetSize(16, 16)
-   LFDRole:SetPoint("LEFT", self)
-   
-   -- Register it with oUF
-   self.LFDRole = LFDRole
+    -- Position and size
+    local GroupRoleIndicator = self:CreateTexture(nil, 'OVERLAY')
+    GroupRoleIndicator:SetSize(16, 16)
+    GroupRoleIndicator:SetPoint('LEFT', self)
 
- Hooks
+    -- Register it with oUF
+    self.GroupRoleIndicator = GroupRoleIndicator
+--]]
 
- Override(self) - Used to completely override the internal update function.
-                  Removing the table key entry will make the element fall-back
-                  to its internal function again.
-]]
-
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
-local Update = function(self, event)
-	local lfdrole = self.LFDRole
-	if(lfdrole.PreUpdate) then
-		lfdrole:PreUpdate()
+-- originally sourced from Blizzard_Deprecated/Deprecated_10_1_5.lua
+local function GetTexCoordsForRoleSmallCircle(role)
+	if(role == 'TANK') then
+		return 0, 19 / 64, 22 / 64, 41 / 64
+	elseif(role == 'HEALER') then
+		return 20 / 64, 39 / 64, 1 / 64, 20 / 64
+	elseif(role == 'DAMAGER') then
+		return 20 / 64, 39 / 64, 22 / 64, 41 / 64
+	end
+end
+
+local function Update(self, event)
+	local element = self.GroupRoleIndicator
+
+	--[[ Callback: GroupRoleIndicator:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the GroupRoleIndicator element
+	--]]
+	if(element.PreUpdate) then
+		element:PreUpdate()
 	end
 
 	local role = UnitGroupRolesAssigned(self.unit)
 	if(role == 'TANK' or role == 'HEALER' or role == 'DAMAGER') then
-		lfdrole:SetTexCoord(GetTexCoordsForRoleSmallCircle(role))
-		lfdrole:Show()
+		element:SetTexCoord(GetTexCoordsForRoleSmallCircle(role))
+		element:Show()
 	else
-		lfdrole:Hide()
+		element:Hide()
 	end
 
-	if(lfdrole.PostUpdate) then
-		return lfdrole:PostUpdate(role)
+	--[[ Callback: GroupRoleIndicator:PostUpdate(role)
+	Called after the element has been updated.
+
+	* self - the GroupRoleIndicator element
+	* role - the role as returned by [UnitGroupRolesAssigned](https://warcraft.wiki.gg/wiki/API_UnitGroupRolesAssigned)
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(role)
 	end
 end
 
-local Path = function(self, ...)
-	return (self.LFDRole.Override or Update) (self, ...)
+local function Path(self, ...)
+	--[[ Override: GroupRoleIndicator.Override(self, event, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	return (self.GroupRoleIndicator.Override or Update) (self, ...)
 end
 
-local ForceUpdate = function(element)
+local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate')
 end
 
-local Enable = function(self)
-	local lfdrole = self.LFDRole
-	if(lfdrole) then
-		lfdrole.__owner = self
-		lfdrole.ForceUpdate = ForceUpdate
+local function Enable(self)
+	local element = self.GroupRoleIndicator
+	if(element) then
+		element.__owner = self
+		element.ForceUpdate = ForceUpdate
 
-		if(self.unit == "player") then
-			self:RegisterEvent("PLAYER_ROLES_ASSIGNED", Path, true)
+		if(self.unit == 'player') then
+			self:RegisterEvent('PLAYER_ROLES_ASSIGNED', Path, true)
 		else
-			self:RegisterEvent("GROUP_ROSTER_UPDATE", Path, true)
+			self:RegisterEvent('GROUP_ROSTER_UPDATE', Path, true)
 		end
 
-		if(lfdrole:IsObjectType"Texture" and not lfdrole:GetTexture()) then
-			lfdrole:SetTexture[[Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES]]
+		if(element:IsObjectType('Texture') and not element:GetTexture()) then
+			element:SetTexture([[Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES]])
 		end
 
 		return true
 	end
 end
 
-local Disable = function(self)
-	local lfdrole = self.LFDRole
-	if(lfdrole) then
-		lfdrole:Hide()
-		self:UnregisterEvent("PLAYER_ROLES_ASSIGNED", Path)
-		self:UnregisterEvent("GROUP_ROSTER_UPDATE", Path)
+local function Disable(self)
+	local element = self.GroupRoleIndicator
+	if(element) then
+		element:Hide()
+
+		self:UnregisterEvent('PLAYER_ROLES_ASSIGNED', Path)
+		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path, true)
 	end
 end
 
-oUF:AddElement('LFDRole', Path, Enable, Disable)
+oUF:AddElement('GroupRoleIndicator', Path, Enable, Disable)

@@ -35,7 +35,7 @@ end
   local whitelist = {}
   if cfg.units.raid.auras.whitelist then
     for _,spellid in pairs(cfg.units.raid.auras.whitelist) do
-      local spell = GetSpellInfo(spellid)
+      local spell = C_Spell.GetSpellInfo(spellid)
       if spell then whitelist[spellid] = true end
     end
   end
@@ -44,7 +44,7 @@ end
   local blacklist = {}
   if cfg.units.raid.auras.blacklist then
     for _,spellid in pairs(cfg.units.raid.auras.blacklist) do
-      local spell = GetSpellInfo(spellid)
+      local spell = C_Spell.GetSpellInfo(spellid)
       if spell then blacklist[spellid] = true end
     end
   end
@@ -100,6 +100,7 @@ end
     if not cfg.doNotUseCustomFilter then
       f.CustomFilter = customFilterB
     end
+    f.onlyShowPlayer = cfg.onlyShowPlayer
     f:SetHeight(f.size)
     f:SetWidth((f.size+f.spacing)*f.num)
     if cfg.buffPos then
@@ -244,7 +245,7 @@ end
             icon:SetPoint(dir[i].pos, self, dir[i].pos, dir[i].x, dir[i].y)
             --make indicator
             --if dir[i].indicator then
-            local tex = icon:CreateTexture()
+            local tex = icon:CreateTexture(nil, "OVERLAY")
               tex:SetAllPoints()
               tex:SetTexture("Interface\\AddOns\\Roth_UI\\media\\indicator")
               --tex:SetVertexColor(dir[i].color.r,dir[i].color.g,dir[i].color.b)
@@ -405,7 +406,7 @@ end
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, 12, "THINOUTLINE", "TOOLTIP")
+    local name = func.createFontString(self, cfg.font, 12, "THINOUTLINE", "OVERLAY")
     name:SetPoint("BOTTOM", self, "TOP", 0, -20)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
@@ -472,14 +473,14 @@ end
     end
 
     --icons
-    self.RaidIcon = func.createIcon(self,"TOOLTIP",14,self.Health,"CENTER","CENTER",0,0,-1)
-	self.RaidIcon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
-    self.ReadyCheck = func.createIcon(self,"TOOLTIP",24,self.Health,"CENTER","CENTER",0,0,-1)
-    self.LFDRole = func.createIcon(self,"TOOLTIP",14,self.Health,"CENTER","CENTER",0,0,-1)
-    self.LFDRole:SetTexture("Interface\\AddOns\\Roth_UI\\media\\lfd_role")
-    self.LFDRole:SetDesaturated(1)
-	self.Leader = func.createIcon(self,"TOOLTIP",14,self.Name,"TOPLEFT","TOPLEFT",-7,-10,0)
-	self.Leader:SetTexture("Interface\\AddOns\\Roth_UI\\media\\leader")
+    self.RaidTargetIndicator = func.createIcon(self,"OVERLAY",14,self.Health,"CENTER","CENTER",0,0,-1)
+	self.RaidTargetIndicator:SetTexture("Interface\\AddOns\\Roth_UI\\media\\raidicons")
+    self.ReadyCheckIndicator = func.createIcon(self,"OVERLAY",24,self.Health,"CENTER","CENTER",0,0,-1)
+    self.GroupRoleIndicator = func.createIcon(self,"OVERLAY",14,self.Health,"CENTER","CENTER",0,0,-1)
+    self.GroupRoleIndicator:SetTexture("Interface\\AddOns\\Roth_UI\\media\\lfd_role")
+    self.GroupRoleIndicator:SetDesaturated(1)
+	self.LeaderIndicator = func.createIcon(self,"OVERLAY",14,self.Name,"TOPLEFT","TOPLEFT",-7,-10,0)
+	self.LeaderIndicator:SetTexture("Interface\\AddOns\\Roth_UI\\media\\leader")
 
     --add heal prediction
     func.healPrediction(self)
@@ -508,22 +509,23 @@ end
 	local raidDragFrame = CreateFrame("Frame", "Roth_UIRaidDragFrame"..i, UIParent)
     raidDragFrame:SetSize(50,50)
     raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,cfg.units.raid.pos.y)
+
 	if i == 2 then
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,cfg.units.raid.pos.y)
-	elseif i == 3 then 
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310)
-	elseif i == 4 then 
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310)
-	elseif i == 5 then 
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310*2)	
-	elseif i == 6 then 
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310*2)
-	elseif i == 7 then 
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310*3)
-	elseif i == 8 then 
-	raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310*3)
-	
+      raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,cfg.units.raid.pos.y)
+	elseif i == 3 then
+      raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310)
+	elseif i == 4 then
+      raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310)
+	elseif i == 5 then
+      raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310*2)
+	elseif i == 6 then
+      raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310*2)
+	elseif i == 7 then
+      raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,5,-310*3)
+	elseif i == 8 then
+      raidDragFrame:SetPoint(cfg.units.raid.pos.a1,cfg.units.raid.pos.af,cfg.units.raid.pos.a2,133,-310*3)
 	end
+
     func.applyDragFunctionality(raidDragFrame)
     table.insert(Roth_UI_Units,"Roth_UIRaidDragFrame"..i) --add frames to the slash command function
       group = oUF:SpawnHeader(
@@ -547,7 +549,7 @@ end
           self:SetHeight(%d)
         ]]):format(128, 64)
       )
-		group:SetPoint("TOPLEFT", raidDragFrame, 0, 0)		
+		group:SetPoint("TOPLEFT", raidDragFrame, 0, 0)
 		groups[i] = group
     end
 	   local scale = cfg.units.raid.scale

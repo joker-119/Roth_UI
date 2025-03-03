@@ -121,10 +121,10 @@ if not cfg.embeds.rInfoStrings then return end
     UpdateAddOnMemoryUsage()
     GameTooltip:AddLine("Top "..addonlist.." AddOns", color.r, color.g, color.b)
     GameTooltip:AddLine(" ")
-    for i=1, GetNumAddOns(), 1 do
+    for i=1, C_AddOns.GetNumAddOns(), 1 do
       if (GetAddOnMemoryUsage(i) > 0 ) then
         memory = GetAddOnMemoryUsage(i)
-        entry = {name = GetAddOnInfo(i), memory = memory}
+        entry = {name = C_AddOns.GetAddOnInfo(i), memory = memory}
         table.insert(addons, entry)
         total = total + memory
       end
@@ -150,7 +150,7 @@ if not cfg.embeds.rInfoStrings then return end
   local function rsiExpRep()
     local xp = ""
 
-    if not IsXPUserDisabled() and (UnitLevel("player")<MAX_PLAYER_LEVEL) then
+    if not IsXPUserDisabled() and (UnitLevel("player")<80) then
       xp = "|c00FA58F4"..numformat(UnitXP("player")).."/"..numformat(UnitXPMax("player")).." |r|c00ffb400("..numformat(GetXPExhaustion() or 0)..")|r|c00FA58F4 | "..string.format("%.0f", (UnitXP("player")/UnitXPMax("player")*100)).."%|r"
     else
       local _, _, minimum, maximum, value = GetWatchedFactionInfo()

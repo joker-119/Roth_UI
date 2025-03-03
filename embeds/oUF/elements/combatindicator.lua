@@ -1,86 +1,100 @@
---[[ Element: Combat Icon
- Toggles the visibility of `self.Combat` based on the player's combat status.
+--[[
+# Element: Combat Indicator
 
- Widget
+Toggles the visibility of an indicator based on the player's combat status.
 
- Combat - Any UI widget.
+## Widget
 
- Notes
+CombatIndicator - Any UI widget.
 
- The default assistant icon will be applied if the UI widget is a texture and
- doesn't have a texture or color defined.
+## Notes
 
- Examples
+A default texture will be applied if the widget is a Texture and doesn't have a texture or a color set.
 
-   -- Position and size
-   local Combat = self:CreateTexture(nil, "OVERLAY")
-   Combat:SetSize(16, 16)
-   Combat:SetPoint('TOP', self)
-   
-   -- Register it with oUF
-   self.Combat = Combat
+## Examples
 
- Hooks
+    -- Position and size
+    local CombatIndicator = self:CreateTexture(nil, 'OVERLAY')
+    CombatIndicator:SetSize(16, 16)
+    CombatIndicator:SetPoint('TOP', self)
 
- Override(self) - Used to completely override the internal update function.
-                  Removing the table key entry will make the element fall-back
-                  to its internal function again.
+    -- Register it with oUF
+    self.CombatIndicator = CombatIndicator
+--]]
 
-]]
-
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
-local Update = function(self, event)
-	local combat = self.Combat
-	if(combat.PreUpdate) then
-		combat:PreUpdate()
+local function Update(self, event)
+	local element = self.CombatIndicator
+
+	--[[ Callback: CombatIndicator:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the CombatIndicator element
+	--]]
+	if(element.PreUpdate) then
+		element:PreUpdate()
 	end
 
 	local inCombat = UnitAffectingCombat('player')
 	if(inCombat) then
-		combat:Show()
+		element:Show()
 	else
-		combat:Hide()
+		element:Hide()
 	end
 
-	if(combat.PostUpdate) then
-		return combat:PostUpdate(inCombat)
+	--[[ Callback: CombatIndicator:PostUpdate(inCombat)
+	Called after the element has been updated.
+
+	* self     - the CombatIndicator element
+	* inCombat - indicates if the player is affecting combat (boolean)
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(inCombat)
 	end
 end
 
-local Path = function(self, ...)
-	return (self.Combat.Override or Update) (self, ...)
+local function Path(self, ...)
+	--[[ Override: CombatIndicator.Override(self, event)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	--]]
+	return (self.CombatIndicator.Override or Update) (self, ...)
 end
 
-local ForceUpdate = function(element)
+local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate')
 end
 
-local Enable = function(self, unit)
-	local combat = self.Combat
-	if(combat and unit == 'player') then
-		combat.__owner = self
-		combat.ForceUpdate = ForceUpdate
+local function Enable(self, unit)
+	local element = self.CombatIndicator
+	if(element and UnitIsUnit(unit, 'player')) then
+		element.__owner = self
+		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", Path, true)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", Path, true)
+		self:RegisterEvent('PLAYER_REGEN_DISABLED', Path, true)
+		self:RegisterEvent('PLAYER_REGEN_ENABLED', Path, true)
 
-		if(combat:IsObjectType"Texture" and not combat:GetTexture()) then
-			combat:SetTexture[[Interface\CharacterFrame\UI-StateIcon]]
-			combat:SetTexCoord(.5, 1, 0, .49)
+		if(element:IsObjectType('Texture') and not element:GetTexture()) then
+			element:SetTexture([[Interface\CharacterFrame\UI-StateIcon]])
+			element:SetTexCoord(.5, 1, 0, .49)
 		end
 
 		return true
 	end
 end
 
-local Disable = function(self)
-	if(self.Combat) then
-		self.Combat:Hide()
-		self:UnregisterEvent("PLAYER_REGEN_DISABLED", Path)
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED", Path)
+local function Disable(self)
+	local element = self.CombatIndicator
+	if(element) then
+		element:Hide()
+
+		self:UnregisterEvent('PLAYER_REGEN_DISABLED', Path)
+		self:UnregisterEvent('PLAYER_REGEN_ENABLED', Path)
 	end
 end
 
-oUF:AddElement('Combat', Path, Enable, Disable)
+oUF:AddElement('CombatIndicator', Path, Enable, Disable)

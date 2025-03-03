@@ -68,45 +68,45 @@ h:SetScript("OnEvent", function(h, event, ...)
             --Health Bar
 			if frame:IsForbidden() then return end
             frame.healthBar:SetStatusBarTexture(mediapath.."statusbar_fill")
-			frame.healthBar:SetPoint("TOP",0,-50)
-			frame.healthBar:SetPoint("BOTTOM",0,50)
-			frame.healthBar:SetPoint("RIGHT",-10,0)
-			frame.healthBar:SetPoint("LEFT",10,0)	
-			frame.healthBar:SetScale(0.35)
+            frame.healthBar:SetScale(1.35)
 			frame.RaidTargetFrame.RaidTargetIcon:SetTexture(mediapath.."raidicons")
 			frame.RaidTargetFrame:SetPoint("RIGHT", frame.healthBar,"RIGHT",35,0)
 			frame.ClassificationFrame:Hide()
-  
+
             --Left Edge artwork
 			if (not frame.healthBar.le) then
 				frame.healthBar.le = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
 				frame.healthBar.le:SetTexture(mediapath.."edge_left")
 				frame.healthBar.le:SetSize(64,64)
 				frame.healthBar.le:SetPoint("RIGHT",frame.healthBar,"LEFT",0,0)
+				frame.healthBar.le:SetScale(0.25)
 			end
 
 			if (not frame.healthBar.text) then
 				frame.healthBar.text = frame.healthBar:CreateFontString(nil,"OVERLAY")
 				frame.healthBar.text:SetFont(cfg.font, cfg.Nameplates.fontSize, "THICKOUTLINE")
 				frame.healthBar.text:SetPoint("CENTER",frame.healthBar,"CENTER",0,0)
+				frame.healthBar.text:SetScale(0.25)
 			end
-	
+
             --Right Edge artwork
 			if (not frame.healthBar.re) then
 				frame.healthBar.re = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
 				frame.healthBar.re:SetTexture(mediapath.."edge_right")
 				frame.healthBar.re:SetSize(64,64)
 				frame.healthBar.re:SetPoint("LEFT",frame.healthBar,"RIGHT",0,0)
+				frame.healthBar.re:SetScale(0.25)
             end
-			
+
             --Healthbar Background
 			if (not frame.healthBar.bg) then
 				frame.healthBar.bg = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
 				frame.healthBar.bg:SetTexture(mediapath.."statusbar_bg")
 				frame.healthBar.bg:SetAllPoints()
 				frame.healthBar.bg:SetAlpha(0.5)
+				frame.healthBar.bg:SetScale(0.25)
 			end
-			
+
             --Name shadow
 			if (not frame.healthBar.shadow) then
 				frame.healthBar.shadow = frame.healthBar:CreateTexture(nil,"BACKGROUND",nil,-8)
@@ -115,15 +115,17 @@ h:SetScript("OnEvent", function(h, event, ...)
 				frame.healthBar.shadow:SetSize(256,32)
 				frame.healthBar.shadow:SetTexCoord(1,1,1,0,0,1,0,0)
 				frame.healthBar.shadow:SetAlpha(0.5)
+				frame.healthBar.shadow:SetScale(0.25)
 			end
-  
+
             --Highlight Frame
 			if (not frame.healthBar.hlf) then
 				frame.healthBar.hlf = CreateFrame("Frame",nil,frame.healthBar)
 				frame.healthBar.hlf:SetAllPoints(frame.healthBar)
 				frame.healthBar.hlf = frame.healthBar.hlf
+				frame.healthBar.hlf:SetScale(0.25)
 			end
-  
+
             --Highlight
 			if (not frame.healthBar.hl) then
 				frame.healthBar.hl = frame.healthBar.hlf:CreateTexture(nil,"BACKGROUND",nil,-8)
@@ -132,8 +134,9 @@ h:SetScript("OnEvent", function(h, event, ...)
 				frame.healthBar.hl:SetPoint("LEFT",-30,0)
 				frame.healthBar.hl:SetPoint("RIGHT",30,0)
 				frame.healthBar.hl:SetPoint("BOTTOM",40,0)
+				frame.healthBar.hl:SetScale(0.25)
 			end
-  
+
             --Cast Bar
             frame.castBar:SetStatusBarTexture(mediapath.."statusbar_fill")
             if GetCVar("NamePlateVerticalScale") == "1" then
@@ -150,10 +153,10 @@ end)
 
 hooksecurefunc("CompactUnitFrame_OnUpdate", function(frame)
 	if (frame:IsForbidden()) then return end
-	
+
 	local name = UnitName(frame.unit)
 	local spell, rank, displayName, icon, startTime, endTime, isTradeSkill, castID, interrupt = UnitCastingInfo(frame.unit)
-	
+
 	if (IsControlKeyDown()) then
 		if (name ~= 'Explosives') then
 			frame:SetScale(0.1)
@@ -162,17 +165,15 @@ hooksecurefunc("CompactUnitFrame_OnUpdate", function(frame)
 	else
 		frame:SetScale(1)
 		frame.healthBar:Show()
-		frame.healthBar:SetScale(0.35)
 	end
 
 	if (name == 'Swarm Training Dummy') then
 		frame:SetFrameStrata("TOOLTIP")
 	end
-	
+
 	if (spell) then
 		if (interrupt == true) then
 			frame:SetScale(1.5)
-			frame.healthBar:SetScale(0.6)
 		end
 	end
 end)

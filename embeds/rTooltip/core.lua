@@ -83,23 +83,23 @@ end)
 
   --hooksecurefunc GameTooltip SetUnitBuff
   hooksecurefunc(GameTooltip, "SetUnitBuff", function(self,...)
-    local spellid = select(10,UnitBuff(...))
+    local spellid = select(10,C_UnitAuras.GetAuraDataByIndex(...))
     if spellid then AddSpellIdRow(self,spellid) end
   end)
 
   --hooksecurefunc GameTooltip SetUnitDebuff
   hooksecurefunc(GameTooltip, "SetUnitDebuff", function(self,...)
-    local spellid = select(10,UnitDebuff(...))
+    local spellid = select(10,C_UnitAuras.GetAuraDataByIndex(...))
     if spellid then AddSpellIdRow(self,spellid) end
-    local isBossDebuff = select(12,UnitDebuff(...))
+    local isBossDebuff = select(12,C_UnitAuras.GetAuraDataByIndex(...))
     if isBossDebuff then AddBossDebuffRow(self,isBossDebuff) end
   end)
 
   --hooksecurefunc GameTooltip SetUnitAura
   hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
-    local spellid = select(10,UnitAura(...))
+    local spellid = select(10,C_UnitAuras.GetAuraDataByIndex(...))
     if spellid then AddSpellIdRow(self,spellid) end
-    local isBossDebuff = select(12,UnitAura(...))
+    local isBossDebuff = select(12,C_UnitAuras.GetAuraDataByIndex(...))
     if isBossDebuff then AddBossDebuffRow(self,isBossDebuff) end
   end)
 
@@ -148,7 +148,7 @@ end)
 
   --HookScript GameTooltip OnTooltipSetUnit
   GameTooltip:HookScript("OnShow", function(self,...)
-    local unit = select(1, TooltipUtil.GetDisplayedUnit(self)) or (GetMouseFocus() and GetMouseFocus():GetAttribute("unit")) or (UnitExists("mouseover") and "mouseover")
+    local unit = select(1, TooltipUtil.GetDisplayedUnit(self)) or (UnitExists("mouseover") and "mouseover")
     if not unit or (unit and type(unit) ~= "string") then return end
     if not UnitGUID(unit) then return end
     local ricon = GetRaidTargetIndex(unit)

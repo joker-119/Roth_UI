@@ -71,7 +71,7 @@
   --name tag
 oUF.Tags.Methods["diablo:name"] = function(unit)
     local cc = ("|cff%s%%s|r"):format(oUF.Tags.Methods["diablo:color"](unit))
-    local unitID = IsAddOnLoaded("Totalrp3") and TRP3_API.utils.str.getUnitID(unit)
+    local unitID = C_AddOns.IsAddOnLoaded("Totalrp3") and TRP3_API.utils.str.getUnitID(unit)
     local fullName = unitID and TRP3_API.chat.getFullnameForUnitUsingChatMethod(unitID)
     return cc:format(fullName or UnitName(unit) or "")
 end

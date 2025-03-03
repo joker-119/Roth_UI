@@ -1,85 +1,98 @@
---[[ Element: Resting Icon
+--[[
+# Element: Resting Indicator
 
- Toggles visibility of the resting icon.
+Toggles the visibility of an indicator based on the player's resting status.
 
- Widget
+## Widget
 
- Resting - Any UI widget.
+RestingIndicator - Any UI widget.
 
- Notes
+## Notes
 
- The default resting icon will be used if the UI widget is a texture and doesn't
- have a texture or color defined.
+A default texture will be applied if the widget is a Texture and doesn't have a texture or a color set.
 
- Examples
+## Examples
 
-   -- Position and size
-   local Resting = self:CreateTexture(nil, 'OVERLAY')
-   Resting:SetSize(16, 16)
-   Resting:SetPoint('TOPLEFT', self)
-   
-   -- Register it with oUF
-   self.Resting = Resting
+    -- Position and size
+    local RestingIndicator = self:CreateTexture(nil, 'OVERLAY')
+    RestingIndicator:SetSize(16, 16)
+    RestingIndicator:SetPoint('TOPLEFT', self)
 
- Hooks
+    -- Register it with oUF
+    self.RestingIndicator = RestingIndicator
+--]]
 
- Override(self) - Used to completely override the internal update function.
-                  Removing the table key entry will make the element fall-back
-                  to its internal function again.
-]]
-
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
-local Update = function(self, event)
-	local resting = self.Resting
-	if(resting.PreUpdate) then
-		resting:PreUpdate()
+local function Update(self, event)
+	local element = self.RestingIndicator
+
+	--[[ Callback: RestingIndicator:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the RestingIndicator element
+	--]]
+	if(element.PreUpdate) then
+		element:PreUpdate()
 	end
 
 	local isResting = IsResting()
 	if(isResting) then
-		resting:Show()
+		element:Show()
 	else
-		resting:Hide()
+		element:Hide()
 	end
 
-	if(resting.PostUpdate) then
-		return resting:PostUpdate(isResting)
+	--[[ Callback: RestingIndicator:PostUpdate(isResting)
+	Called after the element has been updated.
+
+	* self      - the RestingIndicator element
+	* isResting - indicates if the player is resting (boolean)
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(isResting)
 	end
 end
 
-local Path = function(self, ...)
-	return (self.Resting.Override or Update) (self, ...)
+local function Path(self, ...)
+	--[[ Override: RestingIndicator.Override(self, event)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	--]]
+	return (self.RestingIndicator.Override or Update) (self, ...)
 end
 
-local ForceUpdate = function(element)
+local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate')
 end
 
-local Enable = function(self, unit)
-	local resting = self.Resting
-	if(resting and unit == 'player') then
-		resting.__owner = self
-		resting.ForceUpdate = ForceUpdate
+local function Enable(self, unit)
+	local element = self.RestingIndicator
+	if(element and UnitIsUnit(unit, 'player')) then
+		element.__owner = self
+		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("PLAYER_UPDATE_RESTING", Path, true)
+		self:RegisterEvent('PLAYER_UPDATE_RESTING', Path, true)
 
-		if(resting:IsObjectType"Texture" and not resting:GetTexture()) then
-			resting:SetTexture[[Interface\CharacterFrame\UI-StateIcon]]
-			resting:SetTexCoord(0, .5, 0, .421875)
+		if(element:IsObjectType('Texture') and not element:GetTexture()) then
+			element:SetTexture([[Interface\CharacterFrame\UI-StateIcon]])
+			element:SetTexCoord(0, 0.5, 0, 0.421875)
 		end
 
 		return true
 	end
 end
 
-local Disable = function(self)
-	local resting = self.Resting
-	if(resting) then
-		resting:Hide()
-		self:UnregisterEvent("PLAYER_UPDATE_RESTING", Path)
+local function Disable(self)
+	local element = self.RestingIndicator
+	if(element) then
+		element:Hide()
+
+		self:UnregisterEvent('PLAYER_UPDATE_RESTING', Path)
 	end
 end
 
-oUF:AddElement('Resting', Path, Enable, Disable)
+oUF:AddElement('RestingIndicator', Path, Enable, Disable)
