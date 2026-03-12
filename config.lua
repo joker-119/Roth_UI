@@ -629,7 +629,7 @@
       power = {
         texture = (mediapath.."statusbar3"),
       },
-      aurawatch = {
+      AuraWatch = {
         show            = true,
       },
       auras = {
