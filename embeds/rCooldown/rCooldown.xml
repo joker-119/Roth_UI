@@ -1,0 +1,8 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file='core.lua' />
+    <Script file="cooldowns.lua" />
+    <Script file="availability.lua" />
+    <Script file="model.lua" />
+    <Script file="frames.lua" />
+    <Script file="ui.lua" />
+</Ui>

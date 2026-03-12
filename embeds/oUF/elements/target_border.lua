@@ -11,7 +11,17 @@ local Update = function(self, event, unit)
 	end
 
 	local class = UnitClassification(unit)
+	local boss = false
+	for i=1,5 do
+	    if UnitExists("boss"..i) and UnitGUID(unit) == UnitGUID("boss"..i) then
+	        boss = true
+	        break
+	    end
+	end
 	if class == "worldboss" or class == "rare" or class == "rareelite" or UnitLevel(unit) == -1 then
+	    boss = true
+	end
+	if boss then
 		qicon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_boss")
 	elseif class == "elite" then
 		qicon:SetTexture("Interface\\AddOns\\Roth_UI\\media\\target_elite")

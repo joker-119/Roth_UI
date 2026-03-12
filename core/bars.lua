@@ -10,7 +10,6 @@
   local func = ns.func
   local cfg = ns.cfg
   local barposition = ns.player
-  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
   ---------------------------------------------
   -- FUNCTIONS
@@ -23,6 +22,9 @@
 
     local w, h = 365, 5
 
+    if MainMenuExpBar then
+        MainMenuExpBar:Hide()
+    end
     local f = CreateFrame("StatusBar","Roth_UIExpBar",self)
     f:SetFrameStrata("BACKGROUND")
     f:SetFrameLevel(2)
@@ -73,6 +75,22 @@
 
     local w, h = 365, 5
 
+    if ReputationWatchBar then
+      ReputationWatchBar:Hide()
+      ReputationWatchBar:SetScript("OnShow", ReputationWatchBar.Hide)
+    end
+    
+    if SecondaryStatusTrackingBarContainer then
+        SecondaryStatusTrackingBarContainer:Hide()
+        SecondaryStatusTrackingBarContainer:SetScript("OnShow", SecondaryStatusTrackingBarContainer.Hide)
+    end
+    
+    if GetMaxLevelForPlayerExpansion() == UnitLevel('player') then
+        MainStatusTrackingBarContainer:Hide()
+        MainStatusTrackingBarContainer:SetScript("OnShow", MainStatusTrackingBarContainer.Hide)
+    end
+        
+
     local f = CreateFrame("StatusBar","Roth_UIRepBar",self)
     f:SetFrameStrata("BACKGROUND")
     f:SetFrameLevel(0)
@@ -80,6 +98,7 @@
     f:SetScale(cfg.scale)
     f:SetStatusBarTexture(cfg.texture)
     f:SetStatusBarColor(0,0.7,0)
+    f:SetPoint(cfg.pos.a1, cfg.pos.af, cfg.pos.a2, cfg.pos.x, cfg.pos.y)
 
     func.applyDragFunctionality(f)
 
@@ -91,16 +110,29 @@
     f.bg = t
 
     f:SetScript("OnEnter", function(s)
-      name, standing, minrep, maxrep, value = GetWatchedFactionInfo()
+      local d = C_Reputation and C_Reputation.GetWatchedFactionData and C_Reputation.GetWatchedFactionData()
       GameTooltip:SetOwner(s, "ANCHOR_TOP")
       GameTooltip:AddLine("Reputation", 0, 1, 0.5, 1, 1, 1)
-      if name then
-        GameTooltip:AddDoubleLine(FACTION, name, FACTION_BAR_COLORS[standing].r, FACTION_BAR_COLORS[standing].g, FACTION_BAR_COLORS[standing].b,1,1,1)
-        GameTooltip:AddDoubleLine(STANDING, _G["FACTION_STANDING_LABEL"..standing], FACTION_BAR_COLORS[standing].r, FACTION_BAR_COLORS[standing].g, FACTION_BAR_COLORS[standing].b,1,1,1)
-        GameTooltip:AddDoubleLine(REPUTATION, value .."/"..maxrep.." ("..floor((value)/(maxrep)*1000)/10 .."%)", FACTION_BAR_COLORS[standing].r, FACTION_BAR_COLORS[standing].g, FACTION_BAR_COLORS[standing].b,1,1,1)
+    
+      if d and d.name then
+        local standing = d.reaction or d.standing or d.standingID
+        local min = d.currentReactionThreshold or d.minValue or 0
+        local max = d.nextReactionThreshold or d.maxValue or 1
+        local value = d.currentStanding or d.value or 0
+    
+        local cur = value - min
+        local cap = max - min
+        local pct = (cap > 0) and (math.floor((cur / cap) * 1000) / 10) or 0
+    
+        local c = (standing and FACTION_BAR_COLORS[standing]) or { r=1, g=1, b=1 }
+        GameTooltip:AddDoubleLine(FACTION, d.name, c.r, c.g, c.b, 1,1,1)
+        GameTooltip:AddDoubleLine(STANDING, _G["FACTION_STANDING_LABEL"..standing], c.r, c.g, c.b, 1,1,1)
+        GameTooltip:AddDoubleLine(REPUTATION, cur.."/"..cap.." ("..pct.."%)", c.r, c.g, c.b, 1,1,1)
       end
+    
       GameTooltip:Show()
     end)
+
     f:SetScript("OnLeave", function(s) GameTooltip:Hide() end)
 
     self.Reputation = f
@@ -130,14 +162,14 @@
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture(mediapath.."combo_left")
+    t:SetTexture(ns.mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",0,0)
-    t:SetTexture(mediapath.."combo_right")
+    t:SetTexture(ns.mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -154,19 +186,19 @@
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
+      orb.barBg:SetTexture(ns.mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture(mediapath.."combo_orb_bg")
+      orb.bg:SetTexture(ns.mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
       orb.fill:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
-      orb.fill:SetTexture(mediapath.."combo_orb_fill1")
+      orb.fill:SetTexture(ns.mediapath.."combo_orb_fill1")
       orb.fill:SetVertexColor(self.cfg.harmony.color.r,self.cfg.harmony.color.g,self.cfg.harmony.color.b)
       --orb.fill:SetBlendMode("ADD")
 
@@ -174,13 +206,13 @@
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture(mediapath.."combo_orb_border")
+      orb.border:SetTexture(ns.mediapath.."combo_orb_border")
 
       --orb glow
       orb.glow = orb:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture(mediapath.."combo_orb_glow")
+      orb.glow:SetTexture(ns.mediapath.."combo_orb_glow")
       orb.glow:SetVertexColor(self.cfg.harmony.color.r,self.cfg.harmony.color.g,self.cfg.harmony.color.b)
       orb.glow:SetBlendMode("BLEND")
 
@@ -188,7 +220,7 @@
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
+      orb.highlight:SetTexture(ns.mediapath.."combo_orb_highlight")
 
     end
 
@@ -225,14 +257,14 @@
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture(mediapath.."combo_left")
+    t:SetTexture(ns.mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",0,0)
-    t:SetTexture(mediapath.."combo_right")
+    t:SetTexture(ns.mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -249,19 +281,19 @@
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
+      orb.barBg:SetTexture(ns.mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture(mediapath.."combo_orb_bg")
+      orb.bg:SetTexture(ns.mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
       orb.fill:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
-      orb.fill:SetTexture(mediapath.."combo_orb_fill1")
+      orb.fill:SetTexture(ns.mediapath.."combo_orb_fill1")
       orb.fill:SetVertexColor(self.cfg.holypower.color.r,self.cfg.holypower.color.g,self.cfg.holypower.color.b)
       --orb.fill:SetBlendMode("ADD")
 
@@ -269,13 +301,13 @@
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture(mediapath.."combo_orb_border")
+      orb.border:SetTexture(ns.mediapath.."combo_orb_border")
 
       --orb glow
       orb.glow = orb:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture(mediapath.."combo_orb_glow")
+      orb.glow:SetTexture(ns.mediapath.."combo_orb_glow")
       orb.glow:SetVertexColor(self.cfg.holypower.color.r,self.cfg.holypower.color.g,self.cfg.holypower.color.b)
       orb.glow:SetBlendMode("BLEND")
 
@@ -283,7 +315,7 @@
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
+      orb.highlight:SetTexture(ns.mediapath.."combo_orb_highlight")
 
     end
 
@@ -321,14 +353,14 @@
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture(mediapath.."combo_left")
+    t:SetTexture(ns.mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",64,0)
-    t:SetTexture(mediapath.."combo_right")
+    t:SetTexture(ns.mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -344,19 +376,19 @@
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
+      orb.barBg:SetTexture(ns.mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture(mediapath.."combo_gem_bg")
+      orb.bg:SetTexture(ns.mediapath.."combo_gem_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
       orb.fill:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
-      orb.fill:SetTexture(mediapath.."combo_gem_fill1")
+      orb.fill:SetTexture(ns.mediapath.."combo_gem_fill1")
       orb.fill:SetVertexColor(self.cfg.soulshards.color.r,self.cfg.soulshards.color.g,self.cfg.soulshards.color.b)
       --orb.fill:SetBlendMode("ADD")
 
@@ -364,13 +396,13 @@
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture(mediapath.."combo_gem_border")
+      orb.border:SetTexture(ns.mediapath.."combo_gem_border")
 
       --orb glow
       orb.glow = orb:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture(mediapath.."combo_gem_glow")
+      orb.glow:SetTexture(ns.mediapath.."combo_gem_glow")
       orb.glow:SetVertexColor(self.cfg.soulshards.color.r,self.cfg.soulshards.color.g,self.cfg.soulshards.color.b)
       orb.glow:SetBlendMode("BLEND")
 
@@ -378,7 +410,7 @@
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture(mediapath.."combo_gem_highlight")
+      orb.highlight:SetTexture(ns.mediapath.."combo_gem_highlight")
 
     end
 
@@ -413,14 +445,14 @@
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture(mediapath.."combo_left")
+    t:SetTexture(ns.mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",0,0)
-    t:SetTexture(mediapath.."combo_right")
+    t:SetTexture(ns.mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -436,20 +468,20 @@
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
+      orb.barBg:SetTexture(ns.mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture(mediapath.."combo_orb_bg")
+      orb.bg:SetTexture(ns.mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = CreateFrame("StatusBar",nil,orb)
       orb.fill:SetSize(64*orbSizeMultiplier,64*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
       local fill = orb.fill:CreateTexture(nil,"BACKGROUND",nil,-6)
-      fill:SetTexture(mediapath.."combo_orb_fill64_1")
+      fill:SetTexture(ns.mediapath.."combo_orb_fill64_1")
       orb.fill:SetStatusBarTexture(fill)
       orb.fill:SetOrientation("VERTICAL")
 
@@ -461,13 +493,13 @@
       orb.border = helper:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture(mediapath.."combo_orb_border")
+      orb.border:SetTexture(ns.mediapath.."combo_orb_border")
 
       --orb glow
       orb.glow = helper:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture(mediapath.."combo_orb_glow")
+      orb.glow:SetTexture(ns.mediapath.."combo_orb_glow")
       orb.glow:SetBlendMode("BLEND")
       orb.glow:Hide()
 
@@ -475,7 +507,7 @@
       orb.highlight = helper:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
+      orb.highlight:SetTexture(ns.mediapath.."combo_orb_highlight")
 
     end
 
@@ -486,7 +518,9 @@
       rCombatFrameFader(bar, self.cfg.runes.combat.fadeIn, self.cfg.runes.combat.fadeOut) --frame, buttonList, fadeIn, fadeOut
     end
     self.RuneBar = bar
-
+    if select(2, UnitClass("player")) == "DEATHKNIGHT" then
+        bar:Show()
+    end
   end
   
  --create combo
@@ -517,14 +551,14 @@
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture(mediapath.."combo_left")
+    t:SetTexture(ns.mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",0,0)
-    t:SetTexture(mediapath.."combo_right")
+    t:SetTexture(ns.mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, max do
@@ -541,19 +575,19 @@
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
+      orb.barBg:SetTexture(ns.mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture(mediapath.."combo_orb_bg")
+      orb.bg:SetTexture(ns.mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
       orb.fill:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.fill:SetPoint("CENTER")
-      orb.fill:SetTexture(mediapath.."combo_orb_fill1")
+      orb.fill:SetTexture(ns.mediapath.."combo_orb_fill1")
       orb.fill:SetVertexColor(self.cfg.combobar.color.r,self.cfg.combobar.color.g,self.cfg.combobar.color.b)
       --orb.fill:SetBlendMode("ADD")
 
@@ -561,13 +595,13 @@
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture(mediapath.."combo_orb_border")
+      orb.border:SetTexture(ns.mediapath.."combo_orb_border")
 
       --orb glow
       orb.glow = orb:CreateTexture(nil,"BACKGROUND",nil,-4)
       orb.glow:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.glow:SetPoint("CENTER")
-      orb.glow:SetTexture(mediapath.."combo_orb_glow")
+      orb.glow:SetTexture(ns.mediapath.."combo_orb_glow")
       orb.glow:SetVertexColor(self.cfg.combobar.color.r,self.cfg.combobar.color.g,self.cfg.combobar.color.b)
       orb.glow:SetBlendMode("BLEND")
 
@@ -575,7 +609,7 @@
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
+      orb.highlight:SetTexture(ns.mediapath.."combo_orb_highlight")
 
     end
 
@@ -613,14 +647,14 @@
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("LEFT",0,0)
-    t:SetTexture(mediapath.."combo_left")
+    t:SetTexture(ns.mediapath.."combo_left")
     bar.leftEdge = t
 
     --right edge
     t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetSize(64,64)
     t:SetPoint("RIGHT",65,0)
-    t:SetTexture(mediapath.."combo_right")
+    t:SetTexture(ns.mediapath.."combo_right")
     bar.rightEdge = t
 
     for i = 1, bar.maxOrbs do
@@ -637,13 +671,13 @@
       orb.barBg = orb:CreateTexture(nil,"BACKGROUND",nil,-8)
       orb.barBg:SetSize(64,64)
       orb.barBg:SetPoint("CENTER")
-      orb.barBg:SetTexture(mediapath.."combo_bar_bg")
+      orb.barBg:SetTexture(ns.mediapath.."combo_bar_bg")
 
       --orb background
       orb.bg = orb:CreateTexture(nil,"BACKGROUND",nil,-7)
       orb.bg:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.bg:SetPoint("CENTER")
-      orb.bg:SetTexture(mediapath.."combo_orb_bg")
+      orb.bg:SetTexture(ns.mediapath.."combo_orb_bg")
 
       --orb filling
       orb.fill = orb:CreateTexture(nil,"BACKGROUND",nil,-6)
@@ -657,14 +691,14 @@
       orb.border = orb:CreateTexture(nil,"BACKGROUND",nil,-5)
       orb.border:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.border:SetPoint("CENTER")
-      orb.border:SetTexture(mediapath.."combo_orb_border")
+      orb.border:SetTexture(ns.mediapath.."combo_orb_border")
 
 
       --orb highlight
       orb.highlight = orb:CreateTexture(nil,"BACKGROUND",nil,-3)
       orb.highlight:SetSize(128*orbSizeMultiplier,128*orbSizeMultiplier)
       orb.highlight:SetPoint("CENTER")
-      orb.highlight:SetTexture(mediapath.."combo_orb_highlight")
+      orb.highlight:SetTexture(ns.mediapath.."combo_orb_highlight")
 
     end
 

@@ -101,16 +101,16 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, 14, "THINOUTLINE")
+    local name = func.createFontString(self, cfg.fonts.headerFont, 14, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -14)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.fonts.textFont, 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
-    local ppval = func.createFontString(self.Health, cfg.font, 10, "THINOUTLINE")
+    local ppval = func.createFontString(self.Health, cfg.fonts.textFont, 10, "THINOUTLINE")
     ppval:SetPoint("TOP",self.Health,"BOTTOM", 0,0)
     ppval:SetVertexColor(0.6,0.6,0.6,1)
 
@@ -153,6 +153,7 @@
 
     --icons
     self.RaidIcon = func.createIcon(self,"BACKGROUND",16,self.Name,"BOTTOM","TOP",0,0,-1)
+    
 
     --add self to unit container (maybe access to that unit is needed in another style)
     unit.boss[bossid] = self
@@ -164,21 +165,71 @@
   ---------------------------------------------
   -- SPAWN BOSS UNIT
   ---------------------------------------------
+  local respawnQueued = false
+  local spawnedFrames = {}
+local function Init()
+if respawnQueued then return end
+respawnQueued = true
 
   if cfg.units.boss.show then
-    oUF:RegisterStyle("diablo:boss", createStyle)
-    oUF:SetActiveStyle("diablo:boss")
-    local boss = {}
-    for i = 1, MAX_BOSS_FRAMES do
-      local name = "Roth_UIBossFrame"..i
-      local unit = oUF:Spawn("boss"..i, name)
-      if i==1 then
-        unit:SetPoint(cfg.units.boss.pos.a1,cfg.units.boss.pos.af,cfg.units.boss.pos.a2,cfg.units.boss.pos.x,cfg.units.boss.pos.y)
-      else
-        unit:SetPoint("TOP", boss[i-1], "BOTTOM", 0, -5)
-      end
-      table.insert(Roth_UI_Units,name) --add frames to the slash command function
-      func.applyDragFunctionality(unit)
-      boss[i] = unit
+      ns.Scheduler.NextFrame(function()
+      
+      local BossAnchor = CreateFrame("Frame", "Roth_UIBossAnchor", UIParent, "SecureHandlerBaseTemplate")
+      BossAnchor:SetSize(1, 1)
+      
+        local mm = _G[cfg.units.boss.pos.af] or MinimapCluster or Minimap
+        local left = mm:GetLeft()
+        local top  = mm:GetTop()
+        BossAnchor:SetPoint(cfg.units.boss.pos.a1, UIParent, cfg.units.boss.pos.a2, left + cfg.units.boss.pos.x, top + cfg.units.boss.pos.y)
+
+        local styleName = "diablo:boss"..GetTime()
+        respawnQueued = false
+        
+        for _,f in ipairs(spawnedFrames) do
+            if (f.RareIcon) then
+                f:DisableElement("RareIcon")
+            end
+            if (f.Name) then
+                f:DisableElement("Name")
+            end
+            
+            UnregisterUnitWatch(f)
+            f:UnregisterAllEvents()
+            for _, child in ipairs({f:GetChildren()}) do
+                child:UnregisterAllEvents()
+                child:Hide()
+            end
+            f:Hide()
+            f:SetParent(nil)
+            if f:GetName() then _G[f:GetName()] = nil end
+        end
+        
+        oUF:RegisterStyle(styleName, createStyle)
+        oUF:SetActiveStyle(styleName)
+        
+        local boss = {}
+        for i = 1, MAX_BOSS_FRAMES do
+        local name = "Roth_UIBossFrame"..i
+        local unit = oUF:Spawn("boss"..i, name)
+        unit:ClearAllPoints()
+        if i == 1 then
+          unit:SetPoint("TOPLEFT", BossAnchor, "TOPLEFT", 0, 0)
+        else
+          unit:SetPoint("TOP", boss[i-1], "BOTTOM", 0, -5)
+        end
+        
+          table.insert(Roth_UI_Units,name) --add frames to the slash command function
+          table.insert(spawnedFrames, unit)
+          func.applyDragFunctionality(unit)
+          boss[i] = unit
+          unit:EnableElement("RareIcon")
+          unit:EnableElement("Name")
+          unit:UpdateAllElements("ForceUpdate")
+        end
+    end)
     end
-  end
+end
+
+ns:RegisterInit(Init)
+
+Roth_UI:AddConfig("units.boss", {}, "Boss", Init)

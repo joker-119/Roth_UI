@@ -11,6 +11,8 @@
 local A, L = ...
 local addon, ns = ...
 local cfg = ns.cfg
+
+local function Init()
 if not cfg.embeds.rButtonTemplate then return end
 -----------------------------
 -- actionButtonConfig
@@ -20,8 +22,8 @@ local actionButtonConfig = {}
 
 --backdrop
 actionButtonConfig.backdrop = {
-  bgFile = mediapath.."backdrop",
-  edgeFile = mediapath.."backdropBorder",
+  bgFile = ns.mediapath.."backdrop",
+  edgeFile = ns.mediapath.."backdropBorder",
   tile = false,
   tileSize = 32,
   edgeSize = 5,
@@ -60,7 +62,7 @@ actionButtonConfig.flyoutBorderShadow = {
 
 --border
 actionButtonConfig.border = {
-  file = mediapath.."icon_border",
+  file = ns.mediapath.."icon_border",
   points = {
     {"TOPLEFT", -2, 2 },
     {"BOTTOMRIGHT", 2, -2 },
@@ -68,7 +70,7 @@ actionButtonConfig.border = {
 }
 
 actionButtonConfig.checkedTexture = {
-	file = mediapath.."gloss2",
+	file = ns.mediapath.."gloss2",
 	points = {
 		{"TOPLEFT", -2, 2 },
 		{ "BOTTOMRIGHT", 2, -2 },
@@ -77,7 +79,7 @@ actionButtonConfig.checkedTexture = {
 
 --normalTexture
 actionButtonConfig.normalTexture = {
-  file = mediapath.."icon_border",
+  file = ns.mediapath.."icon_border",
   color = {0.5,0.5,0.5,0.6},
   points = {
     {"TOPLEFT", 0, 0 },
@@ -86,7 +88,7 @@ actionButtonConfig.normalTexture = {
 }
 
 actionButtonConfig.pushedTexture = {
-	file = mediapath.."pushed",
+	file = ns.mediapath.."pushed",
 	points = {
 		{ "TOPLEFT", -2, 2 },
 		{ "BOTTOMRIGHT", 2, -2 },
@@ -94,7 +96,7 @@ actionButtonConfig.pushedTexture = {
 }
 
 actionButtonConfig.highlightTexture = {
-	file = mediapath.."icon_border",
+	file = ns.mediapath.."icon_border",
 	point = {
 		{ "TOPLEFT", -2, 2 },
 		{ "BOTTOMRIGHT", 2, -2 },
@@ -187,7 +189,7 @@ local itemButtons = { CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, C
 for i, button in next, itemButtons do
   rButtonTemplate:StyleItemButton(button, itemButtonConfig)
 end
-for bag=0, NUM_TOTAL_EQUIPPED_BAG_SLOTS do
+for bag=0, NUM_TOTAL_EQUIPPED_BAG_SLOTS or 4 do
 	for slot=1,C_Container.GetContainerNumSlots(bag) do
 		local item = C_Container.GetContainerItemID(bag,slot);
 		if (item) then
@@ -205,7 +207,9 @@ local extraButtonConfig = actionButtonConfig
 extraButtonConfig.buttonstyle = { file = "" }
 
 --rButtonTemplate:StyleExtraActionButton
-rButtonTemplate:StyleExtraActionButton(extraButtonConfig)
+if not Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC) then
+    rButtonTemplate:StyleExtraActionButton(extraButtonConfig)
+end
 
 -----------------------------
 -- auraButtonConfig
@@ -234,3 +238,6 @@ SECOND_ONELETTER_ABBR = "%ds"
 
 --rButtonTemplate:StyleAllAuraButtons
 --rButtonTemplate:StyleAllAuraButtons(auraButtonConfig)
+end
+
+Roth_UI:RegisterInit(Init)

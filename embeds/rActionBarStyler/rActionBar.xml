@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='core\config.lua' />
 	<Script file='core\hide_blizzart.lua' />
 	<Script file='core\slashcmd.lua' />
 	<Script file='core\micromenu.lua' />
@@ -15,5 +16,4 @@
 	<Script file='core\leave_vehicle.lua' />
 	<Script file='core\spellflyout.lua' />
 	<Script file='core\cooldown.lua' />
-
 </Ui>

@@ -37,8 +37,13 @@ if not gcfg.embeds.rActionBarStyler then return end
   frame:SetScale(cfg.scale)
 
   --move the buttons into position and reparent them
-  MainMenuBar:SetParent(frame)
-  MainMenuBar:EnableMouse(false)
+  if (MainActionBar) then
+      MainActionBar:SetParent(frame)
+      MainActionBar:EnableMouse(false)
+  elseif (MainMenuBar) then
+      MainMenuBar:SetParent(frame)
+      MainMenuBar:EnableMouse(false)
+  end
   --MainMenuBar.Background.TopEdge:Hide()
   --MainMenuBar.BorderArt.Center:Hide()
   --MainMenuBar.Background.BottomEdge:Hide()
@@ -51,8 +56,10 @@ if not gcfg.embeds.rActionBarStyler then return end
   --MainMenuBar.ActionBarPageNumber.Text:Hide()
   --MainMenuBar.ActionBarPageNumber.DownButton:Hide()
   --MainMenuBar.ActionBarPageNumber.UpButton:Hide()
-  MainMenuBar.EndCaps:Hide()
-  MainMenuBar.BorderArt:Hide()
+  if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+    MainActionBar.EndCaps:Hide()
+    MainActionBar.BorderArt:Hide()
+end
 
   for i=1, num do
     local button = _G["ActionButton"..i]

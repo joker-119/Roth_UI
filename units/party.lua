@@ -5,7 +5,6 @@
   --get oUF namespace (just in case needed)
   local oUF = ns.oUF or oUF
   local rLib = ns.rLib or rLib
-  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
   --get the config
   local cfg = ns.cfg
@@ -54,7 +53,7 @@
 	if self.cfg.vertical == true then
 	 h:SetPoint("TOP",0,-15)
 	 h:SetPoint("LEFT",47,0)
-	 h:SetPoint("RIGHT",-47,0)
+	 h:SetPoint("RIGHT",-45,0)
 	 h:SetPoint("BOTTOM",0,35)
 	 h:SetFrameStrata("BACKGROUND")
 	else
@@ -70,9 +69,9 @@
     h.bg:SetAllPoints(h)
 
     h.glow = h:CreateTexture(nil,"OVERLAY",nil,-5)
-    h.glow:SetTexture(mediapath.."targettarget_hpglow")
+    h.glow:SetTexture(ns.mediapath.."targettarget_hpglow")
 	if self.cfg.vertical == true then
-		h.glow:SetPoint("TOP",0,15)
+		h.glow:SetPoint("TOP",0,25)
 		h.glow:SetPoint("LEFT",-40,0)
 		h.glow:SetPoint("RIGHT",40,0)
 		h.glow:SetPoint("BOTTOM",0,-35)
@@ -126,7 +125,7 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
       
-    local name = func.createFontString(self.Health, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
+    local name = func.createFontString(self.Health, cfg.fonts.headerFont, self.cfg.fontSize, "THINOUTLINE")
 	if self.cfg.vertical == true then
 		name:SetPoint("BOTTOM", self, "TOP", 0, -3)
 		name:SetPoint("LEFT", self.Health, 0, 0)
@@ -138,11 +137,11 @@
 	end
 	self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, self.cfg.health.fontSize, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.fonts.textFont, self.cfg.health.fontSize, "THINOUTLINE")
     if self.cfg.vertical == true then
-		hpval:SetPoint(self.cfg.health.point, self.cfg.health.x,self.cfg.health.y)
+		hpval:SetPoint(self.cfg.health.textPos, self.cfg.health.x,self.cfg.health.y)
 	else
-		hpval:SetPoint(self.cfg.health.point, self.cfg.health.x+18,self.cfg.health.y)
+		hpval:SetPoint(self.cfg.health.textPos, self.cfg.health.x+18,self.cfg.health.y)
 	end
 
     self:Tag(name, "[diablo:name]")
@@ -181,22 +180,7 @@
 
     --create portrait
     if self.cfg.portrait.show then
-      func.createPortrait(self)
-      if self.PortraitHolder then
-        if(InCombatLockdown()) then
-          self.PortraitHolder:RegisterEvent("PLAYER_REGEN_ENABLED")
-        else
-			if self.cfg.vertical then
-				self:SetHitRectInsets(0,0,0,0)
-			else 
-				self:SetHitRectInsets(0,0,-100,0)
-			end
-        end      
-        self.PortraitHolder:SetScript("OnEvent", function(...)
-          self.PortraitHolder:UnregisterEvent("PLAYER_REGEN_ENABLED")
-          self:SetHitRectInsets(0, 0, 0, 0)
-        end)
-      end      
+      func.createPortrait(self)      
     end
 
     --auras
@@ -260,71 +244,141 @@
   ---------------------------------------------
   -- SPAWN PARTY UNIT
   ---------------------------------------------
+  local respawnQueued = false
+  local spawnedHeader
+  
+local function Init()
+    cfg = ns.cfg
+    if respawnQueued then return end
+    respawnQueued = true
+    ns.Scheduler.NextFrame(function()
+        if cfg.units.party.show then
+            
+            respawnQueued = false
+            local styleName = "diablo:party"..GetTime()
 
-  if cfg.units.party.show then
-    oUF:RegisterStyle("diablo:party", createStyle)
-    oUF:SetActiveStyle("diablo:party") 
-      oUF:Spawn("party", "RothUI_PartyFrame")
+            -- Cleanup old header
+            if spawnedHeader then
+                UnregisterUnitWatch(spawnedHeader)
+                UnregisterStateDriver(spawnedHeader, "visibility")
+                spawnedHeader:UnregisterAllEvents()
+                spawnedHeader:Hide()
+                spawnedHeader:SetParent(nil)
+                if spawnedHeader:GetName() then _G[spawnedHeader:GetName()] = nil end
+            end
 
-    local attr = cfg.units.party.attributes
-	
-	
+            oUF:RegisterStyle(styleName, createStyle)
+            oUF:SetActiveStyle(styleName)
+            local attr = cfg.units.party.attributes
 
-    local partyDragFrame = CreateFrame("Frame", "Roth_UIPartyDragFrame", UIParent)
-    partyDragFrame:SetSize(50,50)   
-    partyDragFrame:SetPoint(cfg.units.party.pos.a1,cfg.units.party.pos.af,cfg.units.party.pos.a2,cfg.units.party.pos.x,cfg.units.party.pos.y)
-    func.applyDragFunctionality(partyDragFrame)
-    table.insert(Roth_UI_Units,"Roth_UIPartyDragFrame") --add frames to the slash command function
+            local partyDragFrame = CreateFrame("Frame", "Roth_UIPartyDragFrame", UIParent)
+            partyDragFrame:SetSize(50,50)
+            partyDragFrame:SetPoint(cfg.units.party.pos.a1,cfg.units.party.pos.af,cfg.units.party.pos.a2,cfg.units.party.pos.x,cfg.units.party.pos.y)
+            func.applyDragFunctionality(partyDragFrame)
+            table.insert(Roth_UI_Units,"Roth_UIPartyDragFrame")
 
-if cfg.units.party.vertical == true then
-    local party = oUF:SpawnHeader(
-      "Roth_UIPartyHeader",
-      nil,
-      attr.visibility,
-      "showPlayer",         attr.showPlayer,
-      "showSolo",           attr.showSolo,
-      "showParty",          attr.showParty,
-      "showRaid",           attr.showRaid,
-      "point",              attr.VerticalPoint,
-      "yoffset",            attr.yoffset,
-      "oUF-initialConfigFunction", ([[
-        self:SetWidth(%d)
-        self:SetHeight(%d)
-        self:SetScale(%f)
-      ]]):format(cfg.units.party.vertwidth, cfg.units.party.vertheight, cfg.units.party.scale)
-    )
-    party:SetPoint("TOPLEFT",partyDragFrame,0,0)
- else
-     local party = oUF:SpawnHeader(
-      "Roth_UIPartyHeader",
-      nil,
-      attr.visibility,
-      "showPlayer",         attr.showPlayer,
-      "showSolo",           attr.showSolo,
-      "showParty",          attr.showParty,
-      "showRaid",           attr.showRaid,
-      "point",             	attr.HorizontalPoint,
-      "oUF-initialConfigFunction", ([[
-        self:SetWidth(%d)
-        self:SetHeight(%d)
-        self:SetScale(%f)
-      ]]):format(cfg.units.party.width, cfg.units.party.height, cfg.units.party.scale)
-    )
-    party:SetPoint("TOPLEFT",partyDragFrame,0,0)
-  end
-	if attr.hideInArena then
-		local Frame = CreateFrame("Frame")
-			Frame:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
-			Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-			Frame:SetScript("OnEvent", function(...)
-				isArena, _ = IsActiveBattlefieldArena();
-				if isArena == true then
-					RegisterStateDriver(Roth_UIPartyHeader, "visibility", "hide")
-				else
-					if cfg.units.party.show then
-						RegisterStateDriver(Roth_UIPartyHeader, "visibility", attr.visibility)
-					end
-				end
-			end)
-	end
+            local headerName = "Roth_UIPartyHeader"..GetTime()
+            local party
+            if cfg.units.party.vertical then
+                party = oUF:SpawnHeader(
+                    headerName,
+                    nil,
+                    attr.visibility,
+                    "showPlayer", attr.showPlayer,
+                    "showSolo",   attr.showSolo,
+                    "showParty",  attr.showParty,
+                    "showRaid",   attr.showRaid,
+                    "point",      attr.VerticalAnchor,
+                    "yOffset",    attr.yoffset,
+                    "oUF-initialConfigFunction", ([[ 
+                        self:SetWidth(%d)
+                        self:SetHeight(%d)
+                        self:SetScale(%f)
+                    ]]):format(cfg.units.party.vertwidth, cfg.units.party.vertheight, cfg.units.party.scale),
+                    "template", "SecureUnitButtonTemplate"
+                )
+            else
+                party = oUF:SpawnHeader(
+                    headerName,
+                    nil,
+                    attr.visibility,
+                    "showPlayer", attr.showPlayer,
+                    "showSolo",   attr.showSolo,
+                    "showParty",  attr.showParty,
+                    "showRaid",   attr.showRaid,
+                    "point",      attr.HorizontalAnchor,
+                    "oUF-initialConfigFunction", ([[ 
+                        self:SetWidth(%d)
+                        self:SetHeight(%d)
+                        self:SetScale(%f)
+                    ]]):format(cfg.units.party.width, cfg.units.party.height, cfg.units.party.scale)
+                )
+            end
+
+            party:SetPoint("TOPLEFT", partyDragFrame, 0, 0)
+            spawnedHeader = party
+
+            -- Arena toggle uses consistent header name
+            if attr.hideInArena then
+                local Frame = CreateFrame("Frame")
+                Frame:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
+                Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+                Frame:SetScript("OnEvent", function()
+                    local isArena = IsActiveBattlefieldArena()
+                    if spawnedHeader then
+                        if isArena then
+                            RegisterStateDriver(spawnedHeader, "visibility", "hide")
+                        else
+                            if cfg.units.party.show then
+                                RegisterStateDriver(spawnedHeader, "visibility", attr.visibility)
+                            end
+                        end
+                    end
+                end)
+            end
+
+            -- Force update children so Range alpha works right away
+            for _, child in ipairs({spawnedHeader:GetChildren()}) do
+                if child.UpdateAllElements then
+                    child:UpdateAllElements("ForceUpdate")
+                end
+            end
+            
+            
+            local updater = CreateFrame("Frame")
+            updater.elapsed = 0
+            updater:SetScript("OnUpdate", function(f, e)
+            if CompactPartyFrame then
+                CompactPartyFrame:Hide()
+            end
+            if PartyFrame then
+                PartyFrame:Hide()
+            end
+                f.elapsed = f.elapsed + e
+                if f.elapsed > 0.5 then -- match oUF default
+                    f.elapsed = 0
+                    if spawnedHeader then
+                        for _, child in ipairs({spawnedHeader:GetChildren()}) do
+                            if child:IsShown() and child.UpdateAllElements then
+                                if child.Range and not UnitIsUnit(child.unit, "player") then
+                                    local inRange,_ = UnitInRange(child.unit)
+                                    if inRange then
+                                        child:SetAlpha(child.Range.insideAlpha)
+                                    else
+                                        child:SetAlpha(child.Range.outsideAlpha)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+
+        end
+    end)
 end
+
+
+ns:RegisterInit(Init)
+
+Roth_UI:AddConfig("units.party", {}, "Party", Init)

@@ -144,12 +144,12 @@ local function SetupTexture(texture, cfg, func, button)
     ApplyAlpha(texture, cfg.alpha)
     if func == "SetTexture" then
         ApplyTexture(texture, cfg.file)
-    elseif func == "SetHighlightTexture" then
+    elseif func == "SetHighlightTexture" and Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
         ApplyHighlightTexture(button, cfg.file)
         button.HighlightTexture:ClearAllPoints()
         button.HighlightTexture:SetPoint("TOPLEFT", -2, 2)
         button.HighlightTexture:SetPoint("BOTTOMRIGHT", 2, -2)
-    elseif func == "SetPushedTexture" then
+    elseif func == "SetPushedTexture" and Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
         ApplyPushedTexture(button, cfg.file)
         button.PushedTexture:ClearAllPoints()
         button.PushedTexture:SetPoint("TOPLEFT", -2, 2)

@@ -73,16 +73,6 @@ button.auraInstanceID - unique ID for the current aura being tracked by the butt
 local _, ns = ...
 local oUF = ns.oUF
 
-local function UpdateTooltip(self)
-	if(GameTooltip:IsForbidden()) then return end
-
-	if(self.isHarmful) then
-		GameTooltip:SetUnitDebuffByAuraInstanceID(self:GetParent().__owner.unit, self.auraInstanceID)
-	else
-		GameTooltip:SetUnitBuffByAuraInstanceID(self:GetParent().__owner.unit, self.auraInstanceID)
-	end
-end
-
 local function onEnter(self)
 	if(GameTooltip:IsForbidden() or not self:IsVisible()) then return end
 
@@ -99,52 +89,81 @@ local function onLeave()
 	GameTooltip:Hide()
 end
 
-local function CreateButton(element, index)
-	local button = CreateFrame('Button', element:GetDebugName() .. 'Button' .. index, element)
+local function UpdateTooltip(self)
+  if GameTooltip:IsForbidden() then return end
 
-	local cd = CreateFrame('Cooldown', '$parentCooldown', button, 'CooldownFrameTemplate')
-	cd:SetAllPoints()
-	button.Cooldown = cd
+  local unit = self.unit or (self.__owner and self.__owner.unit) or "target"
+  if not unit or not UnitExists(unit) then return end
 
-	local icon = button:CreateTexture(nil, 'BORDER')
-	icon:SetAllPoints()
-	button.Icon = icon
+  local anchor = self.tooltipAnchor or "ANCHOR_BOTTOMRIGHT"
+  GameTooltip:SetOwner(self, anchor)
 
-	local countFrame = CreateFrame('Frame', nil, button)
-	countFrame:SetAllPoints(button)
-	countFrame:SetFrameLevel(cd:GetFrameLevel() + 1)
+  -- Retail path (works great)
+  if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+    if self.auraInstanceID then
+      if self.isHarmful then
+        GameTooltip:SetUnitDebuffByAuraInstanceID(unit, self.auraInstanceID)
+      else
+        GameTooltip:SetUnitBuffByAuraInstanceID(unit, self.auraInstanceID)
+      end
+      return
+    end
+  end
 
-	local count = countFrame:CreateFontString(nil, 'OVERLAY', 'NumberFontNormal')
-	count:SetPoint('BOTTOMRIGHT', countFrame, 'BOTTOMRIGHT', -1, 0)
-	button.Count = count
+  -- Classic/TBCC: find the CURRENT aura index that matches this button's auraInstanceID
+  local filter = self.filter or (self.isHarmful and "HARMFUL" or "HELPFUL")
 
-	local overlay = button:CreateTexture(nil, 'OVERLAY')
-	overlay:SetTexture([[Interface\Buttons\UI-Debuff-Overlays]])
-	overlay:SetAllPoints()
-	overlay:SetTexCoord(0.296875, 0.5703125, 0, 0.515625)
-	button.Overlay = overlay
+  if self.auraInstanceID and C_UnitAuras and C_UnitAuras.GetAuraDataByIndex then
+    for i = 1, 40 do
+      local data = C_UnitAuras.GetAuraDataByIndex(unit, i, filter)
+      if not data then break end
+      if data.auraInstanceID == self.auraInstanceID then
+        GameTooltip:SetUnitAura(unit, i, filter)
+        return
+      end
+    end
+  end
 
-	local stealable = button:CreateTexture(nil, 'OVERLAY')
-	stealable:SetTexture([[Interface\TargetingFrame\UI-TargetingFrame-Stealable]])
-	stealable:SetPoint('TOPLEFT', -3, 3)
-	stealable:SetPoint('BOTTOMRIGHT', 3, -3)
-	stealable:SetBlendMode('ADD')
-	button.Stealable = stealable
-
-	button.UpdateTooltip = UpdateTooltip
-	button:SetScript('OnEnter', onEnter)
-	button:SetScript('OnLeave', onLeave)
-
-	--[[ Callback: Auras:PostCreateButton(button)
-	Called after a new aura button has been created.
-
-	* self   - the widget holding the aura buttons
-	* button - the newly created aura button (Button)
-	--]]
-	if(element.PostCreateButton) then element:PostCreateButton(button) end
-
-	return button
+  -- Ultimate fallback (may be wrong if sorted, but better than nothing)
+  GameTooltip:SetUnitAura(unit, self:GetID(), filter)
 end
+
+
+
+
+local function CreateButton(element, index)
+    local button = CreateFrame('Button', element:GetDebugName() .. 'Button' .. index, element)
+
+    local cd = CreateFrame('Cooldown', '$parentCooldown', button, 'CooldownFrameTemplate')
+    cd:SetAllPoints()
+    button.Cooldown = cd
+
+    local icon = button:CreateTexture(nil, 'BORDER')
+    icon:SetAllPoints()
+    button.Icon = icon
+
+    local count = button:CreateFontString(nil, 'OVERLAY', 'NumberFontNormal')
+    count:SetPoint('BOTTOMRIGHT', -1, 0)
+    button.Count = count
+
+    button.UpdateTooltip = UpdateTooltip
+    button.__owner = element.__owner
+    button.tooltipAnchor = element.tooltipAnchor or "ANCHOR_BOTTOMRIGHT"
+    button:SetScript("OnEnter", function(b) b:UpdateTooltip() end)
+    button:SetScript("OnLeave", GameTooltip_Hide)
+    button:SetScript('OnEnter', onEnter)
+    button:SetScript('OnLeave', onLeave)
+
+    -- 🔑 Make sure tooltips know the parent unit
+    button.__owner = element.__owner
+
+    if element.PostCreateButton then
+        element:PostCreateButton(button)
+    end
+
+    return button
+end
+
 
 local function SetPosition(element, from, to)
 	local width = element.width or element.size or 16
@@ -190,11 +209,22 @@ local function updateAura(element, unit, data, position)
 	end
 
 	-- for tooltips
-	button.auraInstanceID = data.auraInstanceID
+	-- link button back to its unit
+    button.unit = unit
+    
+    -- Retail uses auraInstanceID, Classic falls back to SetID
+    if data and data.auraInstanceID then
+        button.auraInstanceID = data.auraInstanceID
+    end
+    button:SetID(position)
 	button.isHarmful = data.isHarmful
+	button.filter = element.filter or (data.isHarmful and "HARMFUL" or "HELPFUL")
 
 	if(button.Cooldown and not element.disableCooldown) then
 		if(data.duration > 0) then
+			if (element.disableCooldownText) then
+				button.Cooldown:SetHideCountdownNumbers(true)
+			end
 			button.Cooldown:SetCooldown(data.expirationTime - data.duration, data.duration, data.timeMod)
 			button.Cooldown:Show()
 		else
@@ -244,7 +274,72 @@ local function updateAura(element, unit, data, position)
 	end
 end
 
+local function IsBossSource(sourceUnit)
+    if not sourceUnit then return false end
+
+    -- Most reliable on Retail
+    if IsEncounterInProgress and IsEncounterInProgress() then
+        for i = 1, 5 do
+            if UnitExists("boss"..i) and UnitIsUnit(sourceUnit, "boss"..i) then
+                return true
+            end
+        end
+    end
+
+    -- Fallback (Classic / no encounter API): if any boss unit exists, treat matching source as boss
+    for i = 1, 5 do
+        local b = "boss"..i
+        if UnitExists(b) and UnitIsUnit(sourceUnit, b) then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function IsSpellInList(list, data)
+    if not list or not data then return false end
+
+    local spellId = data.spellId or data.spellID
+    if not spellId then return false end
+
+    return list[spellId] == true
+end
+
+local function IsDebuffDispellable(data)
+    local dispelType = data and (data.dispelName or data.type)
+    if not dispelType then
+        return false
+    end
+
+    if Roth_UI and ns.RolescanDispelDebuff then
+        return ns.RolescanDispelDebuff(dispelType) and true or false
+    end
+
+    return true
+end
+
 local function FilterAura(element, unit, data)
+	if not data or not data.name then return end
+
+	if element.blacklist and IsSpellInList(element.blacklist, data) then
+	    return false
+	end
+	
+	-- 2) Whitelist always shows
+	if element.whitelist and IsSpellInList(element.whitelist, data) then
+	    return true
+	end
+
+	-- 3) Only Dispellable debuffs (with boss aura bypass)
+	if element.onlyDispellable and data.isHarmful then
+	    local bossApplied = IsBossSource(data.sourceUnit)
+
+	    if not bossApplied and not IsDebuffDispellable(data) then
+	        return false
+	    end
+	end
+
 	if((element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and data.name)) then
 		return true
 	end
@@ -284,6 +379,20 @@ local function processData(element, unit, data)
 	end
 
 	return data
+end
+
+local function SortDebuffsDispellableFirst(a, b)
+  local aDispellable = ns.Roles.canDispelDebuff(a.dispelName or a.type)
+  local bDispellable = ns.Roles.canDispelDebuff(b.dispelName or b.type)
+
+  if aDispellable and not bDispellable then
+    return true
+  elseif bDispellable and not aDispellable then
+    return false
+  else
+    -- fall back to default aura sorting
+    return SortAuras(a, b)
+  end
 end
 
 local function UpdateAuras(self, event, unit, updateInfo)
@@ -602,7 +711,7 @@ local function UpdateAuras(self, event, unit, updateInfo)
 		else
 			if(updateInfo.addedAuras) then
 				for _, data in next, updateInfo.addedAuras do
-					if(data.isHelpful and not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, buffFilter)) then
+					if(data.isHelpful) then
 						buffs.all[data.auraInstanceID] = processData(buffs, unit, data)
 
 						if((buffs.FilterAura or FilterAura) (buffs, unit, data)) then
@@ -760,7 +869,7 @@ local function UpdateAuras(self, event, unit, updateInfo)
 				table.insert(debuffs.sorted, debuffs.all[auraInstanceID])
 			end
 
-			table.sort(debuffs.sorted, debuffs.SortDebuffs or debuffs.SortAuras or SortAuras)
+			table.sort(debuffs.sorted, SortDebuffsDispellableFirst)
 
 			local numVisible = math.min(numDebuffs, #debuffs.sorted)
 

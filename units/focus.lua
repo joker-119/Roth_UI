@@ -102,13 +102,13 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, 14, "THINOUTLINE")
+    local name = func.createFontString(self, cfg.fonts.headerFont, 14, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -13)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.fonts.textFont, 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
     self:Tag(name, "[diablo:name]")
@@ -192,9 +192,40 @@
   ---------------------------------------------
   -- SPAWN FOCUS UNIT
   ---------------------------------------------
-
+  local respawnQueued = false
+local function Init()
+if respawnQueued then return end
+respawnQueued = true
   if cfg.units.focus.show then
-    oUF:RegisterStyle("diablo:focus", createStyle)
-    oUF:SetActiveStyle("diablo:focus")
-    oUF:Spawn("focus", "Roth_UIFocusFrame")
+      ns.Scheduler.NextFrame(function()
+      respawnQueued = false
+      local styleName = "diablo:focus"..GetTime()
+      
+      local f = _G["Roth_UIFocusFrame"]
+      if f then
+          if f.RareIcon then
+              f:DisableElement("RareIcon")
+            end
+          UnregisterUnitWatch(f)
+          f:UnregisterAllEvents()
+          for _, child in ipairs({f:GetChildren()}) do
+              child:UnregisterAllEvents()
+              child:Hide()
+          end
+          
+          f:Hide()
+          f:SetParent(nil)
+          _G["Roth_UIFocusFrame"] = nil
+    end
+    oUF:RegisterStyle(styleName, createStyle)
+    oUF:SetActiveStyle(styleName)
+    local frame = oUF:Spawn("focus", "Roth_UIFocusFrame")
+    frame:EnableElement("RareIcon")
+    frame:UpdateAllElements("ForceUpdate")
+    end)
   end
+end
+
+ns:RegisterInit(Init)
+
+Roth_UI:AddConfig("units.focus", {}, "Focus", Init)

@@ -26,6 +26,9 @@
 	"Roth_UIArcanePower",
 	"Roth_DruidMana",
 	"Roth_UIArtifactPower",
+	"Roth_UIStateStrip",
+	"RothUI_rCooldownFrame",
+	"Roth_UISwingTimer"
   }
   Roth_UI_Orbs = {
   "Roth_UIPowerOrb",
@@ -163,6 +166,99 @@
       end
     elseif (cmd:match"resettemplates") then
       ns.db.resetTemplates()
+        -- State Strip commands
+        elseif cmd:match("^ss") or cmd:match("^statestrip") then
+          local sub = cmd:gsub("^statestrip", "ss")
+          local a, b, rest = sub:match("^ss%s*(%S*)%s*(%S*)%s*(.-)%s*$")
+          a = a or ""
+          b = b or ""
+          rest = rest or ""
+    
+          local SS = ns.StateStrip
+          if not SS then
+            print("Roth_UI: State Strip not loaded")
+            return
+          end
+    
+          if a == "" or a == "help" then
+            print("|c00FF3300State Strip commands:|r")
+            print("|c00FF3300/roth ss addbuff <spellNameOrId>|r")
+            print("|c00FF3300/roth ss adddebuff <spellNameOrId>|r")
+            print("|c00FF3300/roth ss delbuff <spellNameOrId>|r")
+            print("|c00FF3300/roth ss deldebuff <spellNameOrId>|r")
+            print("|c00FF3300/roth ss listbuff|r")
+            print("|c00FF3300/roth ss listdebuff|r")
+            print("|c00FF3300/roth ss clearbuff|r")
+            print("|c00FF3300/roth ss cleardebuff|r")
+            print("|c00FF3300/roth ss test <all|buff|debuff|lowhp|lowmana|clear>|r")
+            return
+          end
+    
+          local function Tail(x, y, z)
+            local s = ""
+            if x and x ~= "" then s = x end
+            if y and y ~= "" then s = (s == "" and y or (s .. " " .. y)) end
+            if z and z ~= "" then s = (s == "" and z or (s .. " " .. z)) end
+            return s
+          end
+    
+          if a == "test" then
+            local mode = b ~= "" and b or "all"
+            if mode == "off" then mode = "clear" end
+            SS.SetTestMode(mode)
+            print("Roth_UI: State Strip test mode: " .. mode)
+            return
+          end
+    
+          if a == "addbuff" then
+            local v = Tail(b, rest)
+            local ok, err = SS.AddTracked("buffs", v)
+            print(ok and ("Roth_UI: tracked buff: " .. v) or ("Roth_UI: failed: " .. (err or "?")))
+            return
+          end
+          if a == "adddebuff" then
+            local v = Tail(b, rest)
+            local ok, err = SS.AddTracked("debuffs", v)
+            print(ok and ("Roth_UI: tracked debuff: " .. v) or ("Roth_UI: failed: " .. (err or "?")))
+            return
+          end
+          if a == "delbuff" then
+            local v = Tail(b, rest)
+            SS.RemoveTracked("buffs", v)
+            print("Roth_UI: untracked buff: " .. v)
+            return
+          end
+          if a == "deldebuff" then
+            local v = Tail(b, rest)
+            SS.RemoveTracked("debuffs", v)
+            print("Roth_UI: untracked debuff: " .. v)
+            return
+          end
+          if a == "clearbuff" then
+            SS.ClearTracked("buffs")
+            print("Roth_UI: cleared tracked buffs")
+            return
+          end
+          if a == "cleardebuff" then
+            SS.ClearTracked("debuffs")
+            print("Roth_UI: cleared tracked debuffs")
+            return
+          end
+          if a == "listbuff" then
+            local list = SS.ListTracked("buffs")
+            print("Roth_UI: tracked buffs (" .. #list .. ")")
+            for i = 1, #list do print(" - " .. list[i]) end
+            return
+          end
+          if a == "listdebuff" then
+            local list = SS.ListTracked("debuffs")
+            print("Roth_UI: tracked debuffs (" .. #list .. ")")
+            for i = 1, #list do print(" - " .. list[i]) end
+            return
+          end
+    
+          print("Roth_UI: unknown ss subcommand. Try /roth ss help")
+          return
     elseif (cmd:match"unlockart") then
       Roth_UIUnlock("art")
 	elseif (cmd:match"unlockorbs") then
@@ -219,6 +315,7 @@
       print("|c00FF3300\/roth unlockall|r, to unlock all frames")
       print("|c00FF3300\/roth lockall|r, to lock all frames")
       print("|c00FF3300\/roth resetall|r, to reset all frames")
+      print("|c00FF3300\/roth ss help|r, state strip tracking & test commands")
     end
   end
 

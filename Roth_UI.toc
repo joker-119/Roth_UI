@@ -1,14 +1,13 @@
-## Interface: 110100
+## Interface: 110200, 11507, 20505
 ## Author: Galaxy
 ## Title: Roth UI
-## Version: 3.3.0
+## Version: 4.2.0
 ## Notes: Galaxy's oUF layout with Diablo flavor!
 ## RequiredDeps:
-## SavedVariables: Roth_UI_DB_GLOB, ShinyBuffsDB, PhanxFontDB, Roth_UI_DB
+## SavedVariables: Roth_UI_DB_GLOB, ShinyBuffsDB, PhanxFontDB, Roth_UI_DB, RothUICraftDB, rChatLevelDB
 ## SavedVariablesPerCharacter: Roth_UI_DB_CHAR, ShinyBuffsPCDB
 
-embeds\oUF\oUF.xml
-embeds\rLib\rLib.xml
+
 
 Libs\Ace3\Ace3.xml
 Libs\LibStub\LibStub.lua
@@ -19,10 +18,26 @@ Libs\LibSharedMedia-3.0\lib.xml
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 
 init.lua
-config.lua
-charspecific.lua
+embeds\oUF\oUF.xml
+embeds\rLib\rLib.xml
 
-embeds\Roth_Config\Roth_Config.lua
+config.lua
+config\state_strip.lua
+core\lib.lua
+
+core\roles.lua
+core\reputation.lua
+core\formatting.lua
+core\media.lua
+core\scheduler.lua
+core\state.lua
+core\caves_conditions.lua
+core\conditions\expr.lua
+core\visibility.lua
+core\caevs_config.lua
+core\state_strip.lua
+
+embeds\rCooldown\rCooldown.xml
 embeds\rChat\rChat.xml
 embeds\rActionBarStyler\rActionBar.xml
 embeds\rButtonTemplate\rButton.xml
@@ -34,9 +49,11 @@ embeds\rRaidManager\rManager.xml
 embeds\rTooltip\rTooltip.xml
 embeds\tullaRange\tulla.xml
 embeds\Roth_ShinyBuffs\shinybuff.xml
-embeds\rObjectiveTracker\core.lua
+embeds\rLFGFilter\rLFGFilter.xml
+#embeds\rObjectiveTracker\core.lua
 embeds\RothFont\font.xml
 
+modules\swingtimer.lua
 modules\oUF_acharges.lua
 modules\oUF_AuraWatch.lua
 modules\oUF_HolyPower.lua
@@ -53,11 +70,9 @@ modules\oUF_TotalAbsorb.lua
 core\db.lua
 core\panel.lua
 core\slashcmd.lua
-core\lib.lua
 core\tags.lua
 core\bars.lua
 core\units.lua
-core\mainmenu.lua
 
 
 units\target.lua

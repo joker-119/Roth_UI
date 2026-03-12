@@ -64,8 +64,15 @@ for _, button in pairs(buttonList) do
 end
 
 --disable reanchoring of the micro menu by the petbattle ui
-PetBattleFrame.BottomFrame.MicroButtonFrame:SetScript("OnShow", nil) --remove the onshow script
-MainMenuBar:SetScript("OnShow", nil)
+if not Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC) and not Roth_UI:CheckClientVersion(WOW_PROJECT_BURNING_CRUSADE_CLASSIC) then
+    PetBattleFrame.BottomFrame.MicroButtonFrame:SetScript("OnShow", nil) --remove the onshow script
+end
+
+if (MainActionBar) then
+    MainActionBar:SetScript("OnShow", nil)
+elseif (MainMenuBar) then
+    MainMenuBar:SetScript("OnShow", nil)
+end
 
 
 if not cfg.show then --wait...you no see me? :(

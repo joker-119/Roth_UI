@@ -1,87 +1,97 @@
-local __, ns = ...
+﻿local __, ns = ...
 local oUF = ns.oUF or oUF
-assert(oUF, 'oUF Reputation was unable to locate oUF install')
+assert(oUF, "oUF Reputation was unable to locate oUF install")
 
-for tag, func in pairs({
-  ['currep'] = function()
-    local __, __, min, __, value = C_Reputation.GetWatchedFactionData()
-    return value - min
-  end,
-  ['maxrep'] = function()
-    local __, __, min, max = C_Reputation.GetWatchedFactionData()
-    return max - min
-  end,
-  ['perrep'] = function()
-    local __, __, min, max, value = C_Reputation.GetWatchedFactionData()
-    return math.floor((value - min) / (max - min) * 100 + 0.5)
-  end,
-  ['standing'] = function()
-    local __, standing = C_Reputation.GetWatchedFactionData()
-    return GetText('FACTION_STANDING_LABEL' .. standing, UnitSex('player'))
-  end,
-  ['reputation'] = function()
-    return C_Reputation.GetWatchedFactionData()
-  end,
-}) do
-  oUF.Tags.Methods[tag] = func
-  oUF.Tags.Events[tag] = 'UPDATE_FACTION'
+-- Tags must pull fresh data too
+oUF.Tags.Methods.currep = function()
+  local name, standing, min, max, value = ns.Reputation.GetFactionData()
+  if not name then return 0 end
+  return value - min
 end
 
+oUF.Tags.Methods.maxrep = function()
+  local name, standing, min, max, value = ns.Reputation.GetFactionData()
+  if not name then return 0 end
+  return max - min
+end
+
+oUF.Tags.Methods.perrep = function()
+  local name, standing, min, max, value = ns.Reputation.GetFactionData()
+  if not name then return 0 end
+  local denom = (max - min)
+  if denom <= 0 then return 0 end
+  return math.floor(((value - min) / denom) * 100 + 0.5)
+end
+
+oUF.Tags.Methods.standing = function()
+  local name, standing = GetFactionData()
+  if not name or not standing then return "" end
+  return GetText("FACTION_STANDING_LABEL" .. standing, UnitSex("player"))
+end
+
+for _, tag in ipairs({ "currep", "maxrep", "perrep", "standing" }) do
+  oUF.Tags.Events[tag] = "UPDATE_FACTION"
+end
 oUF.Tags.SharedEvents.UPDATE_FACTION = true
 
-local function Update(self, event, unit)
-  local reputation = self.Reputation
+local function Update(self)
+  local rep = self.Reputation
+  if not rep then return end
 
-  local _, name, _, standing, min, max, value = C_Reputation.GetWatchedFactionData()
-  if(not name) then
-    return reputation:Hide()
-  else
-    reputation:Show()
+  local name, standing, min, max, value = ns.Reputation.GetFactionData()
+  if not name then
+    rep:Hide()
+    return
   end
 
-  reputation:SetMinMaxValues(0, max - min)
-  reputation:SetValue(value)
+  rep:Show()
 
-  if(reputation.colorStanding) then
-    local color = FACTION_BAR_COLORS[standing]
-    reputation:SetStatusBarColor(color.r, color.g, color.b)
+  local cur = value - min
+  local cap = max - min
+
+  rep:SetMinMaxValues(0, cap)
+  rep:SetValue(cur)
+
+  if rep.colorStanding and standing and FACTION_BAR_COLORS[standing] then
+    local c = FACTION_BAR_COLORS[standing]
+    rep:SetStatusBarColor(c.r, c.g, c.b)
   end
 
-  if(reputation.PostUpdate) then
-    return reputation:PostUpdate(unit, name, standing, min, max, value)
+  if rep.PostUpdate then
+    rep:PostUpdate(self.unit, name, standing, min, max, value)
   end
 end
 
 local function Path(self, ...)
-  return (self.Reputation.Override or Update) (self, ...)
+  return (self.Reputation.Override or Update)(self, ...)
 end
 
 local function ForceUpdate(element)
-  return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+  return Path(element.__owner, "ForceUpdate")
 end
 
 local function Enable(self)
-  local reputation = self.Reputation
-  if(reputation) then
-    reputation.__owner = self
-    reputation.ForceUpdate = ForceUpdate
+  local rep = self.Reputation
+  if not rep then return end
 
-    self:RegisterEvent('UPDATE_FACTION', Path, true)
-    self:RegisterEvent('COMBAT_TEXT_UPDATE', Path, true)
-    self:RegisterEvent('QUEST_FINISHED', Path, true)
+  rep.__owner = self
+  rep.ForceUpdate = ForceUpdate
 
-    if(not reputation:GetStatusBarTexture()) then
-      reputation:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
-    end
+  self:RegisterEvent("UPDATE_FACTION", Path, true)
+  self:RegisterEvent("PLAYER_ENTERING_WORLD", Path, true)
 
-    return true
+  if not rep:GetStatusBarTexture() then
+    rep:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
   end
+
+  return true
 end
 
 local function Disable(self)
-  if(self.Reputation) then
-    self:UnregisterEvent('UPDATE_FACTION', Path)
+  if self.Reputation then
+    self:UnregisterEvent("UPDATE_FACTION", Path)
+    self:UnregisterEvent("PLAYER_ENTERING_WORLD", Path)
   end
 end
 
-oUF:AddElement('Reputation', Path, Enable, Disable)
+oUF:AddElement("Reputation", Path, Enable, Disable)

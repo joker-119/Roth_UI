@@ -231,6 +231,18 @@
   ---------------------------------------------
   --CHARACTER DATA
   ---------------------------------------------
+  local function SafeUpdateOrbView()
+    if ns.panel and ns.panel.HealthOrb then
+        ns.panel.updateOrbView()
+    else
+        -- Defer until panel is ready
+        ns:RegisterInit(function()
+            if ns.panel and ns.panel.HealthOrb then
+                ns.panel.updateOrbView()
+            end
+        end)
+    end
+end
 
   --load character data defaults
   db.loadCharacterDataDefaults = function(type)
@@ -249,7 +261,8 @@
     end
     db.char = Roth_UI_DB_CHAR
     --update the orb view
-    ns.panel.updateOrbView()
+    SafeUpdateOrbView()
+
   end
 
   --load character data
@@ -260,7 +273,8 @@
       db.char.reload = false
     end
     --update the orb view
-    ns.panel.updateOrbView()
+    SafeUpdateOrbView()
+
   end
 
   ---------------------------------------------

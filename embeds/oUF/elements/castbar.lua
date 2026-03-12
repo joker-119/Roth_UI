@@ -547,17 +547,20 @@ local function Enable(self, unit)
 
 		self:RegisterEvent('UNIT_SPELLCAST_START', CastStart)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_START', CastStart)
-		self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
 		self:RegisterEvent('UNIT_SPELLCAST_STOP', CastStop)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', CastStop)
-		self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
 		self:RegisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', CastUpdate)
-		self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
 		self:RegisterEvent('UNIT_SPELLCAST_FAILED', CastFail)
 		self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED', CastFail)
 		self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTIBLE', CastInterruptible)
 		self:RegisterEvent('UNIT_SPELLCAST_NOT_INTERRUPTIBLE', CastInterruptible)
+		
+		if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+		    self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
+            self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
+            self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
+        end
 
 		element.holdTime = 0
 		element.stagePoints = {}
@@ -566,9 +569,18 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			PlayerCastingBarFrame:SetUnit(nil)
-			PetCastingBarFrame:SetUnit(nil)
-			PetCastingBarFrame:UnregisterEvent('UNIT_PET')
+		    if not Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and not Roth_UI:CheckClientVersion(WOW_PROJECT_BURNING_CRUSADE_CLASSIC) then
+		        CastingBarFrame:UnregisterAllEvents()
+		        CastingBarFrame.Show = CastingBarFrame.Hide
+		        CastingBarFrame:Hide()
+		        PetCastingBarFrame:UnregisterAllEvents()
+                PetCastingBarFrame.Show = PetCastingBarFrame.Hide
+                PetCastingBarFrame:Hide()
+		    else
+			    PlayerCastingBarFrame:SetUnit(nil)
+			    PetCastingBarFrame:SetUnit(nil)
+                PetCastingBarFrame:UnregisterEvent('UNIT_PET')
+			end
 		end
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
@@ -618,7 +630,11 @@ local function Disable(self)
 		element:SetScript('OnUpdate', nil)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			PlayerCastingBarFrame:OnLoad()
+		    if Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC) then
+		        CastingBarFrame:OnLoad()
+		    else
+			    PlayerCastingBarFrame:OnLoad()
+			end
 			PetCastingBarFrame:PetCastingBar_OnLoad()
 		end
 	end

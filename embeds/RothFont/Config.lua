@@ -1,26 +1,22 @@
-local addonName, Roth_UI = ...
+local addonName, ns = ...
 local LSM = LibStub("LibSharedMedia-3.0")
-local fonts = AceGUIWidgetLSMlists.font
+local fontList = AceGUIWidgetLSMlists.font
 
 -- Font options
 local fonts = {
-  type = "group",
-  name = "Fonts",
-  order = 1,
-  args = {
     headerFont = {
       type = "select",
       order = 1,
       name = "Header Font",
       dialogControl = 'LSM30_Font',
       desc = "Select the font you'd like to use for large displays, like character names, titles and headers",
-      values = fonts, -- this table needs to be a list of keys found in the sharedmedia type you want
+      values = fontList, -- this table needs to be a list of keys found in the sharedmedia type you want
       get = function()
-        return Roth_UI.db.profile.headerFont -- variable that is my current selection
+        return Roth_UI.db.profile.fonts.headerFont -- variable that is my current selection
       end,
       set = function(self,key)
         print("setting")
-        Roth_UI.db.profile.headerFont = key -- saves our new selection the the current one
+        Roth_UI.db.profile.fonts.headerFont = key -- saves our new selection the the current one
       end,
     },
     headerScale = {
@@ -35,10 +31,10 @@ local fonts = {
       step = 0.01,
       bigStep = 0.05,
       get = function()
-        return Roth_UI.db.profile.headerScale
+        return Roth_UI.db.profile.fonts.headerScale
       end,
       set = function(self, key)
-        Roth_UI.db.profile.headerScale = key
+        Roth_UI.db.profile.fonts.headerScale = key
       end,
     },
     textFont = {
@@ -47,12 +43,12 @@ local fonts = {
       name = "Text Font",
       dialogControl = 'LSM30_Font',
       desc = "Select the font you'd like to use for detail information, like class strings, quest text and cooldowns",
-      values = fonts, -- this table needs to be a list of keys found in the sharedmedia type you want
+      values = fontList, -- this table needs to be a list of keys found in the sharedmedia type you want
       get = function()
-        return Roth_UI.db.profile.textFont -- variable that is my current selection
+        return Roth_UI.db.profile.fonts.textFont -- variable that is my current selection
       end,
       set = function(self,key)
-        Roth_UI.db.profile.textFont = key -- saves our new selection the the current one
+        Roth_UI.db.profile.fonts.textFont = key -- saves our new selection the the current one
       end,
     },
     textScale = {
@@ -67,24 +63,25 @@ local fonts = {
       step = 0.01,
       bigStep = 0.05,
       get = function()
-        return Roth_UI.db.profile.textScale
+        return Roth_UI.db.profile.fonts.textScale
       end,
       set = function(self, key)
-        Roth_UI.db.profile.textScale = key
+        Roth_UI.db.profile.fonts.textScale = key
       end,
     },
-    chat = {
+    chatFont = {
       type = "select",
       order = 5,
       name = "Chat Font",
       dialogControl = 'LSM30_Font',
       desc = "Select the font you'd like to use for chat",
-      values = AceGUIWidgetLSMlists.font, -- this table needs to be a list of keys found in the sharedmedia type you want
+      values = fontList, -- this table needs to be a list of keys found in the sharedmedia type you want
       get = function()
-        return Roth_UI.db.profile.chatFont -- variable that is my current selection
+        return Roth_UI.db.profile.fonts.chatFont -- variable that is my current selection
       end,
       set = function(self,key)
-        Roth_UI.db.profile.chatFont = key -- saves our new selection the the current one
+        Roth_UI.db.profile.fonts.chatFont = key -- saves our new selection the the current one
+        Roth_UI:SkinChats()
       end,
     },
     chatScale = {
@@ -99,17 +96,17 @@ local fonts = {
       step = 0.01,
       bigStep = 0.05,
       get = function()
-        return Roth_UI.db.profile.chatScale
+        return Roth_UI.db.profile.fonts.chatScale
       end,
       set = function(self, key)
-        Roth_UI.db.profile.chatScale = key
+        Roth_UI.db.profile.fonts.chatScale = key
+        Roth_UI:SkinChats()
       end,
     },
   }
-}
 
 -- Users likely wouldn't want to have different fonts for different characters.
-local profileDefaults = {
+Roth_UI.defaults.profile.fonts = {
   headerFont = "Expressway",
   headerScale = 1.0,
   textFont = "Expressway",
@@ -118,4 +115,4 @@ local profileDefaults = {
   chatScale = 1.0,
 }
 
-Roth_UI:AddConfig("fonts", fonts, profileDefaults)
+Roth_UI:AddConfig("fonts", fonts, "Fonts")

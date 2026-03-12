@@ -2,7 +2,6 @@ local parent, ns = ...
 local oUF = ns.oUF or oUF
 
 local class = select(2, UnitClass("player"))
-local spec = GetSpecialization()
 
 local Update = function(self, event, unit, powerType)
   local bar = self.ComboBar

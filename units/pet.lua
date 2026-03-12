@@ -102,13 +102,13 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, 14, "THINOUTLINE")
+    local name = func.createFontString(self, cfg.fonts.headerFont, 14, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -13)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.fonts.textFont, 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
     self:Tag(name, "[diablo:name]")
@@ -198,8 +198,35 @@
   -- SPAWN PET UNIT
   ---------------------------------------------
 
+local respawnQueued = false
+local function Init()
+if respawnQueued then return end
+respawnQueued = true
   if cfg.units.pet.show then
-    oUF:RegisterStyle("diablo:pet", createStyle)
-    oUF:SetActiveStyle("diablo:pet")
-    oUF:Spawn("pet", "Roth_UIPetFrame")
+      ns.Scheduler.NextFrame(function()
+        respawnQueued = false
+        local styleName = "diablo:pet"..GetTime()
+        
+        local f = _G["Roth_UIPetFrame"]
+        if f then
+            UnregisterUnitWatch(f)
+            f:UnregisterAllEvents()
+            for _, child in ipairs({f:GetChildren()}) do
+                child:UnregisterAllEvents()
+                child:Hide()
+            end
+            f:Hide()
+            f:SetParent(nil)
+            _G["Roth_UIPetFrame"] = nil
+        end
+        oUF:RegisterStyle(styleName, createStyle)
+        oUF:SetActiveStyle(styleName)
+        local frame = oUF:Spawn("pet", "Roth_UIPetFrame")
+        frame:UpdateAllElements("ForceUpdate")
+      end)
   end
+end
+
+ns:RegisterInit(Init)
+
+Roth_UI:AddConfig("units.pet", {}, "Pet", Init)

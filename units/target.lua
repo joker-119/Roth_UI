@@ -6,7 +6,7 @@ local addon, ns = ...
 local oUF = ns.oUF or oUF
 
 --get the config
-local cfg = ns.cfg
+local cfg
 
 --get the functions
 local func = ns.func
@@ -37,6 +37,7 @@ end
 --Target Frame
 local createArtwork = function(self)
   local t = self:CreateTexture(nil,"BORDER",nil,-8)
+  t:SetParent(self)
   t:SetPoint("TOP",0,25)
   t:SetPoint("LEFT",-62,0)
   t:SetPoint("RIGHT",60,0)
@@ -129,25 +130,25 @@ end
 --create health power strings
 local createHealthPowerStrings = function(self)
 
-  local name = func.createFontString(self, cfg.font, self.cfg.misc.NameFontSize, "THINOUTLINE")
+  local name = func.createFontString(self, cfg.fonts.headerFont, self.cfg.fontSize.name, "THINOUTLINE")
   name:SetPoint("BOTTOM", self, "TOP", 0, 0)
   name:SetPoint("LEFT", self.Health, 0, 0)
   name:SetPoint("RIGHT", self.Health, 0, 0)
   self.Name = name
 
-  local hpval = func.createFontString(self.Health, cfg.font, self.cfg.health.fontSize, "THINOUTLINE")
-  hpval:SetPoint(self.cfg.health.point, self.cfg.health.x,self.cfg.health.y)
+  local hpval = func.createFontString(self.Health, cfg.fonts.textFont, self.cfg.health.fontSize, "THINOUTLINE")
+  hpval:SetPoint(self.cfg.health.textPos, self.cfg.health.x,self.cfg.health.y)
 
-  local perphp = func.createFontString(self.Health, cfg.font, self.cfg.healper.fontSize, "THINOUTLINE")
-  perphp:SetPoint(self.cfg.healper.point, self.cfg.healper.x,self.cfg.healper.y)
+  local perphp = func.createFontString(self.Health, cfg.fonts.textFont, self.cfg.healper.fontSize, "THINOUTLINE")
+  perphp:SetPoint(self.cfg.healper.textPos, self.cfg.healper.x,self.cfg.healper.y)
 
-  local perpp = func.createFontString(self.Power, cfg.font, self.cfg.powper.fontSize, "THINOUTLINE")
-  perpp:SetPoint(self.cfg.powper.point, self.cfg.powper.x,self.cfg.powper.y)
+  local perpp = func.createFontString(self.Power, cfg.fonts.textFont, self.cfg.powper.fontSize, "THINOUTLINE")
+  perpp:SetPoint(self.cfg.powper.textPos, self.cfg.powper.x,self.cfg.powper.y)
 
-  local ppval = func.createFontString(self.Health, cfg.font, self.cfg.power.fontSize, "THINOUTLINE")
-  ppval:SetPoint(self.cfg.power.point, self.cfg.power.x,self.cfg.power.y)
+  local ppval = func.createFontString(self.Health, cfg.fonts.textFont, self.cfg.power.fontSize, "THINOUTLINE")
+  ppval:SetPoint(self.cfg.power.textPos, self.cfg.power.x,self.cfg.power.y)
 
-  local classtext = func.createFontString(self, cfg.font, self.cfg.misc.classFontSize, "THINOUTLINE")
+  local classtext = func.createFontString(self, cfg.fonts.headerFont, self.cfg.fontSize.class, "THINOUTLINE")
   classtext:SetPoint("BOTTOM", self, "TOP", 0, -15)
 
   self:Tag(name, "[diablo:name]")
@@ -200,6 +201,7 @@ local createBuffs = function(self)
   f.spacing = 5
   f.onlyShowPlayer = self.cfg.auras.onlyShowPlayerBuffs
   f.showStealableBuffs = self.cfg.auras.showStealableBuffs
+  f.disableCooldownText = self.cfg.auras.disableCooldownText
   self.Buffs = f
 end
 
@@ -217,6 +219,7 @@ local createDebuffs = function(self)
   f.spacing = 5
   f.showDebuffType = self.cfg.auras.showDebuffType
   f.onlyShowPlayer = self.cfg.auras.onlyShowPlayerDebuffs
+  f.disableCooldownText = self.cfg.auras.disableCooldownText
   self.Debuffs = f
 end
 
@@ -349,9 +352,50 @@ end
 ---------------------------------------------
 -- SPAWN TARGET UNIT
 ---------------------------------------------
+local respawnQueued = false
 
-if cfg.units.target.show then
-  oUF:RegisterStyle("diablo:target", createStyle)
-  oUF:SetActiveStyle("diablo:target")
-  oUF:Spawn("target", "Roth_UITargetFrame")
+local function Init()
+    cfg = ns.cfg
+    if respawnQueued then return end
+    respawnQueued = true
+    if cfg.units.target.show then
+        ns.Scheduler.NextFrame(function()
+            respawnQueued = false
+            local styleName = "diablo:target"..GetTime()
+                
+            local f = _G["Roth_UITargetFrame"]
+            if f then
+                if f.RareIcon then
+                    f:DisableElement("RareIcon")  -- only if registered as an element
+                end
+                if f.Name then
+                    f:DisableElement("Name")
+                end
+                    
+                UnregisterUnitWatch(f)
+                f:UnregisterAllEvents()
+                for _, child in ipairs({f:GetChildren()}) do
+                    child:UnregisterAllEvents()
+                    child:Hide()
+                end
+                f:Hide()
+                f:SetParent(nil)
+                _G["Roth_UITargetFrame"] = nil
+            end
+                
+            oUF:RegisterStyle(styleName, createStyle)
+            oUF:SetActiveStyle(styleName)
+            local frame = oUF:Spawn("target", "Roth_UITargetFrame")
+            frame:EnableElement("RareIcon")
+            frame:EnableElement("Name")
+                
+            if UnitExists("target") then
+                frame:UpdateAllElements("ForceUpdate")
+            end
+        end)
+    end
 end
+
+ns:RegisterInit(Init)
+
+Roth_UI:AddConfig("units.target", {}, "Target", Init)

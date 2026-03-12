@@ -13,30 +13,9 @@
   -----------------------------
   -- FUNCTIONS
   -----------------------------
-if not gcfg.embeds.rActionBarStyler then return end
+  if not gcfg.embeds.rActionBarStyler then return end
   if not cfg.enable then return end
   if gcfg.bars.bar4.combineBar4AndBar5 then return end
-
-  local num = NUM_ACTIONBAR_BUTTONS
-  local buttonList = {}
-
-
-  -----------------------------
-  -- INIT
-  -----------------------------
-
-  --get the addon namespace
-  local addon, ns = ...
-  local gcfg = ns.cfg
-  --get some values from the namespace
-  local cfg = gcfg.bars.bar5
-  local dragFrameList = ns.dragFrameList
-
-  -----------------------------
-  -- FUNCTIONS
-  -----------------------------
-
-  if not cfg.enable then return end
 
   local num = NUM_ACTIONBAR_BUTTONS
   local buttonList = {}

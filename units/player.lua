@@ -6,7 +6,7 @@
   local oUF = ns.oUF or oUF
 
   --get the config
-  local cfg = ns.cfg
+  local cfg
   --get the database
   local db = ns.db
 
@@ -72,13 +72,19 @@ local createActionBarBackground = function(self)
 			--Setup Actionbars
 		local setupBarTexture = function()
 		if C_AddOns.IsAddOnLoaded("Bartender4") then
-			t:SetTexture(mediapath.."actionbar_3_2")
+			t:SetTexture(ns.mediapath.."actionbar_3_2")
 		else
 			--Establish Variables
 			local actionbar
 			local levelbar
 			local repbar
-			MainMenuBar.BorderArt:Hide()
+			if MainActionBar and MainActionBar.BorderArt then
+			    MainActionBar.BorderArt:Hide()
+			end
+			if MainMenuExpBar and Roth_UIExpBar then
+			    MainMenuExpBar:Hide()
+			end
+			
 				--Determine ActionBar Status and report vehicle, 3, 2 or 1 depending on actionbars displayed
 				if ((HasVehicleActionBar() and UnitVehicleSkin("player") and UnitVehicleSkin("player") ~= "") or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= "")) or UnitHasVehicleUI("player") then
 					bar = "vehicle"
@@ -92,7 +98,7 @@ local createActionBarBackground = function(self)
 				
 				local bar_count = 0
 				--Determine is player is max level
-				if UnitLevel("player") == MAX_PLAYER_LEVEL or (not self.cfg.expbar.show) then
+				if UnitLevel("player") == GetMaxLevelForPlayerExpansion() or (not self.cfg.expbar.show) then
 					levelbar = false
 				else
 					levelbar = true
@@ -100,7 +106,14 @@ local createActionBarBackground = function(self)
 				end
 		
 				--Determine if player is 'watching' a faction (show rep as exp bar)
-				if C_Reputation.GetWatchedFactionData() and self.cfg.repbar.show then
+				local faction
+				if not Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and not Roth_UI:CheckClientVersion(WOW_PROJECT_BURNING_CRUSADE_CLASSIC) then
+				    faction = GetWatchedFactionInfo()
+				else
+				    faction = C_Reputation.GetWatchedFactionData()
+				end
+				
+				if faction and self.cfg.repbar.show then
 					repbar = true
 					bar_count = bar_count+1
 				else
@@ -136,10 +149,15 @@ local createActionBarBackground = function(self)
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_3_1")
 					Roth_UIExpBar:ClearAllPoints()
 					Roth_UIRepBar:ClearAllPoints()
-					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
-					Roth_UIExpBar:SetSize(367*cfg.scale, 8*cfg.scale)
-					Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
-					Roth_UIRepBar:SetSize(367*cfg.scale, 8*cfg.scale)
+					if (levelbar) then 
+					    Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
+					    Roth_UIExpBar:SetSize(367*cfg.scale, 8*cfg.scale)
+					end
+					if (repbar) then
+					    Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 121*cfg.scale)
+					    Roth_UIRepBar:SetSize(367*cfg.scale, 8*cfg.scale)
+					end
+					
 				--If we are displaying 2 actionbars and all 3 'exp' bars, set positions for all bars.
 				if bar == "2" and bar_count == 3 then
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_3")
@@ -164,9 +182,11 @@ local createActionBarBackground = function(self)
 					t:SetTexture("Interface\\AddOns\\Roth_UI\\media\\actionbar_2_1")
 					Roth_UIExpBar:ClearAllPoints()
 					Roth_UIRepBar:ClearAllPoints()
-					Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 101*cfg.scale)
-					Roth_UIExpBar:SetSize(389*cfg.scale, 8*cfg.scale)
-					if not levelbar then 
+					if levelbar then
+					    Roth_UIExpBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 101*cfg.scale)
+					    Roth_UIExpBar:SetSize(389*cfg.scale, 8*cfg.scale)
+					end
+					if repbar then 
 						Roth_UIRepBar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 0, 101*cfg.scale)
 						Roth_UIRepBar:SetSize(389*cfg.scale, 8*cfg.scale)
 					end
@@ -550,15 +570,15 @@ end
     local values = CreateFrame("Frame","$parentValues",overlay)
     values:SetAllPoints(orb)
     --top value
-    values.top = func.createFontString(values, cfg.font, 28, "THINOUTLINE")
+    values.top = func.createFontString(values, cfg.fonts.textFont, 28, "THINOUTLINE")
     values.top:SetPoint("CENTER", 0, 10)
     values.top:SetTextColor(orbcfg.value.top.color.r,orbcfg.value.top.color.g,orbcfg.value.top.color.b)
     --bottom value
-    values.bottom = func.createFontString(values, cfg.font, 16, "THINOUTLINE")
+    values.bottom = func.createFontString(values, cfg.fonts.textFont, 16, "THINOUTLINE")
     values.bottom:SetPoint("CENTER", 0, -10)
     values.bottom:SetTextColor(orbcfg.value.top.color.r,orbcfg.value.top.color.g,orbcfg.value.top.color.b)
     orb.values = values
-
+    
     --register the tags
     if orb.type == "HEALTH" then
       self:Tag(orb.values.top, "[diablo:HealthOrbTop]")
@@ -569,7 +589,7 @@ end
     end
     
     --new absorb display directly on the orb
-    if self.cfg.absorb.show and orb.type == "HEALTH" then    
+    if self.cfg.absorb.show and orb.type == "HEALTH" and not Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC) then    
       local absorbBar = CreateFrame("StatusBar", nil, values)
       --absorbBar:SetAllPoints()
       absorbBar:SetPoint("CENTER")
@@ -586,16 +606,6 @@ end
       absorbBar.texture.maxHeight = absorbBar:GetHeight()
       absorbBar.texture:SetHeight(absorbBar.texture.maxHeight)
       absorbBar.texture:SetTexture("Interface\\AddOns\\Roth_UI\\media\\orb_absorb_glow")
-      --absorbBar.texture:SetVertexColor(1,1,1,1)
-      --absorbBar.texture:SetBlendMode("ADD")
-      --absorbBar.texture:SetTexCoord(0,1,0,0.2)
-      --absorbBar.texture:SetHeight(absorbBar.texture.maxHeight*0.2)
-      --[[
-      absorbBar.PostUpdate = function(self,unit,absorb,maxHealth)
-        self.texture:SetTexCoord(0,1,0,absorb/maxHealth)
-        self.texture:SetHeight(absorbBar.texture.maxHeight*absorb/maxHealth)
-      end
-      ]]--
       absorbBar:HookScript("OnValueChanged", function(bar,absorb)
         local minVal, maxHealth = bar:GetMinMaxValues()
         if absorb/maxHealth < 0.04 then
@@ -610,6 +620,7 @@ end
       self.TotalAbsorb.Smooth = self.cfg.absorb.smooth or false      
     end
 
+
     if orb.type == "POWER" then
       self.Power = orb.fill
       ns.PowerOrb = orb --save the orb in the namespace
@@ -620,6 +631,7 @@ end
       self.Power.PostUpdate = updateValue
     else
       self.Health = orb.fill
+      func.healPredictionOrb(self, values)
       ns.HealthOrb = orb --save the orb in the namespace
       hooksecurefunc(self.Health, "SetStatusBarColor", updateStatusBarColor)
       self.Health.frequentUpdates = self.cfg.health.frequentUpdates or false
@@ -633,21 +645,21 @@ end
   end
   
 local DruidMana = function(self)
-	local class = select(2, UnitClass("player"))
-	 --Create DruidMana frame
+		 --Create DruidMana frame
 	local DM = CreateFrame("StatusBar", "Roth_DruidMana", Roth_UIPowerOrb)
-		DM:SetSize(140,20)
-		DM:SetPoint("TOP",0,15)
+		DM:SetSize(140*self.cfg.altpower.scale,20*self.cfg.scale)
+		DM:SetPoint("TOP",self.cfg.pos.x,self.cfg.pos.y)
 		DM:SetPoint("LEFT")
 		DM:SetPoint("RIGHT")
 		DM:SetFrameStrata("LOW")
+		DM:SetStatusBarTexture(self.cfg.altpower.texture)
 		
 		func.applyDragFunctionality(DM)
 		
 		
 		--Add Artwork
 		local b = CreateFrame("Frame",nil,Roth_DruidMana)
-			b:SetSize(20,20)
+			b:SetSize(20*self.cfg.scale,20*self.cfg.scale)
 			b:SetPoint("TOP")
 			b:SetPoint("LEFT")
 			b:SetPoint("RIGHT")
@@ -663,24 +675,11 @@ local DruidMana = function(self)
 		b:RegisterEvent("PLAYER_ENTERING_WORLD")
 		b:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 		b:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
-		b:SetScript("OnEvent", function(...)
-			local self, event, unit = ...
-			if unit and unit ~= "player" then return end
-			local playerclass = select(2, UnitClass("player"))
-			if playerclass == "PRIEST" and GetSpecialization() == 3 then
-				b:Show()
-			elseif playerclass == "DRUID" and GetSpecialization() ~= 4 and GetSpecialization() ~= 2 and GetSpecialization() ~= 3 and GetShapeshiftForm() ~= 1 and GetShapeshiftForm() ~= 2 and GetShapeshiftForm() ~= 3 and GetShapeshiftForm() ~= 6 then
-				b:Show()
-			elseif playerclass == "SHAMAN" and GetSpecialization() ~= 3 then
-				b:Show()
-			else
-				b:Hide()
-			end
-		end)
+
 		--Register with oUF
-		self.DruidMana = DM
-		self.DruidMana.colorPower = DM
-		self.DruidMana.bg = nil
+		self.AdditionalPower = DM
+		self.AdditionalPower.colorPower = DM
+		self.AdditionalPower.bg = b
 end
 
 
@@ -693,12 +692,16 @@ end
   local createStyle = function(self)
 
     --apply config to self
-    self.cfg = cfg.units.player
+    self.cfg = ns.cfg.units.player
     self.cfg.style = "player"
 
     --init
     initUnitParameters(self)
+    --experience bar
+    bars.createExpBar(self)
 
+    --reputation bar
+    bars.createRepBar(self)
     --create the actionbarbackground
     createActionBarBackground(self)
 
@@ -708,17 +711,14 @@ end
     createOrb(self,"POWER")
 	
     --druidmana
-    DruidMana(self)
+    if self.cfg.altpower.show then
+        DruidMana(self)
+    end
+
 
     --create art textures do this now for correct frame stacking
     createAngelFrame(self)
     createDemonFrame(self)
-
-    --experience bar
-    bars.createExpBar(self)
-
-    --reputation bar
-    bars.createRepBar(self)
 	
     --bottomline
     createBottomLine(self)
@@ -726,15 +726,15 @@ end
     --icons
     if self.cfg.icons.resting.show then
       local pos = self.cfg.icons.resting.pos
-      self.Resting = func.createIcon(self,"OVERLAY",32,self,pos.a1,pos.a2,pos.x,pos.y,-1)
+      self.RestingIndicator = func.createIcon(self,"OVERLAY",32,self,pos.a1,pos.a2,pos.x,pos.y,-1)
     end
     if self.cfg.icons.pvp.show then
       local pos = self.cfg.icons.pvp.pos
-      self.PvP = func.createIcon(self,"OVERLAY",44,self,pos.a1,pos.a2,pos.x,pos.y,-1)
+      self.PvPIndicator = func.createIcon(self,"OVERLAY",44,self,pos.a1,pos.a2,pos.x,pos.y,-1)
     end
     if self.cfg.icons.combat.show then
       local pos = self.cfg.icons.combat.pos
-      self.Combat = func.createIcon(self,"OVERLAY",32,self,pos.a1,pos.a2,pos.x,pos.y,-1)
+      self.CombatIndicator = func.createIcon(self,"OVERLAY",32,self,pos.a1,pos.a2,pos.x,pos.y,-1)
     end
 
     --castbar
@@ -743,50 +743,51 @@ end
           func.createCastbar(self)
       end
     if self.cfg.castbar.hideDefault then
-        PlayerCastingBarFrame:UnregisterAllEvents() 
-        PlayerCastingBarFrame.Show = PlayerCastingBarFrame.Hide
-        PlayerCastingBarFrame:Hide()
+        local castBar
+        if not Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and not Roth_UI:CheckClientVersion(WOW_PROJECT_BURNING_CRUSADE_CLASSIC) then
+            castBar = CastingBarFrame
+        else
+            castBar = PlayerCastingBarFrame
+        end
+        castBar:UnregisterAllEvents() 
+        castBar.Show = castBar.Hide
+        castBar:Hide()
     end
 
     --warlock bars
-    if cfg.playerclass == "WARLOCK" and self.cfg.soulshards.show then
+    if ns.player.class == "WARLOCK" and self.cfg.soulshards.show then
       bars.createSoulShardPowerBar(self)
     end
 	
 	--mage bars
-	if cfg.playerclass == "MAGE" and self.cfg.arcbar.show then
+	if ns.player.class == "MAGE" and self.cfg.arcbar.show then
 		bars.createArcBar(self)
 	end
 
     --holypower
-    if cfg.playerclass == "PALADIN" and self.cfg.holypower.show then
+    if ns.player.class == "PALADIN" and self.cfg.holypower.show then
       bars.createHolyPowerBar(self)
     end
 
     --harmony
-    if cfg.playerclass == "MONK" and self.cfg.harmony.show then
+    if ns.player.class == "MONK" and self.cfg.harmony.show then
       bars.createHarmonyPowerBar(self)
     end
 
     --runes
-    if cfg.playerclass == "DEATHKNIGHT" and self.cfg.runes.show then
+    if ns.player.class == "DEATHKNIGHT" and self.cfg.runes.show then
       --position deathknight runes
       bars.createRuneBar(self)
     end
     
     --combobar
-    if (cfg.playerclass == "ROGUE" or cfg.playerclass == "DRUID") and self.cfg.combobar.show then
+    if (ns.player.class == "ROGUE" or ns.player.class == "DRUID") and self.cfg.combobar.show then
       bars.createComboBar(self)
     end
 
     --create portrait
     if self.cfg.portrait.show then
       func.createStandAlonePortrait(self)
-    end
-
-    --make alternative power bar movable
-    if self.cfg.altpower.show then
-      func.createAltPowerBar(self,"oUF_AltPowerPlayer")
     end
 
     --add self to unit container (maybe access to that unit is needed in another style)
@@ -797,8 +798,38 @@ end
   ---------------------------------------------
   -- SPAWN PLAYER UNIT
   ---------------------------------------------
-  if cfg.units.player.show then
-    oUF:RegisterStyle("diablo:player", createStyle)
-    oUF:SetActiveStyle("diablo:player")
-    oUF:Spawn("player", "Roth_UIPlayerFrame")
+  
+local respawnQueued = false
+
+local function Init()
+if respawnQueued then return end
+respawnQueued = true
+cfg = ns.cfg
+    if cfg.units.player.show then
+        ns.Scheduler.NextFrame(function()
+            respawnQueued = false
+            local styleName = "diablo:player"..GetTime()
+            
+            local f = _G["Roth_UIPlayerFrame"]
+            if f then
+                UnregisterUnitWatch(f)
+                f:UnregisterAllEvents()
+                for _, child in ipairs({f:GetChildren()}) do
+                    child:UnregisterAllEvents()
+                    child:Hide()
+                end
+                f:Hide()
+                f:SetParent(nil)
+                _G["Roth_UIPlayerFrame"] = nil
+            end
+            oUF:RegisterStyle(styleName, createStyle)
+            oUF:SetActiveStyle(styleName)
+            local frame = oUF:Spawn("player", "Roth_UIPlayerFrame")
+            frame:UpdateAllElements("ForceUpdate")
+        end)
   end
+end
+
+ns:RegisterInit(Init)
+
+Roth_UI:AddConfig("units.player", {}, "Player", Init)

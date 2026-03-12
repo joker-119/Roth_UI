@@ -5,15 +5,53 @@ if select(2, UnitClass("player")) ~= "MAGE" then return end
 local parent, ns = ...
 local oUF = ns.oUF or oUF
 
+print("Arc Charges")
 
+-- Locals
+local POWER_ARCANE_CHARGES = (Enum and Enum.PowerType and Enum.PowerType.ArcaneCharges) or 16
+local ARCANE_CHARGE_NAME = GetSpellInfo("Arcane Charge") or "Arcane Charge" -- fine for enUS; swap to spellID if you prefer
 
-local SPELL_POWER_ARCANE_CHARGES     = Enum.PowerType.ArcaneCharges
+-- MoP Classic: scan HARMFUL auras for Arcane Charge stacks
+local function GetArcaneChargeCount_Classic(unit)
+  for i = 1, 40 do
+    local name, _, count = UnitAura(unit, i, "HARMFUL")
+    if not name then break end
+    if name == ARCANE_CHARGE_NAME then
+      return count or 0
+    end
+  end
+  return 0
+end
+
+-- Retail: real secondary power
+local function GetArcaneChargeCount_Retail(unit)
+  return UnitPower(unit, POWER_ARCANE_CHARGES) or 0
+end
+
+-- Public: universal getter
+function GetArcaneChargeCount(unit)
+  if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+    return GetArcaneChargeCount_Retail(unit or "player")
+  else
+    return GetArcaneChargeCount_Classic(unit or "player")
+  end
+end
+
+-- Optional: a matching "max" helper
+function GetArcaneChargeMax(unit)
+  if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+    return UnitPowerMax(unit or "player", POWER_ARCANE_CHARGES) or 4
+  else
+    return 4 -- MoP Classic is always 0..4 stacks
+  end
+end
+
 
 
 local Update = function(self, event, unit, powerType)
   local bar = self.ArcBar
-  local cur = UnitPower(unit, SPELL_POWER_ARCANE_CHARGES)
-  local max = UnitPowerMax(unit, SPELL_POWER_ARCANE_CHARGES)
+  local cur = GetArcaneChargeCount("player")
+  local max = GetArcaneChargeMax("player")
 
   --adjust the width of the soulshard power frame
   local w = 64*(max+1)
@@ -46,15 +84,14 @@ local Visibility = function(self, event, unit)
   local bar = self.ArcBar
   if UnitHasVehicleUI("player")
     or ((HasVehicleActionBar() and UnitVehicleSkin("player") and UnitVehicleSkin("player") ~= "")
-    or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= ""))
-  then
-    bar:Hide()
-	elseif (GetSpecialization() == 1) then
-    bar:Show()
-    element.ForceUpdate(element)
-  else
-    bar:Hide()
-  end
+    or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= "")) then
+        bar:Hide()
+    elseif (GetPrimaryTalentTree() == 1) then
+        bar:Show()
+        element.ForceUpdate(element)
+    else
+        bar:Hide()
+    end
 end
 
 local Path = function(self, ...)
@@ -68,6 +105,19 @@ end
 local function Enable(self, unit)
   local element = self.ACharges
   if(element and unit == "player") then
+        local bar = self.ArcBar
+        if UnitHasVehicleUI("player")
+          or ((HasVehicleActionBar() and UnitVehicleSkin("player") and UnitVehicleSkin("player") ~= "")
+          or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= "")) then
+              bar:Hide()
+          elseif (GetPrimaryTalentTree() == 1) then
+              bar:Show()
+              if (element.ForceUpdate) then
+                element.ForceUpdate(element)
+            end
+          else
+              bar:Hide()
+          end
     element.__owner = self
     element.ForceUpdate = ForceUpdate
 

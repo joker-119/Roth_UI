@@ -1,3 +1,7 @@
 <Ui xmlns="www.blizzard.com/wow/ui">
-	<Script file="tullaRange.lua" />
+	<Script file='tullaRange.lua' />
+	<Script file='actionState.lua' />
+	<Script file='attackFlash.lua' />
+	<Script file='updater.classic.lua' />
+	<Script file='updater.modern.lua' />
 </Ui>

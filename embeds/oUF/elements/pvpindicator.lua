@@ -53,12 +53,17 @@ local function Update(self, event, unit)
 
 	local status
 	local factionGroup = UnitFactionGroup(unit) or 'Neutral'
-	local honorRewardInfo = C_PvP.GetHonorRewardInfo(UnitHonorLevel(unit))
+	local honorRewardInfo
+
+	-- Retail only: fetch honor badge info
+	if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+		honorRewardInfo = C_PvP.GetHonorRewardInfo(UnitHonorLevel(unit))
+	end
 
 	if(UnitIsPVPFreeForAll(unit)) then
 		status = 'FFA'
 	elseif(factionGroup ~= 'Neutral' and UnitIsPVP(unit)) then
-		if(unit == 'player' and UnitIsMercenary(unit)) then
+		if(unit == 'player' and Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and UnitIsMercenary(unit)) then
 			if(factionGroup == 'Horde') then
 				factionGroup = 'Alliance'
 			elseif(factionGroup == 'Alliance') then
@@ -72,11 +77,15 @@ local function Update(self, event, unit)
 	if(status) then
 		element:Show()
 
-		if(element.Badge and honorRewardInfo) then
+		-- Retail: badge + honor system textures
+		if(Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and element.Badge and honorRewardInfo) then
 			element:SetTexture(honorRewardInfo.badgeFileDataID)
 			element:SetTexCoord(0, 1, 0, 1)
+
 			element.Badge:SetAtlas('honorsystem-portrait-' .. factionGroup, false)
 			element.Badge:Show()
+
+		-- Classic fallback: old school PVP icons only
 		else
 			element:SetTexture([[Interface\TargetingFrame\UI-PVP-]] .. status)
 			element:SetTexCoord(0, 0.65625, 0, 0.65625)
@@ -128,7 +137,9 @@ local function Enable(self)
 		element.ForceUpdate = ForceUpdate
 
 		self:RegisterEvent('UNIT_FACTION', Path)
-		self:RegisterEvent('HONOR_LEVEL_UPDATE', Path, true)
+		if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+		    self:RegisterEvent('HONOR_LEVEL_UPDATE', Path, true)
+		end
 
 		return true
 	end
@@ -144,7 +155,9 @@ local function Disable(self)
 		end
 
 		self:UnregisterEvent('UNIT_FACTION', Path)
-		self:UnregisterEvent('HONOR_LEVEL_UPDATE', Path)
+		if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+		    self:UnregisterEvent('HONOR_LEVEL_UPDATE', Path)
+		end
 	end
 end
 

@@ -252,7 +252,7 @@ local eventlessUnits = {
 }
 
 local function isEventlessUnit(unit)
-	return unit:match('%w+target') or eventlessUnits[unit]
+	return unit == nil or unit:match('%w+target') or eventlessUnits[unit]
 end
 
 local function initObject(unit, style, styleFunc, header, ...)
@@ -639,7 +639,12 @@ do
 		local name = overrideName or generateName(nil, ...)
 		local header = CreateFrame('Frame', name, PetBattleFrameHider, template)
 
-		header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate, PingableUnitFrameTemplate')
+        if not Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+            header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate')
+        else
+            header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate, PingableUnitFrameTemplate')
+        end
+        
 		for i = 1, select('#', ...), 2 do
 			local att, val = select(i, ...)
 			if(not att) then break end
@@ -730,7 +735,12 @@ function oUF:Spawn(unit, overrideName)
 	unit = unit:lower()
 
 	local name = overrideName or generateName(unit)
-	local object = CreateFrame('Button', name, PetBattleFrameHider, 'SecureUnitButtonTemplate, PingableUnitFrameTemplate')
+	local object
+	if not Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+	    object = CreateFrame('Button', name, PetBattleFrameHider, 'SecureUnitButtonTemplate')
+	else
+	    object = CreateFrame('Button', name, PetBattleFrameHider, 'SecureUnitButtonTemplate, PingableUnitFrameTemplate')
+	end
 	Private.UpdateUnits(object, unit)
 
 	self:DisableBlizzard(unit)

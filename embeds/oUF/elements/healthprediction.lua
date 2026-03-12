@@ -264,6 +264,7 @@ local function ForceUpdate(element)
 end
 
 local function Enable(self)
+    if Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC) then return end
 	local element = self.HealthPrediction
 	if(element) then
 		element.__owner = self
@@ -323,6 +324,7 @@ local function Enable(self)
 end
 
 local function Disable(self)
+    if Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC) then return end
 	local element = self.HealthPrediction
 	if(element) then
 		if(element.myBar) then

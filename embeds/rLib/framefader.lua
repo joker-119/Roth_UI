@@ -97,7 +97,10 @@ local function SpellFlyoutOnShow(self)
     end
   end
 end
-SpellFlyout:HookScript("OnShow", SpellFlyoutOnShow)
+
+if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+    SpellFlyout:HookScript("OnShow", SpellFlyoutOnShow)
+end
 
 function rLib:CreateFrameFader(frame, faderConfig)
   if frame.faderConfig then return end

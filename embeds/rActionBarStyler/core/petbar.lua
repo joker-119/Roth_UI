@@ -28,9 +28,15 @@ if not gcfg.embeds.rActionBarStyler then return end
   frame:SetScale(cfg.scale)
 
   --move the buttons into position and reparent them
-  PetActionBar:ClearAllPoints()
-  PetActionBar:SetParent(frame)
-  PetActionBar:EnableMouse(false)
+  local petFrame
+  if not Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and not Roth_UI:CheckClientVersion(WOW_PROJECT_BURNING_CRUSADE_CLASSIC) then
+      petFrame = PetActionBarFrame
+    else
+        petFrame = PetActionBar
+end
+  petFrame:ClearAllPoints()
+  petFrame:SetParent(frame)
+  petFrame:EnableMouse(false)
 
   for i=1, num do
     local button = _G["PetActionButton"..i]

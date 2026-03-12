@@ -131,7 +131,16 @@ function oUF:DisableBlizzard(unit)
 				handleFrame('Boss' .. i .. 'TargetFrame', true)
 			end
 		end
-	elseif(unit:match('party%d?$')) then
+	elseif(not Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and unit:match'(party)%d?$' == 'party') then
+    	local id = unit:match'party(%d)'
+    	if(id) then
+    		handleFrame('PartyMemberFrame' .. id)
+    	else
+    		for i=1, 4 do
+    			handleFrame(('PartyMemberFrame%d'):format(i))
+    	    end
+        end
+	elseif(Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and unit:match('party%d?$')) then
 		if(not isPartyHooked) then
 			isPartyHooked = true
 

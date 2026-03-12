@@ -8,7 +8,6 @@
 
   --get the config
   local cfg = ns.cfg
-  local mediapath = "Interface\\AddOns\\Roth_UI\\media\\"
 
   --object container
   local func = CreateFrame("Frame")
@@ -24,7 +23,7 @@
   ---------------------------------------------
   -- FUNCTIONS
   ---------------------------------------------
-
+    
   --number format func
   func.numFormat = function(v)
     if v > 1E10 then
@@ -49,25 +48,6 @@
     return floor(val*1000)/1000
   end
 
-  --format time func
-  func.GetFormattedTime = function(time)
-    local hr, m, s, text
-    if time <= 0 then text = ""
-    elseif(time < 3600 and time > 60) then
-      hr = floor(time / 3600)
-      m = floor(mod(time, 3600) / 60 + 1)
-      text = format("%dm", m)
-    elseif time < 60 then
-      m = floor(time / 60)
-      s = mod(time, 60)
-      text = (m == 0 and format("%ds", s))
-    else
-      hr = floor(time / 3600 + 1)
-      text = format("%dh", hr)
-    end
-    return text
-  end
-
   --backdrop func
   func.createBackdrop = function(f)
     f:SetBackdrop(cfg.backdrop)
@@ -75,10 +55,21 @@
     f:SetBackdropBorderColor(0,0,0,1)
   end
 
+local function NormalizeSpellList(list)
+    if not list then return nil end
+
+    local t = {}
+    for _, spellId in ipairs(list) do
+        t[spellId] = true
+    end
+    return t
+end
+
   --create debuff func
   func.createDebuffs = function(self)
   if self.cfg.vertical then
 	local f = CreateFrame("Frame", nil, self)
+	f.disableCooldownText = self.cfg.auras.disableCooldownText
     f.size = self.cfg.auras.size
     if self.cfg.style == "targettarget" then
       f.num = 8
@@ -101,9 +92,13 @@
     f.spacing = 5
     f.showDebuffType = self.cfg.auras.showDebuffType
     f.onlyShowPlayer = self.cfg.auras.onlyShowPlayerDebuffs
+    f.onlyDispellable = self.cfg.auras.onlyDispellable
+    f.whitelist = NormalizeSpellList(self.cfg.auras.whitelist or {})
+    f.blacklist = NormalizeSpellList(self.cfg.auras.blacklist or {})
     self.Debuffs = f
   else
 	local f = CreateFrame("Frame", nil, self)
+	f.disableCooldownText = self.cfg.auras.disableCooldownText
     f.size = self.cfg.auras.size
     if self.cfg.style == "targettarget" then
       f.num = 8
@@ -123,6 +118,9 @@
     f.spacing = 5
     f.showDebuffType = self.cfg.auras.showDebuffType
     f.onlyShowPlayer = self.cfg.auras.onlyShowPlayerDebuffs
+    f.onlyDispellable = self.cfg.auras.onlyDispellable
+    f.whitelist = NormalizeSpellList(self.cfg.auras.whitelist or {})
+    f.blacklist = NormalizeSpellList(self.cfg.auras.blacklist or {})
     self.Debuffs = f
   end
   end
@@ -147,6 +145,7 @@
     f.spacing = 5
     f.showBuffType = self.cfg.auras.showBuffType
     f.onlyShowPlayer = self.cfg.auras.onlyShowPlayerBuffs
+    f.disableCooldownText = self.cfg.auras.disableCooldownText
     self.Buffs = f
   else
 	local f = CreateFrame("Frame", nil, self)
@@ -165,50 +164,49 @@
     f.spacing = 5
     f.showBuffType = self.cfg.auras.showBuffType
     f.onlyShowPlayer = self.cfg.auras.onlyShowPlayerBuffs
+    f.disableCooldownText = self.cfg.auras.disableCooldownText
     self.Buffs = f
   end
   end
-  
+    
   func.checkColors = function(self, event, unit, full, auras)
-	local hasDebuff = false
-	AuraUtil.ForEachAura(unit, "HARMFUL", nil, function(name, icon, _, type, _, _, _, _, _, spellId, ...)
-		if (type) then
-			if (RothUI:canDispelDebuff(type)) then
-				local color = DebuffTypeColor[type] or DebuffTypeColor.none
-				if (color ~= DebuffTypeColor.none) then
-					hasDebuff = true
-					self.Health.buffOverride = true
-					if (self.Health.glow) then
-						self.Health.glow:SetVertexColor(color.r, color.g, color.b)
-					end
-				end
-			end
-		end
-	end)
+      local hasDebuff = false
+  
+      local function handleAura(name, icon, _, debuffType, _, _, _, _, _, spellId, ...)
+          if debuffType and ns.Roles.canDispelDebuff(debuffType) then
+              local color = DebuffTypeColor[debuffType] or DebuffTypeColor.none
+              if color ~= DebuffTypeColor.none then
+                  hasDebuff = true
+                  self.Health.buffOverride = true
+                  if self.Health.glow then
+                      self.Health.glow:SetVertexColor(color.r, color.g, color.b)
+                  end
+              end
+          end
+      end
+  
+      if AuraUtil and AuraUtil.ForEachAura then
+          -- Retail
+          AuraUtil.ForEachAura(unit, "HARMFUL", nil, handleAura)
+      else
+          -- Classic fallback
+          for i = 1, 40 do
+              local name, icon, _, debuffType, _, _, _, _, _, spellId = UnitAura(unit, i, "HARMFUL")
+              if not name then break end
+              handleAura(name, icon, _, debuffType, _, _, _, _, _, spellId)
+          end
+      end
 
+    -- reset if no debuff found
 	if (not hasDebuff) then
-		self.Health.buffOverride = true
+		self.Health.buffOverride = false
 		if (self.Health.glow) then
 			self.Health.glow:SetVertexColor(0, 0, 0)
 		end
 	end
   end
   
-  function RothUI:canDispelDebuff(type)
-	local role = GetSpecializationRole(GetSpecialization())
-	local class, _, _ = UnitClass("player")
-	if (type == 'Magic') then
-		return role == 'HEALER'
-	elseif (type == 'Curse') then
-		return class == 'Druid' or class == 'Mage' or class == 'Shaman'
-	elseif (type == 'Disease') then
-		return class == 'Monk' or class == 'Paladin' or class == 'Priest'
-	elseif (type == 'Poison') then
-		return class == 'Druid' or class == 'Monk' or class == 'Paladin'
-	else
-		return false
-	end
-  end
+
 	
 
   --Desaturated and Button CD
@@ -227,6 +225,7 @@
 
   --aura icon func
   func.createAuraIcon = function(icons, button)
+    local font = ns.Media.Font(cfg.fonts.textFont)
     --button:SetSize(icons.size,icons.size)
     --button.cd:SetReverse()
     local size = icons.size or button:GetWidth()
@@ -245,8 +244,8 @@
     button.Count:SetPoint("TOPRIGHT", 4, 4)
     button.Count:SetTextColor(0.9,0.9,0.9)
     --fix fontsize to be based on button size
-    button.Count:SetFont(cfg.font,size/1.8,"THINOUTLINE")
-    button.Overlay:SetTexture(mediapath.."gloss2")
+    button.Count:SetFont(font,size/1.8,"THINOUTLINE")
+    button.Overlay:SetTexture(ns.mediapath.."gloss2")
     button.Overlay:SetTexCoord(0,1,0,1)
     button.Overlay:SetPoint("TOPLEFT", -1, 1)
     button.Overlay:SetPoint("BOTTOMRIGHT", 1, -1)
@@ -256,65 +255,71 @@
     local back = button:CreateTexture(nil, "BACKGROUND", nil, 0)
     back:SetPoint("TOPLEFT",button.Icon,"TOPLEFT",-0.18*size,0.18*size)
     back:SetPoint("BOTTOMRIGHT",button.Icon,"BOTTOMRIGHT",0.18*size,-0.18*size)
-    back:SetTexture(mediapath.."simplesquare_glow")
+    back:SetTexture(ns.mediapath.."simplesquare_glow")
     back:SetVertexColor(0, 0, 0, 1)
   end
 
-  --create AltPowerBar
-  func.createAltPowerBar = function(self,name)
-
-    local t,f
-    local num = 4
-    local w = 64*num
-    local h = 22
-
-    local bar = CreateFrame("StatusBar",name,self)
-    bar:SetPoint(self.cfg.altpower.pos.a1,self.cfg.altpower.pos.af,self.cfg.altpower.pos.a2,self.cfg.altpower.pos.x,self.cfg.altpower.pos.y)
-    bar:SetSize(w,h)
-	  bar:SetStatusBarTexture(self.cfg.altpower.texture)
-    bar:SetStatusBarColor(self.cfg.altpower.color.r, self.cfg.altpower.color.g, self.cfg.altpower.color.b)
-    bar.colorTexture = true --color the altpower bar
-    --bar:SetMinMaxValues(0,100)
-    --bar:SetValue(70)
-
-    t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetSize(64,64)
-    t:SetPoint("LEFT",-64,0)
-    t:SetTexture(mediapath.."combo_left")
-    bar.leftedge = t
-
-    t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetSize(64,64)
-    t:SetPoint("RIGHT",64,0)
-    t:SetTexture(mediapath.."combo_right")
-    bar.rightedge = t
-
-    t = bar:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetSize(64*num,64)
-    t:SetPoint("LEFT",0,0)
-    t:SetTexture(mediapath.."combo_back")
-    bar.back = t
-
-    local g = CreateFrame("Frame",nil,bar)
-    g:SetAllPoints(bar)
-
-    t = g:CreateTexture(nil,"BACKGROUND",nil,-8)
-    t:SetSize(64*num,64)
-    t:SetPoint("LEFT",0,0)
-    t:SetAlpha(0.7)
-    t:SetBlendMode("BLEND")
-    t:SetTexture(mediapath.."combo_highlight2")
-
-    f = func.createFontString(g, cfg.font, 24, "THINOUTLINE")
-    f:SetPoint("CENTER", 0, 0)
-    f:SetTextColor(0.8,0.8,0.8)
-    self:Tag(f, "[diablo:altpower]")
-
-    bar:SetScale(self.cfg.altpower.scale)
-    func.simpleDragFunc(bar)
-    self.AltPowerBar = bar
-
-  end
+    --create aura watch func
+func.createAuraWatch = function(self)
+    local auras = {}
+    local spellIDs = {}
+    
+    if self.cfg.aurawatch.spellIds.ALL then
+        for _, id in ipairs(self.cfg.aurawatch.spellIds.ALL) do
+            table.insert(spellIDs, id)
+        end
+    end
+    
+    if self.cfg.aurawatch.spellIds[ns.player.class] then
+        for _, id in ipairs(self.cfg.aurawatch.spellIds[ns.player.class]) do
+            table.insert(spellIDs, id)
+        end
+    end
+    
+    auras.onlyShowPresent = self.cfg.aurawatch.onlyShowPresent
+    auras.presentAlpha = self.cfg.aurawatch.alpha
+        
+    auras.PostCreateIcon = function(self, icon, sid)
+        if icon.cd then
+            icon.cd:SetPoint("TOPLEFT", 1, -1)
+            icon.cd:SetPoint("BOTTOMRIGHT", -1, 1)
+        end
+        --count hack for lifebloom
+        if sid == 33763 and icon.count then
+            icon.count:SetFont("Interface\\AddOns\\Roth_UI\\media\\visitor1.ttf",8,"THINOUTLINE, MONOCHROME")
+            icon.count:ClearAllPoints()
+            icon.count:SetPoint("CENTER", 3, 3)
+            icon.count:SetParent(icon.cd)
+        end
+    end
+        
+    -- Set any other AuraWatch settings
+    auras.icons = {}
+    for i, sid in pairs(spellIDs) do
+        local icon = CreateFrame("Frame", nil, self)
+        icon:SetFrameStrata("TOOLTIP")
+        icon.spellID = sid
+                    
+        local setup = {size = self.cfg.aurawatch.size, pos = self.cfg.aurawatch.pos.a1, x = self.cfg.aurawatch.pos.x * i, y = self.cfg.aurawatch.pos.y}
+        -- set the dimensions and positions
+        icon.size = setup.size
+        icon:SetSize(setup.size,setup.size)
+        --position icon
+        icon:SetPoint("CENTER", self, self.cfg.aurawatch.pos.a1, self.cfg.aurawatch.pos.x + ((i-1) * self.cfg.aurawatch.size), self.cfg.aurawatch.pos.y)
+        --make indicator
+        --if dir[i].indicator then
+        local tex = icon:CreateTexture(nil, "BACKGROUND", nil, 1)
+            tex:SetAllPoints()
+            tex:SetTexture(C_Spell.GetSpellTexture(sid))
+            --tex:SetVertexColor(dir[i].color.r,dir[i].color.g,dir[i].color.b)
+            icon.icon = tex
+        
+            auras.icons[sid] = icon
+    -- Set any other AuraWatch icon settings
+    end
+    --call aurawatch
+    self.AuraWatch = auras
+end
 
 
   --update health func
@@ -394,9 +399,9 @@
   func.createDebuffGlow = function(self)
     local t = self:CreateTexture(nil,"BACKGROUND",nil,-5)
     if self.cfg.style == "target" then
-      t:SetTexture(mediapath.."target_debuffglow")
+      t:SetTexture(ns.mediapath.."target_debuffglow")
     else
-      t:SetTexture(mediapath.."targettarget_debuffglow")
+      t:SetTexture(ns.mediapath.."targettarget_debuffglow")
     end
 	if self.cfg.style == "party" then
 		if cfg.units.party.vertical == true then
@@ -465,7 +470,7 @@
 
     local t = back:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetAllPoints(back)
-    t:SetTexture(mediapath.."portrait_back")
+    t:SetTexture(ns.mediapath.."portrait_back")
     t:SetVertexColor(0.1,0.1,0.1,0.9)
     self.PortraitBack = t
 
@@ -481,14 +486,14 @@
 
 			local border = borderholder:CreateTexture(nil,"BACKGROUND",nil,-6)
 				border:SetAllPoints(borderholder)
-				border:SetTexture(mediapath.."portrait_border")
+				border:SetTexture(ns.mediapath.."portrait_border")
 				border:SetVertexColor(0.6,0.5,0.5)
 				--border:SetVertexColor(1,0,0,1) --threat test
 				self.Border = border
 
 			local gloss = borderholder:CreateTexture(nil,"BACKGROUND",nil,-5)
 				gloss:SetAllPoints(borderholder)
-				gloss:SetTexture(mediapath.."portrait_gloss")
+				gloss:SetTexture(ns.mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
 		else
@@ -499,13 +504,13 @@
 
 			local border = back:CreateTexture(nil,"BACKGROUND",nil,-6)
 				border:SetAllPoints(back)
-				border:SetTexture(mediapath.."portrait_border")
+				border:SetTexture(ns.mediapath.."portrait_border")
 				border:SetVertexColor(0.6,0.5,0.5)
 				self.Border = border
 
 			local gloss = back:CreateTexture(nil,"BACKGROUND",nil,-5)
 				gloss:SetAllPoints(back)
-				gloss:SetTexture(mediapath.."portrait_gloss")
+				gloss:SetTexture(ns.mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
 		end
@@ -521,14 +526,14 @@
 
 			local border = borderholder:CreateTexture(nil,"BACKGROUND",nil,-6)
 				border:SetAllPoints(borderholder)
-				border:SetTexture(mediapath.."portrait_border")
+				border:SetTexture(ns.mediapath.."portrait_border")
 				border:SetVertexColor(0.6,0.5,0.5)
 				--border:SetVertexColor(1,0,0,1) --threat test
 				self.Border = border
 
 			local gloss = borderholder:CreateTexture(nil,"BACKGROUND",nil,-5)
 				gloss:SetAllPoints(borderholder)
-				gloss:SetTexture(mediapath.."portrait_gloss")
+				gloss:SetTexture(ns.mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
 		else
@@ -539,13 +544,13 @@
 
 			local border = back:CreateTexture(nil,"BACKGROUND",nil,-6)
 				border:SetAllPoints(back)
-				border:SetTexture(mediapath.."portrait_border")
+				border:SetTexture(ns.mediapath.."portrait_border")
 				border:SetVertexColor(0.6,0.5,0.5)
 				self.Border = border
 
 			local gloss = back:CreateTexture(nil,"BACKGROUND",nil,-5)
 				gloss:SetAllPoints(back)
-				gloss:SetTexture(mediapath.."portrait_gloss")
+				gloss:SetTexture(ns.mediapath.."portrait_gloss")
 				gloss:SetVertexColor(0.9,0.95,1,0.6)
 
 		end	
@@ -579,7 +584,7 @@
 
     local t = back:CreateTexture(nil,"BACKGROUND",nil,-8)
     t:SetAllPoints(back)
-    t:SetTexture(mediapath.."portrait_back")
+    t:SetTexture(ns.mediapath.."portrait_back")
     t:SetVertexColor(0.1,0.1,0.1,0.9)
 
     if pcfg.use3D then
@@ -592,12 +597,12 @@
 
       local border = borderholder:CreateTexture(nil,"BACKGROUND",nil,-6)
       border:SetAllPoints(borderholder)
-      border:SetTexture(mediapath.."portrait_border")
+      border:SetTexture(ns.mediapath.."portrait_border")
       border:SetVertexColor(0.6,0.5,0.5)
 
       local gloss = borderholder:CreateTexture(nil,"BACKGROUND",nil,-5)
       gloss:SetAllPoints(borderholder)
-      gloss:SetTexture(mediapath.."portrait_gloss")
+      gloss:SetTexture(ns.mediapath.."portrait_gloss")
       gloss:SetVertexColor(0.9,0.95,1,0.6)
 
     else
@@ -608,17 +613,87 @@
 
       local border = back:CreateTexture(nil,"BACKGROUND",nil,-6)
       border:SetAllPoints(back)
-      border:SetTexture(mediapath.."portrait_border")
+      border:SetTexture(ns.mediapath.."portrait_border")
       border:SetVertexColor(0.6,0.5,0.5)
 
       local gloss = back:CreateTexture(nil,"BACKGROUND",nil,-5)
       gloss:SetAllPoints(back)
-      gloss:SetTexture(mediapath.."portrait_gloss")
+      gloss:SetTexture(ns.mediapath.."portrait_gloss")
       gloss:SetVertexColor(0.9,0.95,1,0.6)
 
     end
 
   end
+
+-- Roth D3 minimal icon skin
+-- Uses:
+--  - Interface\\AddOns\\Roth_UI\\media\\simplesquare_roth
+--  - Interface\\AddOns\\Roth_UI\\media\\simplesquare_glow (optional)
+--
+-- Call once per icon frame:
+--   ns.SkinIconMinimal(button, button.icon, { size = 28 })
+
+function ns.SkinIconMinimal(f, icon, opt)
+  if f.__rothSkinned then return end
+  f.__rothSkinned = true
+
+  opt = opt or {}
+
+  -- Tuning knobs (safe defaults)
+  local inset     = opt.inset or 3
+  local bgAlpha   = opt.bgAlpha or 0.72
+  local useGlow   = (opt.glow ~= false) -- default true
+  local crop      = opt.crop or 0.07    -- 0.07 looks good for most icons
+
+  -- Crop icon so Blizzard’s baked borders don’t show
+  icon:ClearAllPoints()
+  icon:SetPoint("TOPLEFT", f, "TOPLEFT", inset, -inset)
+  icon:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -inset, inset)
+  icon:SetTexCoord(crop, 1 - crop, crop, 1 - crop)
+  icon:SetAlpha(0.92)
+
+  -- Dark backing (gives depth, avoids “flat sticker” look)
+  local bg = f:CreateTexture(nil, "BACKGROUND", nil, -8)
+  bg:SetAllPoints(icon)
+  bg:SetColorTexture(0, 0, 0, bgAlpha)
+  f._rothBG = bg
+
+  -- Minimal frame (stone/metal look)
+  local frame = f:CreateTexture(nil, "BORDER", nil, 2)
+  frame:SetAllPoints(f)
+  frame:SetTexture("Interface\\AddOns\\Roth_UI\\media\\simplesquare_roth")
+  frame:SetVertexColor(0.65, 0.60, 0.55)
+  f._rothFrame = frame
+  
+  -- after you create f._rothFrame
+  local hi = f:CreateTexture(nil, "BORDER", nil, 1)
+  hi:SetPoint("TOPLEFT", f, "TOPLEFT", 1, -1)
+  hi:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -1, 1)
+  hi:SetColorTexture(1, 1, 1, 0.06)  -- tiny bevel highlight
+  f._rothHi = hi
+  
+  local sh = f:CreateTexture(nil, "BACKGROUND", nil, -8)
+  sh:SetPoint("TOPLEFT", f, "TOPLEFT", -3, 3)
+  sh:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", 3, -3)
+  sh:SetTexture("Interface\\AddOns\\Roth_UI\\media\\border") -- or simplesquare_glow if border is too sharp
+  sh:SetVertexColor(0, 0, 0, 0.35)
+  f._rothShadow = sh
+  
+  local vignette = f:CreateTexture(nil, "ARTWORK", nil, -1)
+  vignette:SetAllPoints(f.icon)
+  vignette:SetColorTexture(0, 0, 0, 0.10)  -- subtle, raises contrast
+  f._rothVignette = vignette
+
+  -- Optional glow (keep it subtle; show only for “important” states)
+  if useGlow then
+    local glow = f:CreateTexture(nil, "ARTWORK", nil, 3)
+    glow:SetAllPoints(f)
+    glow:SetTexture("Interface\\AddOns\\Roth_UI\\media\\simplesquare_glow")
+    glow:SetAlpha(opt.glowAlpha or 0.9)
+    glow:Hide()
+    f._rothGlow = glow
+  end
+end
 
   --create castbar func
   func.createCastbar = function(f)
@@ -636,8 +711,8 @@
     c:SetStatusBarColor(f.cfg.castbar.color.bar.r,f.cfg.castbar.color.bar.g,f.cfg.castbar.color.bar.b,f.cfg.castbar.color.bar.a)
     --c:SetStatusBarColor(0,0,0,1)
 
-    c.background = c:CreateTexture(nil,"BACKGROUND",nil,-8)
-    c.background:SetTexture(mediapath.."castbar")
+    c.background = c:CreateTexture(nil,"OVERLAY",nil,-8)
+    c.background:SetTexture(ns.mediapath.."castbar")
     c.background:SetPoint("TOP",0,24.9)
     c.background:SetPoint("LEFT",-170,0)
     c.background:SetPoint("RIGHT",170,0)
@@ -648,11 +723,11 @@
     c.bg:SetAllPoints(c)
     c.bg:SetVertexColor(f.cfg.castbar.color.bg.r,f.cfg.castbar.color.bg.g,f.cfg.castbar.color.bg.b,f.cfg.castbar.color.bg.a)
 
-    c.Text =  func.createFontString(c, cfg.font, f.cfg.castbar.TextSize, "THINOUTLINE")
+    c.Text =  func.createFontString(c, cfg.fonts.textFont, f.cfg.castbar.fontSize, "THINOUTLINE")
     c.Text:SetPoint("LEFT", 5, 0)
     c.Text:SetJustifyH("LEFT")
 
-    c.Time =  func.createFontString(c, cfg.font, f.cfg.castbar.TextSize, "THINOUTLINE")
+    c.Time =  func.createFontString(c, cfg.fonts.textFont, f.cfg.castbar.fontSize, "THINOUTLINE")
     c.Time:SetPoint("RIGHT", -2, 0)
 
     c.Text:SetPoint("RIGHT", -50, 0)
@@ -664,7 +739,7 @@
     c.Spark:SetVertexColor(0.8,0.6,0,1)
 
     c.glow = c:CreateTexture(nil, "OVERLAY",nil,-4)
-    c.glow:SetTexture(mediapath.."castbar_glow")
+    c.glow:SetTexture(ns.mediapath.."castbar_glow")
     c.glow:SetPoint("TOP",0,26.5)
     c.glow:SetPoint("LEFT",-35,0)
     c.glow:SetPoint("RIGHT",35,0)
@@ -672,7 +747,7 @@
     c.glow:SetVertexColor(0,0,0,1)
 
     c.highlight = c:CreateTexture(nil,"OVERLAY",nil,-3)
-    c.highlight:SetTexture(mediapath.."castbar_highlight")
+    c.highlight:SetTexture(ns.mediapath.."castbar_highlight")
     c.highlight:SetPoint("TOP",0,26.5)
     c.highlight:SetPoint("LEFT",-35,0)
     c.highlight:SetPoint("RIGHT",35,0)
@@ -712,25 +787,15 @@
       self:SetStatusBarColor(self.cfg.castbar.color.bar.r,self.cfg.castbar.color.bar.g,self.cfg.castbar.color.bar.b,self.cfg.castbar.color.bar.a)
     end
   end
-local LSM = LibStub("LibSharedMedia-3.0")
-
+  
   --fontstring func
   func.createFontString = function(f, font, size, outline,layer)
     local fs = f:CreateFontString(nil, layer or "OVERLAY")
-    fs:SetFont(font, size, outline)
+    local fontPath = ns.Media.Font(font)
+    fs:SetFont(fontPath, size, outline)
     fs:SetShadowColor(0,0,0,1)
     return fs
   end
-
-local function CheckFont()
-	if (Roth_UI.db == nil) then 
-		return false
-	elseif (LSM:Fetch("font", Roth_UI.db.profile.chatFont) == nil) then
-		return false
-	else
-		return true
-	end
-end
 
   --allows frames to become movable but frames can be locked or set to default positions
   func.applyDragFunctionality = function(f,special)
@@ -748,7 +813,18 @@ end
     df:SetFrameStrata("HIGH")
     --df:SetHitRectInsets(-15,-15,-15,-15)
     df:SetScript("OnDragStart", function(self) if IsShiftKeyDown() then self:GetParent():StartMoving() end end)
-    df:SetScript("OnDragStop", function(self) self:GetParent():StopMovingOrSizing() end)
+    df:SetScript("OnDragStop", function(self) 
+        self:GetParent():StopMovingOrSizing()
+            if InCombatLockdown() then return end
+            local f = self:GetParent()
+            local a1, af, a2, x, y = f:GetPoint(1)
+            local afName = (af and af.GetName and af:GetName()) or "UIParent"
+        
+            -- IMPORTANT: mutate the existing pos table so it persists cleanly
+            if not f.cfg then return end
+            local pos = f.cfg.pos
+            pos.a1, pos.af, pos.a2, pos.x, pos.y = a1, afName, a2, x, y
+        end)
     local t = df:CreateTexture(nil,"OVERLAY",nil,6)
     t:SetAllPoints(df)
     t:SetColorTexture(0,1,0)
@@ -815,40 +891,251 @@ end
     return icon
   end
 
-  --heal prediction
-  func.healPrediction = function(self)
-    if not self.cfg.healprediction or (self.cfg.healprediction and not self.cfg.healprediction.show) then return end
-    local w = self.Health:GetWidth()
-    if w == 0 then
-      w = self:GetWidth()-24.5-24.5 --raids and party have no width on the health frame for whatever reason, thus use self and subtract the setpoint values
-    end
-    -- my heals
-    local mhpb = CreateFrame("StatusBar", nil, self.Health)
-    mhpb:SetFrameLevel(self.Health:GetFrameLevel())
-    mhpb:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", 0, 0)
-    mhpb:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", 0, 0)
-    mhpb:SetWidth(w)
-    mhpb:SetStatusBarTexture(self.cfg.healprediction.texture)
-    mhpb:SetStatusBarColor(self.cfg.healprediction.color.myself.r,self.cfg.healprediction.color.myself.g,self.cfg.healprediction.color.myself.b,self.cfg.healprediction.color.myself.a)
-    -- other heals
-    local ohpb = CreateFrame("StatusBar", nil, self.Health)
-    ohpb:SetFrameLevel(self.Health:GetFrameLevel())
-    ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-    ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-    ohpb:SetWidth(w)
-    ohpb:SetStatusBarTexture(self.cfg.healprediction.texture)
-    ohpb:SetStatusBarColor(self.cfg.healprediction.color.other.r,self.cfg.healprediction.color.other.g,self.cfg.healprediction.color.other.b,self.cfg.healprediction.color.other.a)
-    -- Register it with oUF
-    self.HealthPrediction = {
-      myBar = mhpb,
-      otherBar = ohpb,
-      maxOverflow = self.cfg.healprediction.maxoverflow,
-    }
+func.healPrediction = function(self)
+  if not self.cfg.healprediction
+    or (self.cfg.healprediction and not self.cfg.healprediction.show)
+    or Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC)
+  then return end
+
+  local cfg = self.cfg.healprediction
+
+  -- Use the actual filled part of the healthbar
+  local healthTex = self.Health:GetStatusBarTexture()
+  if not healthTex then return end
+
+  local w = self.Health:GetWidth()
+  if w == 0 then
+    w = self:GetWidth() - 24.5 - 24.5
   end
+
+  local overflow = math.floor(w * ((self.cfg.healprediction.maxoverflow or 1.25) -1 ))
+  -- my heals
+  local mhpb = CreateFrame("StatusBar", nil, self.Health)
+  mhpb:SetFrameLevel(self.Health:GetFrameLevel())
+  mhpb:SetStatusBarTexture(cfg.texture)
+  mhpb:SetStatusBarColor(cfg.color.myself.r, cfg.color.myself.g, cfg.color.myself.b, cfg.color.myself.a)
+  mhpb:SetOrientation(self.Health:GetOrientation() or "HORIZONTAL")
+  mhpb:SetReverseFill(self.Health:GetReverseFill() or false)
+
+  mhpb:SetPoint("TOP", self.Health)
+  mhpb:SetPoint("BOTTOM", self.Health)
+  mhpb:SetPoint("LEFT", healthTex, "RIGHT", 0, 0)
+  mhpb:SetWidth(w + overflow)
+
+  -- other heals (stack after my heals)
+  local ohpb = CreateFrame("StatusBar", nil, self.Health)
+  ohpb:SetFrameLevel(self.Health:GetFrameLevel())
+  ohpb:SetStatusBarTexture(cfg.texture)
+  ohpb:SetStatusBarColor(cfg.color.other.r, cfg.color.other.g, cfg.color.other.b, cfg.color.other.a)
+  ohpb:SetOrientation(self.Health:GetOrientation() or "HORIZONTAL")
+  ohpb:SetReverseFill(self.Health:GetReverseFill() or false)
+
+  ohpb:SetPoint("TOP", self.Health)
+  ohpb:SetPoint("BOTTOM", self.Health)
+  ohpb:SetPoint("LEFT", mhpb:GetStatusBarTexture(), "RIGHT", 0, 0)
+  ohpb:SetWidth(w + overflow)
+  
+  self.HealthPrediction = {
+    myBar = mhpb,
+    otherBar = ohpb,
+    maxOverflow = cfg.maxoverflow,
+  }
+  
+  self.Health:SetClipsChildren(false)
+
+end
+
+--========================================================
+-- Heal Prediction Crescent for PLAYER HEALTH ORB
+-- Drop-in replacement for your healPredictionOrb code
+--========================================================
+
+-- Put this in the same file/section where you define other ns.func helpers.
+-- Assumes:
+--   - self.Health is the orb StatusBar (VERTICAL) for the player's health orb
+--   - self.cfg.size exists (orb size)
+--   - self.cfg.healprediction exists (at least .show, .color, .maxoverflow optional)
+--   - You already have your "values" frame (the same parent you used for TotalAbsorb),
+--     but this code will fall back safely if not.
+
+local addon, ns = ...
+local func = ns.func
+
+local function HPOrb_GetTotalIncoming(unit)
+  -- Retail + Wrath+ Classic: UnitGetIncomingHeals exists
+  if UnitGetIncomingHeals then
+    return UnitGetIncomingHeals(unit) or 0
+  end
+  return 0
+end
+
+local function HPOrb_Update(self)
+  local hp = (UnitHealth(self.unit) or 0)
+  local maxhp = (UnitHealthMax(self.unit) or 0)
+  local inc = HPOrb_GetTotalIncoming(self.unit)
+
+  local element = self.OrbHealPrediction
+  if not element or maxhp <= 0 then return end
+
+  -- Hide when full HP or no incoming
+  if hp >= maxhp or inc <= 0 then
+    element:Hide()
+    return
+  end
+
+  local maxOverflow = element.maxOverflow or 1.05
+  local predicted = hp + inc
+
+  -- Overheal indicator (anything beyond maxhp)
+  local willOverheal = predicted > maxhp
+
+  -- Cap predicted to overflow limit so visuals stay sane
+  local cap = maxhp * maxOverflow
+  if predicted > cap then predicted = cap end
+
+  -- We render a "new health value" crescent:
+  -- fraction can exceed 1.0, but the crescent artwork itself can't extend beyond the orb,
+  -- so we clamp the visible fill to 1.0 and use a separate indicator for overheal.
+  local f = predicted / maxhp
+  local fVisual = math.min(math.max(f, 0), 1)
+
+  -- Critical fix:
+  -- DO NOT resize/scale the crescent texture itself (that causes the morphing tips).
+  -- Instead, keep the texture full-size and only change the CLIP WINDOW height.
+  local H = element._h or element:GetHeight() or (self.cfg.size - 5)
+  element._h = H
+
+  element.clip:SetHeight(H * fVisual)
+
+  -- Overheal indicator
+  if element.overTex then
+    if willOverheal then
+      element.overTex:Show()
+    else
+      element.overTex:Hide()
+    end
+  end
+
+  -- Slightly brighten when overhealing (optional, still subtle)
+  if element.fillTex then
+    if willOverheal then
+      element.fillTex:SetVertexColor(element.colOver.r, element.colOver.g, element.colOver.b, element.colOver.a)
+    else
+      element.fillTex:SetVertexColor(element.colNorm.r, element.colNorm.g, element.colNorm.b, element.colNorm.a)
+    end
+  end
+
+  element:Show()
+end
+
+-- Call this from your player-orb creation after self.Health exists (orb fill statusbar)
+func.healPredictionOrb = function(self, parentFrameForOverlay)
+  local cfg = self.cfg and self.cfg.healprediction
+  if not cfg or not cfg.show then return end
+
+  -- If you want to disable on some versions, do it here.
+  -- (You previously had "not classic" checks; heal prediction *does* exist on Wrath+,
+  -- and on many Classic clients. If you want to restrict, add your version check.)
+  if not self.unit then self.unit = "player" end
+
+  -- Pick a sane parent for the crescent.
+  -- Best: the same overlay parent you used for TotalAbsorb (your "values" frame).
+  local parent = parentFrameForOverlay
+              or (self.Health and self.Health:GetParent())
+              or self
+
+  -- Prevent double-creation
+  if self.OrbHealPrediction then
+    self.OrbHealPrediction:Show()
+    HPOrb_Update(self)
+    return
+  end
+
+  local size = (self.cfg and self.cfg.size) or 128
+  local pad = 5
+
+  -- Container: lock it exactly like your absorb glow frame is locked.
+  -- You said you can fix the side; default to RIGHT side here.
+  local healPred = CreateFrame("Frame", nil, parent)
+  healPred:SetSize(size - pad, size - pad)
+  healPred:SetPoint("CENTER", 0, 0)
+  healPred:Hide()
+
+  -- You can adjust these anchors to match your absorb-bar's "fixed to side" positioning:
+  -- healPred:ClearAllPoints()
+  -- healPred:SetPoint("CENTER", parent, "CENTER", 0, 0)
+
+  -- Background (dark green) - fixed, like your absorb bg glow
+  local bg = healPred:CreateTexture(nil, "BACKGROUND", nil, -8)
+  bg:SetAllPoints()
+  bg:SetTexture("Interface\\AddOns\\Roth_UI\\media\\orb_absorb_glow") -- reuse your glow art
+  bg:SetVertexColor(0, 1, 0, 1)
+  bg:SetAlpha(0.18)
+  bg:SetTexCoord(1,0,0,1)
+  healPred.bg = bg
+
+  -- Clip window (THIS is what changes height)
+  local clip = CreateFrame("Frame", nil, healPred)
+  clip:SetPoint("BOTTOMLEFT")
+  clip:SetPoint("BOTTOMRIGHT")
+  clip:SetHeight(0)
+  clip:SetClipsChildren(true)
+  healPred.clip = clip
+
+  -- Full-size fill texture (NEVER resized)
+  local fill = clip:CreateTexture(nil, "ARTWORK", nil, -8)
+  fill:SetAllPoints(healPred) -- note: larger than clip region; clip reveals it
+  fill:SetTexture("Interface\\AddOns\\Roth_UI\\media\\orb_absorb_glow") -- replace with your crescent art if desired
+  fill:SetTexCoord(1,0,0,1)
+  healPred.fillTex = fill
+
+  -- Overheal indicator (small spark at top)
+  local over = healPred:CreateTexture(nil, "OVERLAY", nil, -7)
+  over:SetTexture("Interface\\AddOns\\Roth_UI\\media\\orb_spark") -- reuse your spark art
+  over:SetPoint("TOP", healPred, "TOP", 0, -2)
+  over:SetSize((size - pad) * 0.9, (size - pad) * 0.15)
+  over:SetBlendMode("ADD")
+  over:SetVertexColor(0.4, 1.0, 0.4, 0.9)
+  over:Hide()
+  healPred.overTex = over
+
+  -- Colors (defaults if not configured)
+  local colMy = (cfg.color and cfg.color.myself) or { r = 0.2, g = 1, b = 0.2, a = 0.55 }
+  healPred.colNorm = { r = colMy.r or 0.2, g = colMy.g or 1, b = colMy.b or 0.2, a = colMy.a or 0.55 }
+  healPred.colOver = { r = 0.4, g = 1.0, b = 0.4, a = math.min((healPred.colNorm.a or 0.55) + 0.2, 1) }
+
+  healPred.maxOverflow = cfg.maxoverflow or cfg.maxOverflow or 1.05
+
+  -- Start color
+  fill:SetVertexColor(healPred.colNorm.r, healPred.colNorm.g, healPred.colNorm.b, healPred.colNorm.a)
+
+  -- Save & hook updates
+  self.OrbHealPrediction = healPred
+
+  -- Events that can change prediction without HP changing:
+  -- UNIT_HEAL_PREDICTION is the key one.
+  self:RegisterEvent("UNIT_HEAL_PREDICTION", function(_, _, unit)
+    if unit == self.unit then HPOrb_Update(self) end
+  end)
+
+  -- Still listen to health/maxhealth so it stays correct
+  self:RegisterEvent("UNIT_HEALTH", function(_, _, unit)
+    if unit == self.unit then HPOrb_Update(self) end
+  end)
+  self:RegisterEvent("UNIT_MAXHEALTH", function(_, _, unit)
+    if unit == self.unit then HPOrb_Update(self) end
+  end)
+
+  -- Initial update
+  HPOrb_Update(self)
+end
+
+
+
 
   --total absorb
   func.totalAbsorb = function(self)
-    if not self.cfg.totalabsorb or (self.cfg.totalabsorb and not self.cfg.totalabsorb.show) then return end
+    if not self.cfg.totalabsorb or (self.cfg.totalabsorb and not self.cfg.totalabsorb.show) or Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC) then return end
 	
     local w = self.Health:GetWidth()
 	

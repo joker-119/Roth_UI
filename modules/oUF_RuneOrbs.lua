@@ -4,8 +4,8 @@ local parent, ns = ...
 local oUF = ns.oUF or oUF
 
 oUF.colors.runes = {
-  {0,1,1}, --blood
-  {0,1,1}, --unholy
+  {1,0,0}, --blood
+  {0,1,0.5}, --unholy
   {0,1,1}, --frost
   {1,0,1}, --death
 }
@@ -23,9 +23,16 @@ local OnUpdate = function(self, elapsed)
 end
 
 local UpdateType = function(self, event, rid, alt)
-
   local rune = self.RuneOrbs[runemap[rid]]
-  local colors = self.colors.runes[alt]
+  local colors = oUF.colors.runes[alt]
+  if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+      colors = oUF.colors.runes[3]
+  end
+  if not Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and GetRuneType then
+	  if (GetRuneType(rid) == 4) then
+	      colors = oUF.colors.runes[4]
+	    end
+  end
   local r, g, b = colors[1], colors[2], colors[3]
   rune.fill:SetStatusBarColor(r, g, b)
   rune.glow:SetVertexColor(r, g, b)
@@ -53,6 +60,7 @@ end
 local Update = function(self, event)
   for i=1, 6 do
     UpdateRune(self, event, i)
+    UpdateType(self, nil, i, floor((i+1)/2))
   end
 end
 

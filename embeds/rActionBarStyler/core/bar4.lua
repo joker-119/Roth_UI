@@ -19,27 +19,6 @@ if not gcfg.embeds.rActionBarStyler then return end
   local num = NUM_ACTIONBAR_BUTTONS
   local buttonList = {}
 
-
-  -----------------------------
-  -- INIT
-  -----------------------------
-
-  --get the addon namespace
-  local addon, ns = ...
-  local gcfg = ns.cfg
-  --get some values from the namespace
-  local cfg = gcfg.bars.bar4
-  local dragFrameList = ns.dragFrameList
-
-  -----------------------------
-  -- FUNCTIONS
-  -----------------------------
-
-  if not cfg.enable then return end
-
-  local num = NUM_ACTIONBAR_BUTTONS
-  local buttonList = {}
-
 if cfg.vert  == true then
   --create the frame to hold the buttons
   local frame = CreateFrame("Frame", "rABS_MultiBarRight", UIParent, "SecureHandlerStateTemplate")

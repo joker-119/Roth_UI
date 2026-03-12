@@ -88,7 +88,7 @@ local function UpdateColor(self, event, unit, powerType)
 		local bg = element.bg
 		if(bg) then
 			local mu = bg.multiplier or 1
-			bg:SetVertexColor(r * mu, g * mu, b * mu)
+			--bg:SetVertexColor(r * mu, g * mu, b * mu)
 		end
 	end
 
@@ -161,6 +161,7 @@ local function Path(self, ...)
 end
 
 local function ElementEnable(self)
+    if Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC) then return end
 	local element = self.AdditionalPower
 
 	if(element.frequentUpdates) then
@@ -194,7 +195,7 @@ local function Visibility(self, event, unit)
 	local element = self.AdditionalPower
 	local shouldEnable
 
-	if(not UnitHasVehicleUI('player')) then
+	if(Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) and not UnitHasVehicleUI('player')) then
 		if(UnitPowerMax(unit, ADDITIONAL_POWER_BAR_INDEX) ~= 0) then
 			if(element.displayPairs[playerClass]) then
 				local powerType = UnitPowerType(unit)
@@ -272,13 +273,11 @@ local function Enable(self, unit)
 
 		self:RegisterEvent('UNIT_DISPLAYPOWER', VisibilityPath)
 
-		if(not element.displayPairs) then
+		if(not element.displayPairs and ALT_POWER_BAR_PAIR_DISPLAY_INFO) then
 			element.displayPairs = CopyTable(ALT_POWER_BAR_PAIR_DISPLAY_INFO)
 		end
 
-		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
-			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
-		end
+		
 
 		return true
 	end

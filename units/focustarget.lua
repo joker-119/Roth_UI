@@ -99,13 +99,13 @@
   --create health power strings
   local createHealthPowerStrings = function(self)
 
-    local name = func.createFontString(self, cfg.font, 14, "THINOUTLINE")
+    local name = func.createFontString(self, cfg.fonts.headerFont, 14, "THINOUTLINE")
     name:SetPoint("BOTTOM", self, "TOP", 0, -13)
     name:SetPoint("LEFT", self.Health, 0, 0)
     name:SetPoint("RIGHT", self.Health, 0, 0)
     self.Name = name
 
-    local hpval = func.createFontString(self.Health, cfg.font, 11, "THINOUTLINE")
+    local hpval = func.createFontString(self.Health, cfg.fonts.textFont, 11, "THINOUTLINE")
     hpval:SetPoint("RIGHT", -2,0)
 
     self:Tag(name, "[diablo:name]")
@@ -169,9 +169,14 @@
   ---------------------------------------------
   -- SPAWN FOCUSTARGET UNIT
   ---------------------------------------------
-
+local function Init()
   if cfg.units.focustarget.show then
     oUF:RegisterStyle("diablo:focustarget", createStyle)
     oUF:SetActiveStyle("diablo:focustarget")
     oUF:Spawn("focustarget", "Roth_UIFocusTargetFrame")
   end
+end
+
+ns:RegisterInit(Init)
+
+Roth_UI:AddConfig("units.focustarget", {}, "Focus Target", Init)

@@ -2,11 +2,10 @@
 local addonName, Roth_UI = ...
 local addon, ns = ...
 local cfg = ns.cfg
-local LSM = LibStub("LibSharedMedia-3.0")
 
-local headerFont = LSM:Fetch("font", "")
-local textFont = LSM:Fetch("font", "")
-local chatFont = LSM:Fetch("font", "")
+local headerFont = nil
+local textFont = nil
+local chatFont = nil
 local headerScale = 1
 local textScale = 1
 local chatScale = 1
@@ -14,7 +13,6 @@ local chatScale = 1
 if not cfg.embeds.RothFont then return end
 
 ------------------------------------------------------------------------
-if cfg.font == STANDARD_TEXT_FONT then return end
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	if not obj then return end -- TODO: prune things that don't exist anymore
 	local fontFace = nil
@@ -34,17 +32,32 @@ local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	if fontScale == nil then
 		fontScale = 1
 	end
-	obj:SetFont(fontFace, floor(size * fontScale), style)
-	if sr and sg and sb then
-		obj:SetShadowColor(sr, sg, sb)
+
+	local isFontObj = (obj.GetObjectType and obj:GetObjectType() == "Font")
+	if isFontObj then
+	    style = style or "" -- empty string is okay, nil is not
 	end
-	if sox and soy then
-		obj:SetShadowOffset(sox, soy)
+
+	if obj:GetObjectType() == "ScrollingMessageFrame" then
+	    local _, _, flags = obj:GetFont()
+	    obj:SetFont(fontFace, floor(size * fontScale), flags or "")
+	else
+	    obj:SetFont(fontFace, floor(size * fontScale), style or "")
 	end
-	if r and g and b then
-		obj:SetTextColor(r, g, b)
-	elseif r then
-		obj:SetAlpha(r)
+
+
+	if not isFontObj then
+		if sr and sg and sb then
+			obj:SetShadowColor(sr, sg, sb)
+		end
+		if sox and soy then
+			obj:SetShadowOffset(sox, soy)
+		end
+		if r and g and b then
+			obj:SetTextColor(r, g, b)
+		elseif r then
+			obj:SetAlpha(r)
+		end
 	end
 end
 
@@ -126,6 +139,22 @@ function Addon:SetFonts(event, addon)
 	-- Derived fonts in FontStyles.xml
 	SetFont(BossEmoteNormalHuge,  "header", 27, "THICKOUTLINE") -- inherits SystemFont_Shadow_Huge3
 	SetFont(CombatTextFont,           "text", 26) -- inherits SystemFont_Shadow_Huge3
+	-- Combat text:
+    -- 1) Scrolling Combat Text (player-centric SCT)
+    -- Some clients/eras use an outline variant for SCT.
+    SetFont(CombatTextFontOutline, "text", 26, "OUTLINE")
+    
+    -- 2) Floating combat text (numbers over mobs/players)
+    -- This is the damage/heal "floaters" in the 3D world.
+    SetFont(DamageTextFont, "text", 24, "OUTLINE")
+    
+    -- Legacy globals: only touch them if they already exist (avoid creating new globals)
+    if rawget(_G, "DAMAGE_TEXT_FONT") ~= nil then
+      _G.DAMAGE_TEXT_FONT = textFont
+    end
+    if rawget(_G, "COMBAT_TEXT_FONT") ~= nil then
+      _G.COMBAT_TEXT_FONT = textFont
+    end
 	SetFont(ErrorFont,                "text", 16, nil, 60) -- inherits GameFontNormalLarge
 	SetFont(WorldMapTextFont,     "header", 31, "THICKOUTLINE", 40, nil, nil, 0, 0, 0, 1, -1) -- inherits SystemFont_OutlineThick_WTF
 
@@ -135,65 +164,36 @@ function Addon:SetFonts(event, addon)
 	SetFont(PVPInfoTextFont,      "text", 22, "THICKOUTLINE") -- inherits SystemFont_OutlineThick_Huge2
 	
 
-	-- Chat frames
-	local _, size = ChatFrame1:GetFont()
-	FCF_SetChatWindowFontSize(nil, ChatFrame1, size)
-	cfg.font = textFont
 end
 
 ------------------------------------------------------------------------
-hooksecurefunc("FCF_SetChatWindowFontSize", function(self, frame, size)
-	if not frame then
-		frame = FCF_GetCurrentChatFrame()
-	end
-	if not size then
-		size = self.value
-	end
 
-	-- Set all the other frames to the same size.
-	for i = 1, 10 do
-		local f = _G["ChatFrame"..i]
-		if f then
-			f:SetFont("chat", size)
-			SetChatWindowSize(i, size)
-		end
-	end
+if not Roth_UI:CheckClientVersion(WOW_PROJECT_CLASSIC) and not Roth_UI:CheckClientVersion(WOW_PROJECT_BURNING_CRUSADE_CLASSIC) then
+    hooksecurefunc("BattlePetToolTip_Show", function()
+    	BattlePetTooltip:SetHeight(BattlePetTooltip:GetHeight() + 12)
+    end)
 
-	-- Set the language override fonts to the same size.
-	for _, f in pairs({
-		ChatFontNormalKO,
-		ChatFontNormalRU,
-		ChatFontNormalZH,
-	}) do
-		local font, _, outline = f:GetFont()
-		f:SetFont("chat", size, outline)
-	end
-end)
-
-hooksecurefunc("BattlePetToolTip_Show", function()
-	BattlePetTooltip:SetHeight(BattlePetTooltip:GetHeight() + 12)
-end)
-
-hooksecurefunc("FloatingBattlePet_Show", function()
-	FloatingBattlePetTooltip:SetHeight(FloatingBattlePetTooltip:GetHeight() + 12)
-end)
+    hooksecurefunc("FloatingBattlePet_Show", function()
+    	FloatingBattlePetTooltip:SetHeight(FloatingBattlePetTooltip:GetHeight() + 12)
+    end)
+end
 
 
 --- We may be using fonts that haven't loaded yet, so listen for them.
 Roth_UI:ListenForMediaChange(function(name, mediaType, key)
 	if mediaType == "font" then
-		headerFont = LSM:Fetch("font", Roth_UI.db.profile.headerFont)
-		textFont = LSM:Fetch("font", Roth_UI.db.profile.textFont)
-		chatFont = LSM:Fetch("font", Roth_UI.db.profile.chatFont)
+		headerFont = ns.Media.Font(Roth_UI.db.profile.headerFont)
+		textFont = ns.Media.Font(Roth_UI.db.profile.textFont)
+		chatFont = ns.Media.Font(Roth_UI.db.profile.chatFont)
 		Addon:SetFonts()
 	end
 end)
 
 --- Need to set chat fonts as soon as the addon has loaded.
-Roth_UI:ListenForLoaded(function()
-	headerFont = LSM:Fetch("font", Roth_UI.db.profile.headerFont)
-	textFont = LSM:Fetch("font", Roth_UI.db.profile.textFont)
-	chatFont = LSM:Fetch("font", Roth_UI.db.profile.chatFont)
+Roth_UI:RegisterInit(function()
+	headerFont = ns.Media.Font(Roth_UI.db.profile.headerFont) or STANDARD_TEXT_FONT
+	textFont   = ns.Media.Font(Roth_UI.db.profile.textFont)   or STANDARD_TEXT_FONT
+	chatFont   = ns.Media.Font(Roth_UI.db.profile.chatFont)   or STANDARD_TEXT_FONT
 	headerScale = ns.db.profile.headerScale
 	textScale = ns.db.profile.textScale
 	chatScale = ns.db.profile.chatScale
@@ -202,21 +202,16 @@ Roth_UI:ListenForLoaded(function()
 	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 14
 	CHAT_FONT_HEIGHTS = { 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 }
 
-	-- I have no idea why the channel list is getting fucked up
-	-- but re-setting the font obj seems to fix it
-
-
-	for _, button in pairs(PaperDollTitlesPane.buttons) do
-		button.text:SetFontObject(GameFontHighlightSmallLeft)
-	end
-
 	-- Fix help frame category buttons, NFI why they need fixing
 
+    if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+	    BattlePetTooltip.Name:SetFontObject(GameTooltipHeaderText)
+	    FloatingBattlePetTooltip.Name:SetFontObject(GameTooltipHeaderText)
+	end
 
-	BattlePetTooltip.Name:SetFontObject(GameTooltipHeaderText)
-	FloatingBattlePetTooltip.Name:SetFontObject(GameTooltipHeaderText)
-
-	LFGListFrame.CategorySelection.CategoryButtons[1].Label:SetFontObject(GameFontNormal)
-	WorldMapFrameHomeButtonText:SetFontObject(GameFontNormal)
+    if Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then
+        LFGListFrame.CategorySelection.CategoryButtons[1].Label:SetFontObject(GameFontNormal)
+        WorldMapFrameHomeButtonText:SetFontObject(GameFontNormal)
+    end
 
 end)

@@ -29,9 +29,12 @@ local Update = function(self, event, unit, powerType)
       if not orb:IsShown() then orb:Show() end
     end
   end
+  local divinePurpose = C_UnitAuras.GetPlayerAuraBySpellID(223819)
+  local full = num/max
   for i = 1, max do
+    local affectedByDp = i > 0 and i < 4
     local orb = self.HolyPower[i]
-    local full = num/max
+    local shouldShow = false;
     if(i <= num) then
       if full == 1 then
         orb.fill:SetVertexColor(1,0,0)
@@ -40,13 +43,22 @@ local Update = function(self, event, unit, powerType)
         orb.fill:SetVertexColor(bar.color.r,bar.color.g,bar.color.b)
         orb.glow:SetVertexColor(bar.color.r,bar.color.g,bar.color.b)
       end
-      orb.fill:Show()
-      orb.glow:Show()
-      orb.highlight:Show()
+      shouldShow = true
+    end
+
+    if (affectedByDp and divinePurpose) then
+        orb.glow:SetVertexColor(1,0.84,0)
+        shouldShow = true
+    end
+
+    if (shouldShow) then
+        orb.fill:Show()
+        orb.glow:Show()
+        orb.highlight:Show()
     else
-      orb.fill:Hide()
-      orb.glow:Hide()
-      orb.highlight:Hide()
+        orb.fill:Hide()
+        orb.glow:Hide()
+        orb.highlight:Hide()
     end
   end
 end

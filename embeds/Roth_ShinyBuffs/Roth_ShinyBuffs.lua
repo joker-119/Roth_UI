@@ -13,7 +13,7 @@ local BuffFrame = BuffFrame
 local addon, ns = ...
 local cfg = ns.cfg
 
-if not cfg.embeds.Roth_ShinyBuffs then return end
+if not cfg.embeds.Roth_ShinyBuffs.enabled then return end
 
 local defaults = {
 	font = "Cracked",
@@ -96,8 +96,8 @@ local function SkinningMachine(svtable, btn, dur, c, icon, bor, firstTime)
 			bor:SetColorTexture(1,1,1,1)
 		end	
 	end
-	dur:SetFont(LSM:Fetch("font", db.font), db[svtable].dfsize, db.fstyle)
-	c:SetFont(LSM:Fetch("font", db.font), db[svtable].cfsize, db.fstyle)
+	dur:SetFont(ns.Media.Font(db.font), db[svtable].dfsize, db.fstyle)
+	c:SetFont(ns.Media.Font(db.font), db[svtable].cfsize, db.fstyle)
 	btn.bg:SetPoint("BOTTOMRIGHT", btn, "BOTTOMRIGHT", 2, -max(db[svtable].size*.2, 5))
 	btn.bg:SetBackdrop({	bgFile = LSM:Fetch("background", db.bg),
 						edgeFile = LSM:Fetch("border", db.border),
@@ -895,7 +895,7 @@ local function PEW()
 	BUFF_ROW_SPACING = 15
 	BUFFS_PER_ROW = db.bprow
 	
-	C_Timer.After(.25, SkinAuras)
+	ns.Scheduler.After(0.25, SkinAuras)
 	SkinTench(true)
 
 	--keep other stuff (like ticket frame) from moving buffs

@@ -21,6 +21,7 @@ This element updates by changing the texture.
     -- Register it with oUF
     self.SummonIndicator = SummonIndicator
 --]]
+if not Roth_UI:CheckClientVersion(WOW_PROJECT_MAINLINE) then return end 
 
 local _, ns = ...
 local oUF = ns.oUF
